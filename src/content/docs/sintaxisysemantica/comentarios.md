@@ -4,23 +4,17 @@
         order: 6
 ---
 
-## Comentarios
-
 Los comentarios en librescript se escriben de dos maneras:
 
-**Comentario en una línea:**
+* **Comentarios de una línea:** Comienzan con `//`. Todo lo que sigue hasta el final de la línea se considera un comentario.  
 
-Que se declaran con diagonales dobles // todo lo que se encuentre a la derecha en esa misma línea será ignorado por el lenguaje.
-`// Este es un comentario de una línea`
+* **Comentarios de bloque:** Comienzan con `/*` y terminan con `*/`. Pueden abarcar múltiples líneas.
 
-**Comentario en varias líneas:**
+```ts
+    // Este es un comentario de línea
 
-Se escriben utilizando `/* */`. Todo el texto entre estos delimitadores será ignorado, incluso si ocupa varias líneas.
-
-```js
-    /* Este es un
-
-    comentario
-
-    en múltiples líneas */
+    /*  
+    Este es un comentario de bloque.  
+    Puede ocupar múltiples líneas.  
+    */
 ```
