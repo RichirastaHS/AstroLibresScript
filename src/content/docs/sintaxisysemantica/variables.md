@@ -3,49 +3,71 @@ title: Variables
 sidebar:
   order: 2
 ---
+## Declaración y Asignación de Variables en LibreScript
 
-## Variables
+**Prefijo para Variables:** El signo de **dólar (`$`)** es un prefijo **obligatorio** para todas las variables.
 
-En librescript, se deben tener en cuenta las siguientes reglas que debe cumplir una variable:
+* Ejemplo:
 
-1. Es obligatorio el uso del signo `$` para declarar una variable.
-2. La declaración de variables es explícita, lo que significa que siempre debe indicarse el tipo de dato de la variable.
-3. No puede comenzar con un número ni contener caracteres especiales excepto ( `_` ).  
-4. El lenguaje es sensible a mayúsculas y minúsculas, por lo que `$variable`, `$Variable` y `$VARIABLE` serían identificadores distintos.
+    ```ts
+    $miVariable
+    ```
 
-### Sintaxis
+**Separador de Tipo y Nombre:** El **colon (`:`)** es el separador entre el nombre de la variable y su tipo.
 
-En Librescript, la sintaxis de para la declaración de variables deben hacerse con los elementos en el siguiente orden:
+* Ejemplo:
 
-1. **El símbolo `$`:** que indica la declaración de una variable mutable, `$$` indica la declaración de una constante.
+    ```ts
+        $nombre: texto
+    ```
 
-~~~javascript
-    $nombre = "Juan";  // Variable mutable
+### Declaración Explícita
 
-    $$PI = 3.1416;     // Constante (doble '$')
-~~~
+La declaración de variables es **explícita**, lo que significa que siempre debe indicarse el tipo de dato de la variable. No se utilizan palabras clave como `var`, `let` o `const`. La mera presencia de `$nombre: tipo` ya indica una declaración.
 
-2. **El nombre de la variable**, que debe seguir las reglas de nomenclatura del lenguaje.
+* Ejemplo:
 
-3. **`:` (anotación de tipo):** Especifica el tipo de dato de la variable. Es obligatorio y debe colocarse después del nombre de la variable.
+    ```ts
+        $cantidad: numero = 100;
+    ```
 
-4. **El tipo de dato:** que puede ser `numero`, `texto` o `booleano`.
+**Tipado Obligatorio e Inmutable:** En LibreScript, el tipo de cada variable debe ser declarado explícitamente y **no se puede cambiar** una vez asignado.
 
-5. **El operador de asignación `=`**, que se usa para asignar un valor inicial obligatorio a la variable.
+* Ejemplo:
 
-Correcto
+    ```ts
+        $edad: numero = 25; //(No puedes cambiar `$edad` a tipo `texto` más tarde).
+    ```
 
-~~~javascript
-    Correcto:
-    $edad: numero = 25;
-    $nombre: texto = "Juan";
-    $activo: booleano = verdadero;
-~~~
+**Declaración de Constantes:** Se utiliza el prefijo **doble dólar (`$$`)** para declarar una constante. Una constante **no puede cambiar su valor** una vez definido.
 
-Incorrecto
+* Ejemplo:
 
-~~~javascript
-    edad: numero = 25; //No se usa el simbolo $ para declarar la variable
-    $nombre = "Juan"; //No se especifica el tipo de dato
-    $activo@: booleano = 12; //El nombre de la variable no es válido
-~~~
+    ```ts
+        $$PI: numero = 3.1416;
+    ```
+
+**Conversión de Tipos:** La conversión de tipos debe ser **explícita** y se realiza mediante funciones específicas: `aNum()`, `aTxt()`, `aBool()`.
+
+* Ejemplo:
+
+    ```ts
+        $a: numero \= 5;
+
+        $b: texto \= "5";
+
+        $suma: numero \= $a \+ aNum($b);
+    ```
+
+**Reasignación:** Una vez declarada una variable (que no sea una constante `$$`), se le puede asignar un nuevo valor utilizando el **operador de asignación (`=`)**. Es importante que el nuevo valor **coincida con el tipo declarado** de la variable.
+
+```ts
+    $a: numero \= 10; // Declaración inicial
+
+    $a \= 20;         // Reasignación del valor (el tipo de $a sigue siendo 'numero')
+
+    $mensaje: texto \= "Hola";
+
+    $mensaje \= "Adiós"; // Reasignación de una cadena
+    
+```

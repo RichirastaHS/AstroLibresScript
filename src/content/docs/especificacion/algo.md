@@ -2,37 +2,7 @@
 title: uabjo
 ---
 
-
-## **2.4. Operadores Matemáticos y Lógicos**
-
-### **2.4.1. Operadores Matemáticos**
-
-Los operadores matemáticos se utilizan para realizar operaciones aritméticas. Ejemplos:
-
-`+	Suma	$total = $a + $b`
-
-`-	Resta	$diferencia = $a - $b`
-
-`*	Multiplicación	$producto = $a * $b`
-
-`/	División	$cociente = $a / $b`
-
-`%	Módulo (residuo)	$resto = $a % $b`
-
-`**	Potencia	$resultado = $a ** $b`
-
-| `Operador` | `Operación` | `Ejemplo` |
-| :---- | :---- | :---- |
-| `+` | `Suma` | `$total = $a + $b;` |
-| `-` | `Resta` | `$diferencia = $a - $b;` |
-| `*` | `Multiplicación` | `$producto = $a * $b;` |
-| `/` | `División` | `$cociente = $a / $b;` |
-| `%` | `Módulo (residuo)` | `$resto = $a % $b;` |
-| `**` | `Potencia` | `$resultado = $a ** $b;` |
-
-### 
-
-### **2.4.2. Operadores de Comparación**
+### Operadores de Comparación
 
 Los operadores de comparación se utilizan para comparar valores:
 
@@ -57,11 +27,7 @@ Los operadores de comparación se utilizan para comparar valores:
 | `<=` | `Menor o igual que` | `si ($a <= $b)` |
 | `>=` | `Mayor o igual que` | `si ($a >= $b)` |
 
-### 
-
-### 
-
-### **2.4.3. Operadores Lógicos**
+### Operadores Lógicos
 
 Los operadores lógicos se usan para realizar combinaciones de condiciones:
 
