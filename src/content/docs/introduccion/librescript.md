@@ -1,6 +1,5 @@
 ---
 title: ¿Qué es LibreScript?
-descpription: Que es LibreScript
 sidebar:
   order: 1
 ---

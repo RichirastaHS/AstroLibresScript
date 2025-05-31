@@ -4,11 +4,14 @@ import starlight from '@astrojs/starlight';
 import starlightThemeObsidian from 'starlight-theme-obsidian'
 import markdoc from '@astrojs/markdoc';
 
+import tailwindcss from '@tailwindcss/vite';
+
 export default defineConfig({
   integrations: [starlight({
     title: 'LibreScript',
     customCss: [
       './src/styles/custom.css',
+      './src/fonts/font-face.css',
     ],
     social: [{ icon: 'github', label: 'GitHub', href: 'https://github.com/withastro/starlight' }],
 
@@ -31,8 +34,12 @@ export default defineConfig({
       },
     ],
 
-	plugins: [starlightThemeObsidian({
+    plugins: [starlightThemeObsidian({
     graph: false
   })]
   }), markdoc()],
+
+  vite: {
+    plugins: [tailwindcss()],
+  },
 });
