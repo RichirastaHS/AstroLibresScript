@@ -5,6 +5,8 @@ import starlightThemeObsidian from 'starlight-theme-obsidian'
 import markdoc from '@astrojs/markdoc';
 
 export default defineConfig({
+  site: 'https://richirastahs.github.io',
+  base: 'astrolibresscript',
   integrations: [starlight({
     title: 'LibreScript',
     customCss: [
