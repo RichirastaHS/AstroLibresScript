@@ -1,6 +1,11 @@
 ---
-const title = "alog"
+const title = "LibreScript";
 const description = "Una página sencilla construida con Astro.";
+import "../fonts/font-face.css";
+import PericoIcon from "../icons/perico.astro";
+import BookIcon from "../icons/book.astro";
+import GithubIcon from "../icons/github.astro";
+import PersonIcon from "../icons/person.astro";
 ---
 
 <html lang="es">
@@ -9,14 +14,633 @@ const description = "Una página sencilla construida con Astro.";
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{title}</title>
     <meta name="description" content={description} />
+    <link rel="shortcut icon" href="favicon.svg" type="image/x-icon" />
   </head>
-  <body>
-    <main style="font-family: sans-serif; text-align: center; padding: 2rem;">
-      <h1>{title}</h1>
-      <p>{description}</p>
-      <a href="/introduccion/librescript" style="display: inline-block; margin-top: 1rem; color: blue;">
-        Ir a la página Acerca de
-      </a>
+  <body class="">
+    <main class="">
+      <section class="hero-section">
+        <div class="">
+          <div class="titles-container">
+            <h1 class="title">{title}</h1>
+            <div class="scrolling-words-container">
+              <div class="scrolling-words-box">
+                <ul class="subtext">
+                  <li>Fácil de aprender!</li>
+                  <li>Divertido de usar!</li>
+                  <li>Algun texto raro</li>
+                  <li>Y en español!</li>
+                  <li>¡Únete a la bandada!</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div class="contenedor-btn">
+            <a
+              href="/introduccion/librescript"
+              title=""
+              class="btn btn-p"
+              role="button"
+            >
+            <div></div>
+              <BookIcon />
+              Ver Documentación
+            </a>
+            <a
+              href="/introduccion/librescript"
+              title=""
+              class="btn btn-s"
+              role="button"
+            >
+              <GithubIcon />
+              Respositorio de {title}
+            </a>
+          </div>
+        </div>
+        <div class="">
+          <PericoIcon />
+        </div>
+      </section>
+      <section class="team-section">
+        <h2>Equipo</h2>
+        <div class="team-container">
+          <div class="team-icon-container">
+            <PersonIcon />
+          </div>
+          <div class="team-cards-grid">
+            <div class="team-card">
+              <div class="team-card-img-container">
+                <img src="https://i.pravatar.cc/100?u=richie" alt="Foto de Richie" class="team-card-img">
+              </div>
+              <h3 class="team-card-name">Richie</h3>
+              <p class="team-card-legend">Desarrollador Frontend</p>
+            </div>
+            <div class="team-card">
+              <div class="team-card-img-container">
+                <img src="https://i.pravatar.cc/100?u=alex" alt="Foto de Alex" class="team-card-img">
+              </div>
+              <h3 class="team-card-name">Alex</h3>
+              <p class="team-card-legend">Diseñador UX/UI</p>
+            </div>
+            <div class="team-card">
+              <div class="team-card-img-container">
+                <img src="https://i.pravatar.cc/100?u=mariana" alt="Foto de Mariana" class="team-card-img">
+              </div>
+              <h3 class="team-card-name">Mariana</h3>
+              <p class="team-card-legend">Desarrolladora Backend</p>
+            </div>
+            <div class="team-card">
+              <div class="team-card-img-container">
+                <img src="https://i.pravatar.cc/100?u=carlos" alt="Foto de Carlos" class="team-card-img">
+              </div>
+              <h3 class="team-card-name">Carlos</h3>
+              <p class="team-card-legend">Tester QA</p>
+            </div>
+            <div class="team-card">
+              <div class="team-card-img-container">
+                <img src="https://i.pravatar.cc/100?u=laura" alt="Foto de Laura" class="team-card-img">
+              </div>
+              <h3 class="team-card-name">Laura</h3>
+              <p class="team-card-legend">Product Owner</p>
+            </div>
+            <div class="team-card">
+              <div class="team-card-img-container">
+                <img src="https://i.pravatar.cc/100?u=pedro" alt="Foto de Pedro" class="team-card-img">
+              </div>
+              <h3 class="team-card-name">Pedro</h3>
+              <p class="team-card-legend">DevOps Engineer</p>
+            </div>
+            <div class="team-card">
+              <div class="team-card-img-container">
+                <img src="https://i.pravatar.cc/100?u=sofia" alt="Foto de Sofía" class="team-card-img">
+              </div>
+              <h3 class="team-card-name">Sofía</h3>
+              <p class="team-card-legend">Scrum Master</p>
+            </div>
+            <div class="team-card">
+              <div class="team-card-img-container">
+                <img src="https://i.pravatar.cc/100?u=david" alt="Foto de David" class="team-card-img">
+              </div>
+              <h3 class="team-card-name">David</h3>
+              <p class="team-card-legend">Analista de Datos</p>
+            </div>
+            <div class="team-card">
+              <div class="team-card-img-container">
+                <img src="https://i.pravatar.cc/100?u=valeria" alt="Foto de Valeria" class="team-card-img">
+              </div>
+              <h3 class="team-card-name">Valeria</h3>
+              <p class="team-card-legend">Marketing Digital</p>
+            </div>
+            <div class="team-card">
+              <div class="team-card-img-container">
+                <img src="https://i.pravatar.cc/100?u=andres" alt="Foto de Andrés" class="team-card-img">
+              </div>
+              <h3 class="team-card-name">Andrés</h3>
+              <p class="team-card-legend">Soporte Técnico</p>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section class="features-section">
+        <h2>Descubre Más</h2>
+        <div class="features-grid">
+          <div class="feature-card">
+            <div class="feature-icon-placeholder">
+              <!-- Icono 1 -->
+            </div>
+            <h3>Documentación Completa</h3>
+            <p>Explora nuestra guía detallada para aprender todo sobre LibreScript y sus capacidades.</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon-placeholder">
+              <!-- Icono 2 -->
+            </div>
+            <h3>Comunidad Activa</h3>
+            <p>Únete a nuestra comunidad de desarrolladores, comparte ideas y obtén soporte.</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon-placeholder">
+              <!-- Icono 3 -->
+            </div>
+            <h3>Proyectos Ejemplo</h3>
+            <p>Inspírate con proyectos de ejemplo y comienza a construir tus propias aplicaciones.</p>
+          </div>
+        </div>
+      </section>
     </main>
   </body>
 </html>
+
+<style>
+  * {
+    box-sizing: border-box;
+    margin: 0;
+  }
+  body {
+    background: rgba(255, 221, 192, 1);
+  }
+  main {
+    color: white;
+    height: 100%;
+    width: 100%;
+    font-family: "Inter", Courier, monospace;
+  }
+
+  .container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 0 20px;
+  }
+
+  .titles-container {
+    max-width: 531px;
+  }
+  h1 {
+    font-size: 75px;
+    color: #ef348d;
+  }
+
+  .hero-section {
+    display: flex;
+    height: 100vh;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: nowrap;
+    padding: 5px;
+    background: linear-gradient(
+      180deg,
+      #82cde0 0%,
+      #95c9de 13.667%,
+      #aec8d8 30.333%,
+      #cac9d0 40%,
+      #e8cec7 66.667%,
+      #ffd5c2 83.333%,
+      #ffddc0 100%
+    );
+  }
+
+  .contenedor-btn {
+    display: flex;
+    gap: 10px;
+  }
+
+  .btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all ease-in-out 100ms;
+  }
+
+  .btn-p {
+    padding: 10px 15px;
+    background: rgb(239 52 141);
+    color: indigo;
+    border-radius: 20px;
+    width: fit-content;
+    height: 50px;
+    text-decoration: none;
+    font-weight: 500;
+  }
+  .btn-p:hover {
+    background: #ff81be;
+    color: rgb(127, 44, 185);
+  }
+
+  .btn-s {
+    padding: 10px 15px;
+    border: 2px solid indigo;
+    color: indigo;
+    border-radius: 20px;
+    width: fit-content;
+    height: 50px;
+    text-decoration: none;
+    font-weight: 500;
+  }
+  .btn-s:hover {
+    background: #ff81be;
+    border: 2px solid #ff81be;
+    color: rgb(127, 44, 185);
+  }
+  .d {
+    border: 2px solid #ee9595;
+    color: #ee9595;
+  }
+
+  .team-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding-bottom: 50px;
+    background: linear-gradient(
+      180deg,
+      rgba(255, 221, 192, 1) 0%,
+      rgba(255, 197, 168, 1) 15%,
+      rgba(255, 165, 138, 1) 75%
+    );
+  }
+  .team{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+  .scrolling-words-container {
+    display: flex;
+    align-items: center;
+    font-size: 2rem;
+    font-weight: 700;
+    color: indigo;
+  }
+  .scrolling-words-box {
+    height: 3rem;
+    overflow: hidden;
+    ul {
+      padding: 0;
+      animation: scrollUp 4s  forwards;
+      animation-delay: .7s;
+      li {
+        display: flex;
+        font-weight: 700;
+        height: 3rem;
+        align-items: center;
+        list-style: none;
+      }
+    }
+  }
+  @keyframes scrollUp {
+    15%,
+    25% {
+      transform: translateY(-20%);
+    }
+    40%,
+    50% {
+      transform: translateY(-40%);
+    }
+    65%,
+    75% {
+      transform: translateY(-60%);
+    }
+    90%,
+    100% {
+      transform: translateY(-80%);
+    }
+  }
+
+  .card-list{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    /* From https://css.glass */
+    /* From https://css.glass */
+background: rgba(214, 77, 77, 0.34);
+border-radius: 16px;
+box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+backdrop-filter: blur(19.1px);
+-webkit-backdrop-filter: blur(19.1px);
+border: 1px solid rgba(228, 73, 73, 0.56);
+    width: 100%;
+    max-width: 350px;
+    height: 400px;
+    list-style: none;
+    padding: 0;
+    li {
+      list-style: none;
+    }
+  }
+  .person-icon{
+    position: relative;
+    right: -18px;
+  }
+
+  .person-icon-img{
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    overflow: hidden;
+    img{
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+  .card-list li{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+  }
+  .person-info{
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+  }
+  
+
+
+  /* Styles for Team Section */
+  .team-section h2 {
+    color: #ef348d;
+    font-size: 2.8em;
+    margin-bottom: 40px;
+  }
+
+  .team-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+
+  .team-icon-container {
+    margin-bottom: 20px;
+  }
+
+  .team-icon-container svg {
+    width: 100px;
+    height: 100px;
+    fill: #ef348d;
+  }
+
+  .team-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 25px;
+    width: 100%;
+  }
+
+  .team-card {
+    background-color: rgba(255, 255, 255, 0.9);
+    color: #333;
+    border-radius: 12px;
+    padding: 20px 15px;
+    text-align: center;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: 1px solid rgba(239, 52, 141, 0.25);
+  }
+
+  .team-card:hover {
+    transform: translateY(-7px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+  }
+
+  .team-card-img-container {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin: 0 auto 15px auto;
+    border: 3px solid #ef348d;
+    background-color: #f0f0f0;
+  }
+
+  .team-card-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .team-card-name {
+    font-size: 1.15em;
+    margin-bottom: 8px;
+    color: #d63384;
+    font-weight: 600;
+  }
+
+  .team-card-legend {
+    font-size: 0.85em;
+    color: #495057;
+    line-height: 1.4;
+  }
+
+  /* Styles for Features Section */
+  .features-section {
+    padding: 60px 20px;
+    background-color: #f8f9fa;
+    text-align: center;
+    color: #333;
+  }
+
+  .features-section h2 {
+    color: #343a40;
+    margin-bottom: 50px;
+    font-size: 2.8em;
+    font-weight: 700;
+  }
+
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .feature-card {
+    background-color: #ffffff;
+    color: #333;
+    border-radius: 10px;
+    padding: 30px 25px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border-left: 5px solid #ef348d;
+  }
+
+  .feature-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+  }
+
+  .feature-icon-placeholder {
+    width: 60px;
+    height: 60px;
+    background-color: #ef348d;
+    border-radius: 50%;
+    margin: 0 auto 25px auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.8em;
+  }
+  .feature-icon-placeholder::before {
+      content: "💡";
+  }
+  .features-grid .feature-card:nth-child(2) .feature-icon-placeholder::before {
+      content: "💬";
+  }
+  .features-grid .feature-card:nth-child(3) .feature-icon-placeholder::before {
+      content: "🚀";
+  }
+
+  .feature-card h3 {
+    font-size: 1.6em;
+    margin-bottom: 15px;
+    color: #ef348d;
+    font-weight: 600;
+  }
+
+  .feature-card p {
+    font-size: 1em;
+    color: #555;
+    line-height: 1.6;
+  }
+
+  /* Responsive adjustments for team section */
+  @media (min-width: 992px) { 
+    .team-container {
+      flex-direction: row;
+      align-items: flex-start;
+      gap: 50px;
+    }
+    .team-icon-container {
+      margin-bottom: 0;
+      flex-shrink: 0;
+    }
+    .team-icon-container svg {
+      width: 150px;
+      height: 150px;
+    }
+  }
+  @media (max-width: 767px) { 
+      .team-cards-grid {
+          grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); /* Smaller cards on mobile */
+      }
+      .team-card-name {
+          font-size: 1em;
+      }
+      .team-card-legend {
+          font-size: 0.8em;
+      }
+      .feature-card h3 {
+        font-size: 1.4em;
+      }
+      .feature-card p {
+        font-size: 0.9em;
+      }
+  }
+
+  /* Additional Responsive adjustments for Hero Section and general elements */
+  @media (max-width: 767px) {
+    .hero-section {
+      flex-direction: column;
+      text-align: center;
+      height: auto; /* Adjust height for stacked content */
+      padding-top: 50px; /* Add padding when stacked */
+      padding-bottom: 50px;
+    }
+
+    .hero-section > div:first-child {
+      margin-bottom: 30px; /* Space between text content and icon */
+    }
+
+    h1.title {
+      font-size: 48px; /* Reduce h1 font size for mobile */
+    }
+
+    .scrolling-words-container {
+      justify-content: center;
+      font-size: 1.5rem; /* Reduce scrolling words font size */
+    }
+    .scrolling-words-box {
+      height: 2.25rem; /* Adjust height of scrolling box */
+    }
+    .scrolling-words-box ul li {
+      height: 2.25rem; /* Adjust li height */
+    }
+
+    .contenedor-btn {
+      flex-direction: column; /* Stack buttons on mobile */
+      align-items: center; /* Center stacked buttons */
+    }
+
+    .btn-p, .btn-s {
+      width: 80%; /* Make buttons wider on mobile */
+      max-width: 300px;
+      font-size: 0.9rem;
+      padding: 12px 15px;
+    }
+
+    .hero-section > div:last-child svg { /* PericoIcon container */
+      width: 150px; /* Adjust icon size on mobile */
+      height: 150px;
+    }
+  }
+
+  @media (max-width: 480px) { /* Even smaller screens */
+    h1.title {
+      font-size: 36px;
+    }
+    .scrolling-words-container {
+      font-size: 1.2rem;
+    }
+    .scrolling-words-box {
+      height: 1.8rem;
+    }
+    .scrolling-words-box ul li {
+      height: 1.8rem;
+    }
+    .team-icon-container svg {
+      width: 80px;
+      height: 80px;
+    }
+    .features-section h2,
+    .team-section h2 {
+      font-size: 2.2em;
+    }
+    .feature-card h3 {
+      font-size: 1.2em;
+    }
+  }
+</style>

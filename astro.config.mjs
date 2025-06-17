@@ -4,8 +4,6 @@ import starlight from '@astrojs/starlight';
 import starlightThemeObsidian from 'starlight-theme-obsidian'
 import markdoc from '@astrojs/markdoc';
 
-import tailwindcss from '@tailwindcss/vite';
-
 export default defineConfig({
   integrations: [starlight({
     title: 'LibreScript',
@@ -38,8 +36,4 @@ export default defineConfig({
     graph: false
   })]
   }), markdoc()],
-
-  vite: {
-    plugins: [tailwindcss()],
-  },
 });
