@@ -1,6 +1,6 @@
 @font-face {
     font-family: 'Inter';
-    src: url('./Inter-VariableFont_opsz,wght.ttf') format('truetype');
+    src: url('/public/Inter-VariableFont_opsz\,wght.ttf') format('truetype');
     font-stretch: 75% 125%; /* Para wdth si se desea */
     font-style: normal;
 }
