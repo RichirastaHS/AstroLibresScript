@@ -1,11 +1,12 @@
 ---
 const title = "LibreScript";
-const description = "Una página sencilla construida con Astro.";
+const description = "Aprende a programar con LibreScript, un lenguaje de programación divertido y fácil de aprender, ¡todo en español!";
 import "../fonts/font-face.css";
 import PericoIcon from "../icons/perico.astro";
 import BookIcon from "../icons/book.astro";
 import GithubIcon from "../icons/github.astro";
 import PersonIcon from "../icons/person.astro";
+import TerminalIcon from "../icons/terminal.astro";
 ---
 
 <html lang="es">
@@ -53,6 +54,15 @@ import PersonIcon from "../icons/person.astro";
             >
               <GithubIcon />
               Respositorio de {title}
+            </a>
+            <a
+              href="https://github.com/RichirastaHS/AstroLibresScript"
+              title=""
+              class="btn btn-s"
+              role="button"
+            >
+              <TerminalIcon />
+              Ejecutar en Terminal
             </a>
           </div>
         </div>
@@ -168,7 +178,7 @@ import PersonIcon from "../icons/person.astro";
       </section>
     </main>
   </body>
-  <style is:inline>
+  <style>
   * {
     box-sizing: border-box;
     margin: 0;
@@ -195,8 +205,9 @@ import PersonIcon from "../icons/person.astro";
     max-width: 531px;
   }
   h1 {
-    font-size: 75px;
+    font-size: 93px;
     color: #ef348d;
+    line-height: 85px;
   }
 
   .hero-section {
@@ -220,7 +231,9 @@ import PersonIcon from "../icons/person.astro";
 
   .contenedor-btn {
     display: flex;
+    flex-wrap: wrap;
     gap: 10px;
+    max-width: 500px;
   }
 
   .btn {
@@ -228,16 +241,16 @@ import PersonIcon from "../icons/person.astro";
     justify-content: center;
     align-items: center;
     transition: all ease-in-out 100ms;
+    border-radius: 25px;
+    width: fit-content;
+    height: 55px;
+    text-decoration: none;
   }
 
   .btn-p {
     padding: 10px 15px;
     background: rgb(239 52 141);
     color: indigo;
-    border-radius: 20px;
-    width: fit-content;
-    height: 50px;
-    text-decoration: none;
     font-weight: 500;
   }
   .btn-p:hover {
@@ -249,10 +262,6 @@ import PersonIcon from "../icons/person.astro";
     padding: 10px 15px;
     border: 2px solid indigo;
     color: indigo;
-    border-radius: 20px;
-    width: fit-content;
-    height: 50px;
-    text-decoration: none;
     font-weight: 500;
   }
   .btn-s:hover {
@@ -289,9 +298,10 @@ import PersonIcon from "../icons/person.astro";
   .scrolling-words-container {
     display: flex;
     align-items: center;
-    font-size: 2rem;
+    font-size: 2.2rem;
     font-weight: 700;
     color: indigo;
+    margin-bottom: 10px;
   }
   .scrolling-words-box {
     height: 3rem;
@@ -303,7 +313,7 @@ import PersonIcon from "../icons/person.astro";
       li {
         display: flex;
         font-weight: 700;
-        height: 3rem;
+        height: 3.3rem;
         align-items: center;
         list-style: none;
       }
