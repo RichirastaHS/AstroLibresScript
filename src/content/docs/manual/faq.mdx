@@ -1,0 +1,65 @@
+---
+title: Preguntas Frecuentes
+sidebar:
+  order: 6
+---
+
+<details>
+  <summary>
+    💲 **¿Qué significa el prefijo `$` y `$$` en las variables?**    
+  </summary>
+  El prefijo $ indica una variable regular, cuyo valor puede cambiar. El prefijo $$ indica una constante, cuyo valor se establece una vez y no puede ser modificado.
+</details>
+
+<details>
+  <summary>
+    🖥️ **¿Por qué mi código no compila?**  
+  </summary>
+  Lo más probable es que haya un error de sintaxis o un error semántico. Revise los mensajes de error en la consola. El compilador intenta proporcionar la línea y columna donde se encontró el problema.
+</details>
+
+
+<details>
+  <summary>
+    📦 **¿Cómo declaro un arreglo de números/textos/booleanos?**  
+  </summary>
+  Se declara especificando el tipo base seguido de corchetes [].
+
+  `$misNumeros: numero[];`
+
+  `$misTextos: texto[];`
+
+  `$misBoleados: booleano[];.`
+
+  Puede inicializarlo con valores:
+  
+  `$misNumeros: numero[] = [1, 2, 3];`
+</details>
+
+<details>
+  <summary>
+    👴 **¿LibreScript tiene clases y herencia?**
+  </summary>
+  Sí, LibreScript soporta la declaración de clases con propiedades y métodos, y tiene un constructor (constructor). La información proporcionada sugiere que la herencia podría ser una característica futura o está en desarrollo, pero la gramática básica para clases está presente.
+</details>
+
+<details>
+  <summary>
+    🛠️ **¿Existe una forma de depurar mi código en LibreScript?**
+  </summary>
+ Actualmente, la depuración se realiza principalmente a través de la sentencia imprimir(), que permite mostrar valores de variables en la consola. Herramientas de depuración más avanzadas no están integradas en esta versión.
+</details>
+
+<details>
+  <summary>
+    ⚠️ **¿Qué pasa si el compilador dice “Gramática ambigua”?**
+  </summary>
+  Esta es una advertencia que indica que la gramática del lenguaje tiene una ambigüedad. El compilador intenta resolverla, pero podría no ser la interpretación deseada. Si es un usuario final, puede intentar simplificar la línea de código donde se produce la advertencia. Si es un desarrollador del compilador, la gramática (*grammar.ne* o *grammar.txt*) necesita ser revisada para eliminar la ambigüedad.
+</details>
+
+<details>
+  <summary>
+    🕸️ **¿Puedo usar LibreScript para desarrollar aplicaciones web/móviles?**
+  </summary>
+  LibreScript es un lenguaje de programación con su propio compilador. Su uso actual está enfocado en la lógica de programación. Para desarrollo web o móvil, necesitaría integrarse con otras tecnologías y frameworks que soporten la ejecución del código compilado de LibreScript, o un runtime específico que aún no se describe en los archivos proporcionados.
+</details>

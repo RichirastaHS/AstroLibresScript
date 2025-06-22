@@ -32,6 +32,10 @@ export default defineConfig({
         label: 'Expresiónes Regulares',
         autogenerate: { directory: 'expresionregulares' },
       },
+      {
+        label: 'Manual de Referencia',
+        autogenerate: { directory: 'manual' },
+      },
     ],
 
     plugins: [starlightThemeObsidian({
