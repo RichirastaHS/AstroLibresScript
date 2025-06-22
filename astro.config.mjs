@@ -36,6 +36,10 @@ export default defineConfig({
         label: 'Manual de Referencia',
         autogenerate: { directory: 'manual' },
       },
+      {
+        label: 'Manual de Programador',
+        autogenerate: { directory: 'manualprogramador' },
+      },
     ],
 
     plugins: [starlightThemeObsidian({
