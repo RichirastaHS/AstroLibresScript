@@ -40,6 +40,18 @@ export default defineConfig({
         label: 'Manual de Programador',
         autogenerate: { directory: 'manualprogramador' },
       },
+      {
+        label: 'Análisis Léxico',
+        autogenerate: { directory: 'lexico' },
+      },
+      {
+        label: 'Análisis Semántico',
+        autogenerate: { directory: 'semantico' },
+      },
+      {
+        label: 'Analizador Sintáctico',
+        autogenerate: { directory: 'sintactico' },
+      },
     ],
 
     plugins: [starlightThemeObsidian({
