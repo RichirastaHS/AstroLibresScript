@@ -74,17 +74,19 @@ import PersonalGithubIcon from "../icons/linkgithub.astro";
       <section class="team-section">
         <h2>Equipo</h2>
         <div class="team-container">
+
           <div class="team-icon-container">
-            <PersonIcon />
+            <img src="/AstroLibresScript/img/206470837_10860523.png" alt="">
           </div>
+
           <div class="team-cards-grid">
             <div class="team-card">
               <div class="team-card-img-container">
-                <img src="https://i.pravatar.cc/100?u=richie" alt="Foto de Adriel" class="team-card-img">
+                <img src="https://avatars.githubusercontent.com/u/73452941?v=4" alt="Foto de Adriel" class="team-card-img">
               </div>
               <h3 class="team-card-name">Adriel Joaquin</h3>
               <p class="team-card-legend">Cruz Delgado</p>
-              <a href="" target="_blank" class="github-icon">
+              <a href="https://github.com/adrcrz" target="_blank" class="github-icon">
                 <PersonalGithubIcon />
               </a>
             </div>
@@ -155,6 +157,16 @@ import PersonalGithubIcon from "../icons/linkgithub.astro";
               <h3 class="team-card-name">Ricardo</h3>
               <p class="team-card-legend">Hernandez Sanchez</p>
               <a href="https://github.com/RichirastaHS" target="_blank" class="github-icon"> 
+                <PersonalGithubIcon />
+              </a>
+            </div>
+            <div class="team-card">
+              <div class="team-card-img-container">
+                <img src="https://avatars.githubusercontent.com/u/96956093?v=4" alt="Foto de David" class="team-card-img">
+              </div>
+              <h3 class="team-card-name">Daniel </h3>
+              <p class="team-card-legend">Ramos Jimenez</p>
+              <a href="https://github.com/DanieRJl1115" target="_blank" class="github-icon"> 
                 <PersonalGithubIcon />
               </a>
             </div>
@@ -356,12 +368,12 @@ import PersonalGithubIcon from "../icons/linkgithub.astro";
     gap: 10px;
     /* From https://css.glass */
     /* From https://css.glass */
-background: rgba(214, 77, 77, 0.34);
-border-radius: 16px;
-box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-backdrop-filter: blur(19.1px);
--webkit-backdrop-filter: blur(19.1px);
-border: 1px solid rgba(228, 73, 73, 0.56);
+    background: rgba(214, 77, 77, 0.34);
+    border-radius: 16px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(19.1px);
+    -webkit-backdrop-filter: blur(19.1px);
+    border: 1px solid rgba(228, 73, 73, 0.56);
     width: 100%;
     max-width: 350px;
     height: 400px;
@@ -424,10 +436,9 @@ border: 1px solid rgba(228, 73, 73, 0.56);
     margin-bottom: 20px;
   }
 
-  .team-icon-container svg {
-    width: 100px;
-    height: 100px;
-    fill: #ef348d;
+  .team-icon-container img {
+    max-width: 500px;
+    width: 100%;
   }
 
   .team-cards-grid {
@@ -564,11 +575,11 @@ border: 1px solid rgba(228, 73, 73, 0.56);
     color: #ef348d;
   }
   /* Responsive adjustments for team section */
-  @media (min-width: 992px) { 
+  @media (min-width: 1292px) { 
     .team-container {
       flex-direction: row;
-      align-items: flex-start;
-      gap: 50px;
+      align-items: center;
+      gap: 10px;
     }
     .team-icon-container {
       margin-bottom: 0;
