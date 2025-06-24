@@ -59,6 +59,7 @@ Estos errores ocurren cuando el código es sintácticamente correcto, pero su si
 
   $contador: numero = 10;  
   ```
+
   ```bash
   --- Análisis Semántico ---
   Error Semántico 🔴: El identificador '$contador' ya ha sido declarado en este ámbito.
@@ -75,6 +76,7 @@ Estos errores ocurren cuando el código es sintácticamente correcto, pero su si
   $b: numero = 20;
   $res1: numero = $a + $b * $c; 
   ```
+
   ```bash
   --- Análisis Semántico ---
   Error Semántico 🔴: El identificador '$c' no ha sido declarado.
@@ -89,9 +91,11 @@ Estos errores ocurren cuando el código es sintácticamente correcto, pero su si
   ⚠️ **Interpretación:**
   
   Se intentó realizar una asignación o una operación con tipos de datos que no son compatibles. Por ejemplo, asignar un texto a una variable de tipo numero.
+
    ```ts
   $miNumero: numero = 'cinco';
   ```
+
   ```bash
   --- Análisis Semántico ---
   Error Semántico 🔴: Tipo incompatible para variable '$miNumero'. Se esperaba 'numero' pero se obtuvo 'texto'.
@@ -100,7 +104,6 @@ Estos errores ocurren cuando el código es sintácticamente correcto, pero su si
   ✅ **Solución:**
   
   Asegúrese de que los tipos de datos coincidan. Utilice las funciones de conversión (`aNum`, `aTxt`, `aBool`) si es necesario.
-
 
 ### SemanticError: No se puede reasignar un valor a la constante `${name}`
 
@@ -117,12 +120,14 @@ Estos errores ocurren cuando el código es sintácticamente correcto, pero su si
   ⚠️ **Interpretación:**
 
   Se intentó llamar a una función o método que no está definida, o los argumentos proporcionados (número o tipo) no coinciden con la firma de la función.
-    ```ts
+  
+  ```ts
   $miAncho: numero = 10;
   $miAlto: numero = 5;
   $resultadoArea: numero = calcularArea($miAncho, $miAlto); 
   imprimir("El área es: " + $resultadoArea);
   ```
+
   ```bash
   --- Análisis Semántico ---
   Error Semántico 🔴: 'calcularArea' no es una función o método, o no ha sido declarada. Se
@@ -138,12 +143,14 @@ Estos errores ocurren cuando el código es sintácticamente correcto, pero su si
  ⚠️ **Interpretación:**
 
  La palabra clave devolver se usó fuera del cuerpo de una función.
+
    ```ts
   funcion calcularArea($ancho: numero, $alto: numero): numero {
   $area: numero = $ancho * $alto;
   }
   devolver $area;
   ```
+
   ```bash
   --- Análisis Semántico ---
   Error Semántico 🔴: Sentencia 'devolver' fuera de una función o método.

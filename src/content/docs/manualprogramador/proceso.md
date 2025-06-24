@@ -33,4 +33,3 @@ npx nearleyc src/grammar.ne -o src/grammar.js
 
 Esta linea se usa para ver el funcionamiento del compilador de libreScript
 :::
-

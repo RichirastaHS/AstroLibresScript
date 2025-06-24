@@ -10,6 +10,7 @@ La implementación concreta del analizador sintáctico en LibreScript se basa en
 El archivo `grammar.js` es la piedra angular del analizador sintáctico. Como se explicó anteriormente, este archivo no es escrito manualmente, sino que es el resultado de compilar la gramática de LibreScript (definida en `grammar.ne`) utilizando la herramienta `nearleyc`.
 
 El `grammar.js` contiene la representación interna de la gramática, incluyendo:
+
 * La referencia al objeto `lexer` (de Moo.js) que Nearley utilizará.
 * Un array de `ParserRules`, donde cada elemento es una regla de producción de la gramática con sus símbolos terminales y no terminales, y la lógica (la función *postprocessor*) para construir el nodo del Árbol de Sintaxis Abstracta (AST) correspondiente.
 * Funciones auxiliares definidas en el encabezado del archivo `.ne` (como `nodo`, `id`, `opBinaria`, etc.) que son cruciales para la transformación de la secuencia de tokens en el AST.
@@ -22,11 +23,11 @@ La cohesión entre el analizador léxico y el sintáctico es fundamental para el
 
 El proceso de integración en LibreScript se desarrolla de la siguiente manera:
 
-1.  **Carga del Código Fuente:** El `main.js` del compilador se encarga de leer el código fuente del programa LibreScript (ej. desde un archivo `.ls`).
-2.  **Preparación del Lexer:** El objeto `lexer` (instanciado desde `lexer.js` que usa Moo.js) se inicializa con la cadena de código fuente mediante el método `lexer.reset(codigoFuente)`. Esto prepara al léxico para entregar tokens a demanda.
-3.  **Instanciación del Parser:** El módulo `parser.js` (que es el encargado de la lógica de *parsing*) importa la gramática compilada desde `grammar.js`. Luego, crea una nueva instancia del *parser* de Nearley, pasándole la gramática y, crucialmente, el objeto `lexer` configurado. Esta configuración permite a Nearley invocar el lexer para obtener los tokens a medida que los necesita.
-4.  **Alimentación del Parser:** El método `parser.feed(codigoFuente)` se llama con la cadena de código fuente completa. Internamente, Nearley utilizará el `lexer` provisto para tokenizar la entrada y procesar los tokens de acuerdo con las reglas de la gramática.
-5.  **Construcción del AST:** A medida que el *parser* reconoce secuencias de tokens que coinciden con las reglas de producción, ejecuta las funciones *postprocessor* asociadas a esas reglas. Estas funciones son responsables de construir los nodos del Árbol de Sintaxis Abstracta (AST), combinando los resultados de sub-reglas en una estructura jerárquica que representa el significado del código.
+1. **Carga del Código Fuente:** El `main.js` del compilador se encarga de leer el código fuente del programa LibreScript (ej. desde un archivo `.ls`).
+2. **Preparación del Lexer:** El objeto `lexer` (instanciado desde `lexer.js` que usa Moo.js) se inicializa con la cadena de código fuente mediante el método `lexer.reset(codigoFuente)`. Esto prepara al léxico para entregar tokens a demanda.
+3. **Instanciación del Parser:** El módulo `parser.js` (que es el encargado de la lógica de *parsing*) importa la gramática compilada desde `grammar.js`. Luego, crea una nueva instancia del *parser* de Nearley, pasándole la gramática y, crucialmente, el objeto `lexer` configurado. Esta configuración permite a Nearley invocar el lexer para obtener los tokens a medida que los necesita.
+4. **Alimentación del Parser:** El método `parser.feed(codigoFuente)` se llama con la cadena de código fuente completa. Internamente, Nearley utilizará el `lexer` provisto para tokenizar la entrada y procesar los tokens de acuerdo con las reglas de la gramática.
+5. **Construcción del AST:** A medida que el *parser* reconoce secuencias de tokens que coinciden con las reglas de producción, ejecuta las funciones *postprocessor* asociadas a esas reglas. Estas funciones son responsables de construir los nodos del Árbol de Sintaxis Abstracta (AST), combinando los resultados de sub-reglas en una estructura jerárquica que representa el significado del código.
 
 Aquí se muestra un fragmento del código de la gramatica `grammar.js` que ilustra esta integración:
 

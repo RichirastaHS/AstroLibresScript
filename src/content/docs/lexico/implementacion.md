@@ -16,12 +16,13 @@ Para demostrar el funcionamiento del analizador léxico, consideremos un pequeñ
 
 **Código LibreScript de Entrada (`ejemplo.ls`):**
 
-```
+```ts
 $edad: numero = 25;
 imprimir("Tu edad es:", $edad);
 ```
 
-**Tokens**
+### Tokens
+
 ```bash
 [
   {

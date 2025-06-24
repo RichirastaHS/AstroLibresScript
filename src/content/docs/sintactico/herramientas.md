@@ -10,14 +10,13 @@ Para la construcción del analizador sintáctico de LibreScript, se ha empleado 
 * **Basado en LALR(1):** Utiliza un algoritmo de *parsing* LALR(1), lo que le permite manejar una amplia gama de gramáticas libres de contexto, incluidas muchas que son ambiguas de forma natural, siempre que la ambigüedad pueda resolverse con un *look-ahead* de un token.
 * **Manejo de Ambigüedades:** Permite definir prioridades y asociaciones para operadores directamente en la gramática, y ofrece mecanismos para resolver ambigüedades mediante *postprocessors* o `$fuentes` para elegir la derivación correcta cuando existen múltiples caminos de análisis.
 
-
 ### Estructura de Archivos `.ne` (y su equivalente en `grammar.js`)
 
 Nearley utiliza archivos con extensión `.ne` para definir la gramática. Estos archivos son compilados por la herramienta `nearleyc` en archivos JavaScript (`.js`) que pueden ser importados y utilizados directamente en el proyecto.
 
 Un archivo `.ne` típicamente tiene la siguiente estructura conceptual:
 
-```nearley
+```js
 // Sección de Encabezado (equivalente a las declaraciones en .cup/.y)
 // Código JavaScript que se insertará al principio del archivo .js generado.
 // Aquí se importan utilidades, como el lexer o una función para crear nodos AST.
@@ -50,3 +49,4 @@ DeclaracionVariable -> IDENTIFICADOR_VAR _ DOS_PUNTOS _ Tipo _ OP_ASIGNACION _ E
 // _nl -> %nl | %ws:*:* | %comentario_linea | %comentario_bloque
 // _ws -> %ws:+
 // _ -> %ws:*
+```

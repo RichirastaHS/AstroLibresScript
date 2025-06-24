@@ -98,3 +98,4 @@ IDENTIFICADOR\_VAR\:   /\\</span>[a-zA-Z_][a-zA-Z0-9_]*/,   // Empieza con $, se
   DOS_PUNTOS:   /:/,
   PUNTO:        /\./, 
 });
+```

@@ -10,23 +10,23 @@ LibreScript, como lenguaje de tipado fuerte y explícito, debe cumplir con varia
 Todos los identificadores (variables, constantes, funciones, clases) deben ser declarados antes de su uso. La redeclaración de un identificador en el mismo ámbito no está permitida. Los ámbitos definen la visibilidad y el tiempo de vida de los identificadores.
 
 * **Variables y Constantes Declaradas Únicamente:**
-    * **Cumplimiento:**
+  * **Cumplimiento:**
         ```librescript
         $contador: numero = 0; // Declaración válida y única
         $contador = $contador + 1; // Uso válido de la variable declarada
         ```
-    * **Error (Redeclaración):**
+  * **Error (Redeclaración):**
         ```librescript
         $miVar: texto = "Hola";
         $miVar: numero = 123; // Error: '$miVar' ya ha sido declarado en este ámbito.
         ```
-    * **Error (Uso antes de Declaración):**
+  * **Error (Uso antes de Declaración):**
         ```librescript
         imprimir($desconocida); // Error: El identificador '$desconocida' no ha sido declarado.
         ```
 
 * **Ámbitos de Bloque:** Los identificadores declarados dentro de bloques (`{...}` asociados a `si`, `mientras`, `funcion`, `clase`, etc.) son locales a ese bloque y no son visibles fuera de él una vez que el bloque finaliza.
-    * **Cumplimiento:**
+  * **Cumplimiento:**
         ```librescript
         si (verdadero) {
             $temp: numero = 10;
@@ -34,7 +34,7 @@ Todos los identificadores (variables, constantes, funciones, clases) deben ser d
         }
         // Después de este bloque, $temp ya no es accesible.
         ```
-    * **Error (Acceso fuera de Ámbito):**
+  * **Error (Acceso fuera de Ámbito):**
         ```librescript
         si (verdadero) {
             $temp: numero = 10;
@@ -47,18 +47,18 @@ Todos los identificadores (variables, constantes, funciones, clases) deben ser d
 LibreScript impone un sistema de tipado estático y fuerte. Esto significa que las operaciones y asignaciones deben respetar la compatibilidad de tipos en tiempo de compilación.
 
 * **Asignaciones Consistentes:** El tipo del valor en el lado derecho de una asignación debe ser compatible con el tipo declarado de la variable o constante en el lado izquierdo.
-    * **Cumplimiento:**
+  * **Cumplimiento:**
         ```librescript
         $edad: numero = 25; // OK: Asignación de 'numero' a 'numero'
         $nombre: texto = "Juan"; // OK: Asignación de 'texto' a 'texto'
         ```
-    * **Error (Tipo Inconsistente en Asignación):**
+  * **Error (Tipo Inconsistente en Asignación):**
         ```librescript
         $edad: numero = "veinte"; // Error: No se puede asignar 'texto' a una variable de tipo 'numero'.
         ```
 
 * **Operaciones Aritméticas y Lógicas:** Los operadores binarios y unarios tienen requisitos específicos sobre los tipos de sus operandos.
-    * **Cumplimiento:**
+  * **Cumplimiento:**
         ```librescript
         $a: numero = 10;
         $b: numero = 20;
@@ -68,13 +68,13 @@ LibreScript impone un sistema de tipado estático y fuerte. Esto significa que l
         $y: booleano = falso;
         $z: booleano = $x && $y; // OK: Operación lógica AND de booleanos
         ```
-    * **Error (Operación de Tipos Incompatibles):**
+  * **Error (Operación de Tipos Incompatibles):**
         ```librescript
         $num: numero = 5;
         $cad: texto = "abc";
         $res: numero = $num * $cad; // Error: Operación '*' no definida para 'numero' y 'texto'.
         ```
-    * **Error (Operador Unario Incompatible):**
+  * **Error (Operador Unario Incompatible):**
         ```librescript
         $estaListo: booleano = verdadero;
         $negado: numero = -$estaListo; // Error: Operador unario '-' no definido para 'booleano'.
@@ -87,23 +87,23 @@ LibreScript impone un sistema de tipado estático y fuerte. Esto significa que l
 Las llamadas a funciones y métodos deben coincidir con su definición en términos del número de argumentos y sus tipos.
 
 * **Número de Argumentos Correcto:**
-    * **Cumplimiento:**
+  * **Cumplimiento:**
         ```librescript
         funcion saludar($nombre: texto) { imprimir("Hola", $nombre); }
         saludar("Ana"); // OK: Coincide el número de argumentos (1)
         ```
-    * **Error (Número Incorrecto de Argumentos):**
+  * **Error (Número Incorrecto de Argumentos):**
         ```librescript
         saludar(); // Error: La función 'saludar' espera 1 argumento, pero recibió 0.
         saludar("Ana", "Luis"); // Error: La función 'saludar' espera 1 argumento, pero recibió 2.
         ```
 * **Tipos de Argumentos Correctos:**
-    * **Cumplimiento:**
+  * **Cumplimiento:**
         ```librescript
         funcion sumar($a: numero, $b: numero): numero { devolver $a + $b; }
         $resultado: numero = sumar(5, 10); // OK: Tipos de argumentos coinciden
         ```
-    * **Error (Tipo de Argumento Incorrecto):**
+  * **Error (Tipo de Argumento Incorrecto):**
         ```librescript
         $resultado: numero = sumar(5, "diez"); // Error: El argumento 2 de 'sumar' debe ser 'numero', pero se recibió 'texto'.
         ```
@@ -113,14 +113,14 @@ Las llamadas a funciones y métodos deben coincidir con su definición en térmi
 Ciertas partes de las estructuras de control tienen requisitos de tipo específicos para asegurar un flujo de ejecución coherente.
 
 * **Condiciones Booleanas:** Las expresiones utilizadas como condiciones en estructuras como `si`, `mientras` y `para` deben evaluarse a un tipo booleano.
-    * **Cumplimiento:**
+  * **Cumplimiento:**
         ```librescript
         $esValido: booleano = verdadero;
         si ($esValido) { // OK: La condición es booleana
             // ...
         }
         ```
-    * **Error (Condición No Booleana):**
+  * **Error (Condición No Booleana):**
         ```librescript
         $num: numero = 10;
         mientras ($num) { // Error: La condición del bucle 'mientras' debe ser de tipo 'booleano'.
@@ -129,18 +129,18 @@ Ciertas partes de las estructuras de control tienen requisitos de tipo específi
         ```
 
 * **Sentencias `romper` y `devolver`:**
-    * **`romper`:** Solo puede aparecer dentro de un contexto de bucle (`mientras`, `para`) o una sentencia `segun`.
-        * **Error (`romper` fuera de contexto):**
+  * **`romper`:** Solo puede aparecer dentro de un contexto de bucle (`mientras`, `para`) o una sentencia `segun`.
+    * **Error (`romper` fuera de contexto):**
             ```librescript
             romper; // Error: La sentencia 'romper' debe estar dentro de un bucle o 'segun'.
             ```
-    * **`devolver`:** Solo puede aparecer dentro del cuerpo de una función. Si la función declara un tipo de retorno, el valor devuelto por `devolver` debe ser compatible con ese tipo.
-        * **Error (`devolver` fuera de función):**
+  * **`devolver`:** Solo puede aparecer dentro del cuerpo de una función. Si la función declara un tipo de retorno, el valor devuelto por `devolver` debe ser compatible con ese tipo.
+    * **Error (`devolver` fuera de función):**
             ```librescript
             $a: numero = 10;
             devolver $a; // Error: La sentencia 'devolver' debe estar dentro de una función.
             ```
-        * **Error (Tipo de Retorno Inconsistente):**
+    * **Error (Tipo de Retorno Inconsistente):**
             ```librescript
             funcion obtenerTexto(): texto {
                 devolver 123; // Error: La función 'obtenerTexto' debe devolver 'texto', pero se devuelve 'numero'.

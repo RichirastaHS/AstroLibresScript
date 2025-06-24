@@ -10,6 +10,7 @@ La sintaxis de LibreScript se define formalmente mediante una **Gramática Libre
 La gramática de LibreScript se presenta a continuación utilizando una notación EBNF, que es una extensión de la BNF tradicional.
 
 **Convenciones utilizadas:**
+
 * Los **símbolos no terminales** están escritos con la primera letra en mayúscula (ej., `Programa`, `Sentencia`).
 * Los **símbolos terminales** (tokens) están escritos en `MAYÚSCULAS_CON_GUIONES_BAJOS` tal como se definen en el analizador léxico (ej., `PR_IMPRIMIR`, `IDENTIFICADOR_VAR`).
 * `::=` significa "se define como".

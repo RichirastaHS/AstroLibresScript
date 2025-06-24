@@ -9,13 +9,13 @@ El **análisis semántico** es el proceso de añadir información de significado
 
 **Función en el Proceso de Compilación:**
 
-1.  **Verificación de Tipos (Type Checking):** Una de las tareas más importantes. Asegura que las operaciones se realicen sobre tipos de datos compatibles (ej., no sumar un `numero` y un `texto` a menos que haya una conversión implícita definida), y que los valores asignados a variables coincidan con su tipo declarado.
-2.  **Verificación de Declaraciones:** Confirma que todas las variables, constantes, funciones y clases utilizadas en el programa han sido previamente declaradas.
-3.  **Manejo de Ámbitos (Scope Management):** Gestiona la visibilidad de los identificadores. Asegura que las referencias a variables y funciones se resuelvan al identificador correcto en el ámbito adecuado (local, global, de clase, etc.).
-4.  **Verificación de Llamadas a Funciones/Métodos:** Comprueba que el número y los tipos de los argumentos pasados en una llamada de función coincidan con los parámetros esperados en su definición.
-5.  **Validación de Estructuras de Control:** Por ejemplo, verifica que la condición en un `si`, `mientras` o `para` sea de tipo booleano, o que una sentencia `romper` o `devolver` se encuentre dentro de un contexto válido (un bucle/`segun` para `romper`, una función para `devolver`).
-6.  **Decoración del AST:** Durante este proceso, el analizador semántico puede "decorar" el AST añadiendo información valiosa a los nodos, como los tipos inferidos de expresiones o referencias directas a las entradas de la tabla de símbolos. Este AST "decorado" es la entrada para las fases posteriores, como la generación de código intermedio.
-7.  **Reporte de Errores Semánticos:** Cuando se detecta una inconsistencia semántica (ej., usar una variable no declarada, asignar un tipo incorrecto, llamar a una función con argumentos erróneos), el analizador semántico genera un error y lo reporta al usuario.
+1. **Verificación de Tipos (Type Checking):** Una de las tareas más importantes. Asegura que las operaciones se realicen sobre tipos de datos compatibles (ej., no sumar un `numero` y un `texto` a menos que haya una conversión implícita definida), y que los valores asignados a variables coincidan con su tipo declarado.
+2. **Verificación de Declaraciones:** Confirma que todas las variables, constantes, funciones y clases utilizadas en el programa han sido previamente declaradas.
+3. **Manejo de Ámbitos (Scope Management):** Gestiona la visibilidad de los identificadores. Asegura que las referencias a variables y funciones se resuelvan al identificador correcto en el ámbito adecuado (local, global, de clase, etc.).
+4. **Verificación de Llamadas a Funciones/Métodos:** Comprueba que el número y los tipos de los argumentos pasados en una llamada de función coincidan con los parámetros esperados en su definición.
+5. **Validación de Estructuras de Control:** Por ejemplo, verifica que la condición en un `si`, `mientras` o `para` sea de tipo booleano, o que una sentencia `romper` o `devolver` se encuentre dentro de un contexto válido (un bucle/`segun` para `romper`, una función para `devolver`).
+6. **Decoración del AST:** Durante este proceso, el analizador semántico puede "decorar" el AST añadiendo información valiosa a los nodos, como los tipos inferidos de expresiones o referencias directas a las entradas de la tabla de símbolos. Este AST "decorado" es la entrada para las fases posteriores, como la generación de código intermedio.
+7. **Reporte de Errores Semánticos:** Cuando se detecta una inconsistencia semántica (ej., usar una variable no declarada, asignar un tipo incorrecto, llamar a una función con argumentos erróneos), el analizador semántico genera un error y lo reporta al usuario.
 
 ### Diferencia con el Análisis Sintáctico
 

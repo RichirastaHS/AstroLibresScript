@@ -57,6 +57,7 @@ Consideremos un si simple:
 si ($cond: booleano = verdadero) {
     imprimir("Es verdadero");
 }
+
 ```bash
       <Programa>
           |

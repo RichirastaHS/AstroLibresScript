@@ -14,7 +14,6 @@ Sintaxis simplificada:
 
 Esto significa que el tipo de todas las variables, parámetros de función y retornos debe ser conocido en tiempo de compilación (o análisis). El programador debe declarar explícitamente el tipo de una variable en el momento de su definición. Esto ayuda a prevenir muchos errores relacionados con tipos antes de la ejecución del programa.
 
-
 ### Sintaxis General y Semántica Esperada
 
 La sintaxis de LibreScript está diseñada para ser clara y concisa, inspirándose en lenguajes modernos para facilitar la lectura y escritura.
@@ -45,6 +44,6 @@ LibreScript define un conjunto de palabras reservadas que tienen un significado 
 20. texto
 21. booleano
 22. arreglo
-23. Objeto 
+23. Objeto
 24. verdadero
 25. falso

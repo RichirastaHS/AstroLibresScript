@@ -12,7 +12,6 @@ Tipos de Expresiones: Para cada expresión en el código fuente, el analizador d
 Tipos Esperados: Para cada operación, asignación o llamada a función, el analizador conoce los tipos esperados de los operandos o argumentos. Por ejemplo, el operador + espera operandos de tipo numero, la asignación a una variable espera un valor del mismo tipo que la variable, y una llamada a función espera argumentos que coincidan con los tipos de los parámetros definidos en la función.
 Comparación de Tipos: El analizador compara el tipo obtenido de una expresión con el tipo esperado. Si los tipos coinciden, la operación es válida. Si no, se reporta un error de tipo.
 
-
 **Ejemplos de Código **Correcto** (Cumplimiento de Reglas de Tipo):**
 
 ```bash
@@ -36,7 +35,9 @@ funcion sumarDosNumeros($x: numero, $y: numero): numero {
 }
 $resultadoSuma: numero = sumarDosNumeros(5, 10); // OK: Argumentos 'numero', retorno 'numero'
 ```
+
 **Ejemplos de Código con Errores de Tipo (Infracción de Reglas de Tipo):**
+
 ```bash
 // Error: Asignación de tipo incompatible
 $edad: numero = "veinte"; // Error Semántico: No se puede asignar 'texto' a una variable de tipo 'numero'.
