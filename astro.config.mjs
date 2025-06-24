@@ -21,19 +21,23 @@ export default defineConfig({
         autogenerate: { directory: 'introduccion' },
       },
       {
-        label: 'Sintaxis y Semántica',
+        label: 'Definición del Lenguaje de Programación Diseñado',
         autogenerate: { directory: 'sintaxisysemantica' },
       },
       {
-        label: 'Especificación Formal',
-        autogenerate: { directory: 'especificacion' },
+        label: 'Analizador Léxico',
+        autogenerate: { directory: 'lexico' },
       },
       {
-        label: 'Expresiónes Regulares',
-        autogenerate: { directory: 'expresionregulares' },
+        label: 'Analizador Sintáctico',
+        autogenerate: { directory: 'sintactico' },
       },
       {
-        label: 'Manual de Referencia',
+        label: 'Análisis Semántico',
+        autogenerate: { directory: 'semantico' },
+      },
+      {
+        label: 'Manual del Usuario',
         autogenerate: { directory: 'manual' },
       },
       {
@@ -41,16 +45,8 @@ export default defineConfig({
         autogenerate: { directory: 'manualprogramador' },
       },
       {
-        label: 'Análisis Léxico',
-        autogenerate: { directory: 'lexico' },
-      },
-      {
-        label: 'Análisis Semántico',
-        autogenerate: { directory: 'semantico' },
-      },
-      {
-        label: 'Analizador Sintáctico',
-        autogenerate: { directory: 'sintactico' },
+        label: 'Bibliografía y Anexos',
+        autogenerate: { directory: 'final' },
       },
     ],
 

@@ -9,20 +9,16 @@ import { Steps } from '@astrojs/starlight/components';
 Actualmente, el compilador de LibreScript se ejecuta a través de la línea de comandos de Node.js.
 
 <Steps>
-  1. Guarde su Código Fuente: Escriba su programa LibreScript en un archivo con una extensión `.lib` (o cualquier otra que prefiera, aunque `.lib` es una convención sugerida). Por ejemplo, `mi_programa.lib`.
-      Ejemplo mi_programa.lib:
+  1. Guarde su Código Fuente: Escriba su programa LibreScript en el archivo `test.ls` .
+      Ejemplo test.ls:
       ```ts
-      Fragmento de código
+      //Fragmento de código
       $nombre: texto = "Mundo";
       imprimir("Hola, " + $nombre + "!");
       ```
-  2. Ejecutar el Compilador: Abra una terminal o línea de comandos, navegue hasta el directorio raíz del proyecto de LibreScript (donde se encuentra main.js) y ejecute el siguiente comando, reemplazando `ruta/a/mi_programa.lib` con la ruta real a su archivo:
+  2. Ejecutar el Compilador: Abra una terminal o línea de comandos y ejecute el siguiente comando:
       ```bash
-      node main.js ruta/a/mi_programa.lib
-      ```
-      Ejemplo:
-      ```bash
-      node main.js ejemplos/hola_mundo.lib
+      node main.js
       ```
       :::note
       El compilador procesará el archivo. Si no hay errores semánticos, verá un mensaje como "Análisis semántico completado sin errores. " en la consola. Si hay errores de sintaxis o semánticos, se mostrarán mensajes de error detallados.

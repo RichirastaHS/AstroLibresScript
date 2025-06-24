@@ -1,7 +1,7 @@
 ---
     title: Operadores Aritméticos y lógicos
     sidebar:
-        order: 8
+        order: 6
 ---
 
 Los operadores matemáticos se utilizan para realizar operaciones aritméticas. Ejemplos:

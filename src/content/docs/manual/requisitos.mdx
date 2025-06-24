@@ -8,8 +8,8 @@ import { Steps } from '@astrojs/starlight/components';
 ## Hardware
 
 - Procesador: Cualquier procesador moderno (Intel Core i3 o equivalente AMD, o superior).
-- RAM: 4 GB de RAM como mínimo (8 GB o más recomendados para un rendimiento óptimo).
-- Almacenamiento: 500 MB de espacio libre en disco.
+- RAM: 4 GB de RAM como mínimo.
+- Almacenamiento: 10 MB de espacio libre en disco.
 
 ## Software
 
@@ -17,8 +17,12 @@ import { Steps } from '@astrojs/starlight/components';
   - Windows 10 o posterior.
   - macOS 10.15 (Catalina) o posterior.
   - Distribuciones de Linux modernas (Ubuntu 20.04+, Fedora 34+, Debian 11+, etc.).
-- Node.js: Versión 14.x o superior. Node.js es necesario para ejecutar el compilador, ya que está desarrollado en JavaScript.
-- npm (Node Package Manager): Generalmente viene incluido con Node.js. Se utiliza para gestionar las dependencias del proyecto.
+  -Editor de Texto o IDE:** Cualquier editor de código como:
+    - Visual Studio Code (recomendado)
+    - Sublime Text
+    - Atom
+  - Node.js: Versión 14.x o superior. Node.js es necesario para ejecutar el compilador, ya que está desarrollado en JavaScript.
+  - npm (Node Package Manager): Generalmente viene incluido con Node.js. Se utiliza para gestionar las dependencias del proyecto.
 
 ## Instalación
 
@@ -28,8 +32,8 @@ Siga estos pasos para instalar el compilador de LibreScript
 1. **Clonar o Descargar el Repositorio:** Obtenga los archivos del compilador. Si está utilizando Git, puede clonar el repositorio:
 
     ``` bash
-    git clone <URL_DEL_REPOSITORIO_LIBRESCRIPT>
-    cd <directorio_del_repositorio>
+    git clone [https://github.com/AdrCrz/librescript.git](https://github.com/AdrCrz/librescript.git)
+        cd librescript
     ```
     :::note
     Si descargó un archivo ZIP, descomprímalo en la ubicación deseada y navegue hasta el directorio del proyecto.
@@ -42,12 +46,9 @@ Siga estos pasos para instalar el compilador de LibreScript
     ```
     Este comando instalará moo (para el lexer) y nearley (para el parser), tal como se especifica en package.json.
 
-3. **Compilar la Gramática:** El parser de LibreScript utiliza nearley. Debe compilar la gramática de Nearley antes de poder ejecutar el compilador. Esto generará el archivo `grammar.js` a partir de `grammar.ne` (o `grammar.txt` si lo renombró).
+3. **Verificar la instalación:** Para asegurarte de que todo está configurado correctamente, puedes intentar analizar el archivo de ejemplo `test.ls`.
     ```bash
-    npm run build:grammar
+    node main.js
     ```
-    :::tip
-    Este comando ejecuta nearleyc `grammar.ne` -o `grammar.js`. Asegúrese de que su archivo de gramática se llame `grammar.ne` o ajuste el comando en `package.json` si tiene un nombre diferente (por ejemplo, `grammar.txt`).
-    :::
     ¡Con estos pasos, el compilador estará listo para ser utilizado!
 </Steps>

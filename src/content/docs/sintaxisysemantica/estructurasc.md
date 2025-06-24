@@ -22,20 +22,20 @@ La estructura condicional `si` permite ejecutar bloques de código basados en la
 #### Estructuras de Control: `si(if)`
 
 ```ts
-$temperatura: numero \= 25;
+$temperatura: numero = 25;
 
-si ($temperatura \> 30\) {  
-  imprimir("Hace mucho calor.");  
-} siNo si ($temperatura \> 20\) {  
-  imprimir("La temperatura es agradable.");  
-} siNo {  
-  imprimir("Hace frío.");  
+si ($temperatura > 30) {
+  imprimir("Hace mucho calor.");
+} siNo si ($temperatura > 20) {
+  imprimir("La temperatura es agradable.");
+} siNo {
+  imprimir("Hace frío.");
 }
 
-// If sin siNo  
-$lluvia: booleano \= falso;  
-si ($lluvia) {  
-  imprimir("Lleva un paraguas.");  
+// If sin siNo
+$lluvia: booleano = falso;
+si ($lluvia) {
+  imprimir("Lleva un paraguas.");
 }
 
 ```
@@ -53,8 +53,8 @@ El bucle `mientras` permite ejecutar un bloque de código repetidamente mientras
 ```ts
 $contador: numero = 0;
 mientras ($contador < 5) {
-  imprimir("Contador: " + $contador);
-  $contador++;
+    imprimir($contador);
+    $contador = $contador + 1;
 }
 ```
 
@@ -69,8 +69,8 @@ El bucle `para` proporciona una forma concisa de iterar. Es útil para bucles co
 * Los bloques de código se delimitan con llaves `{}`.  
 
 ```ts
-para ($i: numero = 0; $i < 3; $i++) {
-  imprimir("Bucle i: " + $i);
+para ($i: numero = 0; $i < 10; $i = $i + 1) {
+    imprimir($i);
 }
 ```
 
@@ -87,20 +87,20 @@ La estructura `segun` permite ejecutar diferentes bloques de código basados en 
 * `pordefecto` es opcional y se ejecuta si ninguna de las expresiones `caso` coincide.
 
 ```ts
-Estructuras de Control: segun (Switch)
+//Estructuras de Control: segun (Switch)
 $opcion: numero = 2;
-
 segun ($opcion) {
-  caso 1:  
+  caso 1:{
     imprimir("Seleccionaste la opción 1.");
-    romper;
-  caso 2:  
-    imprimir("Seleccionaste la opción 2.");  
-    romper;  
-  caso 3:  
-    imprimir("Seleccionaste la opción 3.");  
-    romper;  
-  pordefecto:  
-    imprimir("Opción no reconocida."); 
+    }romper;
+  caso 2:{
+    imprimir("Seleccionaste la opción 2.");
+    }romper;
+  caso 3:{
+    imprimir("Seleccionaste la opción 3.");
+    }romper;
+  pordefecto:{
+    imprimir("Opción no reconocida.");
+    }
 }
 ```

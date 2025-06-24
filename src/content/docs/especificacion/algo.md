@@ -1,5 +1,5 @@
 ---
-title: uabjo
+title: UABJO
 ---
 
 ### Operadores de Comparación
@@ -49,13 +49,13 @@ Los operadores lógicos se usan para realizar combinaciones de condiciones:
 
 Las cadenas de texto se pueden manejar utilizando comillas dobles o simples. Aquí tienes un ejemplo de cómo concatenar texto en CodeScript:
 
-`texto: texto= "Hola, mundo";   // También se puede hacer con comillas simples`
+`$texto: texto= "Hola, mundo";   // También se puede hacer con comillas simples`
 
-`nombre: texto = 'Juan';`
+`$nombre: texto = 'Juan';`
 
-`saludo: texto = "Hola, " + $nombre + "!";` 
+`$saludo: texto = "Hola, " + $nombre + "!";` 
 
-`saludo: texto = "Hola,  {{$nombre}}  !";`  
+`$saludo: texto = "Hola,  {{$nombre}}  !";`  
 
 `imprimir(saludo);  // Salida: "Hola, Juan!"`
 
@@ -71,7 +71,7 @@ Los arreglos se utilizan para almacenar múltiples valores. Aquí un ejemplo de 
 
 `$numeros[2] = 10; // Para cambiar un valor`
 
-`longitud = $numeros.longitud;`
+`$longitud = $numeros.longitud;`
 
 `$numeros.agregar(6);`
 
@@ -87,11 +87,11 @@ Un objeto se utiliza para agrupar datos relacionados, y se define con una lista 
 
 `$persona: Objeto = {`
 
-    `nombre: "Juan",`
+    nombre: "Juan",
 
-    `edad: 30,`
+    edad: 30,
 
-    `activo: verdadero`
+    activo: verdadero,
 
 `};`
 
@@ -101,11 +101,11 @@ Las matrices bidimensionales son arreglos de arreglos, y se pueden usar para alm
 
 `$matriz: Número[][] = [`
 
-    `[1, 2, 3],`
+    [1, 2, 3],
 
-    `[4, 5, 6],`
+    [4, 5, 6],
 
-    `[7, 8, 9]`
+    [7, 8, 9]
 
 `];`
 

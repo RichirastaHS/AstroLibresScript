@@ -14,15 +14,15 @@ Si una variable local tiene el mismo nombre que una variable en un ámbito super
 EJEMPLO:  
 
 ```ts
-    $globalVar: numero \= 100; // Variable global
-    funcion miFuncionEjemplo($param: numero): vacio {  
-        $localVar: numero \= 20; // Variable local  
-        imprimir("Dentro de la función:");  
-        imprimir("  Parametro: " \+ $param);   // Acceso a parámetro  
-        imprimir("  Variable local: " \+ $localVar); // Acceso a variable local  
-        imprimir("  Variable global: " \+ $globalVar); // Acceso a variable global  
-        $globalVar \= 101; // Modificación de variable global (si no es constante)  
-    }
-    miFuncionEjemplo(5);  
-    imprimir("Fuera de la función, globalVar es: " \+ $globalVar);
+$globalVar: numero = 100; // Variable global
+funcion miFuncionEjemplo($param: numero): vacio {
+    $localVar: numero = 20; // Variable local
+    imprimir("Dentro de la función:");
+    imprimir("  Parametro: " + $param);    // Acceso a parámetro
+    imprimir("  Variable local: " + $localVar); // Acceso a variable local
+    imprimir("  Variable global: " + $globalVar); // Acceso a variable global
+    $globalVar = 101; // Modificación de variable global (si no es constante)
+}
+miFuncionEjemplo(5);
+imprimir("Fuera de la función, globalVar es: " + $globalVar);
 ```

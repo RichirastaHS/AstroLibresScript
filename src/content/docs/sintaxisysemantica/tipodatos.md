@@ -1,7 +1,7 @@
 ---
  title: Tipos de datos
  sidebar:
-    order: 3
+    order: 0
 
 ---
 En librescript, el **tipado es obligatorio**.

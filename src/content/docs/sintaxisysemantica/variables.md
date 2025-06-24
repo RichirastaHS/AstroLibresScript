@@ -62,12 +62,12 @@ La declaración de variables es **explícita**, lo que significa que siempre deb
 **Reasignación:** Una vez declarada una variable (que no sea una constante `$$`), se le puede asignar un nuevo valor utilizando el **operador de asignación (`=`)**. Es importante que el nuevo valor **coincida con el tipo declarado** de la variable.
 
 ```ts
-    $a: numero \= 10; // Declaración inicial
+    $a: numero = 10; // Declaración inicial
 
-    $a \= 20;         // Reasignación del valor (el tipo de $a sigue siendo 'numero')
+    $a = 20;         // Reasignación del valor (el tipo de $a sigue siendo 'numero')
 
-    $mensaje: texto \= "Hola";
+    $mensaje: texto = "Hola";
 
-    $mensaje \= "Adiós"; // Reasignación de una cadena
+    $mensaje = "Adiós"; // Reasignación de una cadena
     
 ```

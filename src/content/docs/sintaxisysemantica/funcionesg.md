@@ -46,17 +46,16 @@ En LibreScript, las **funciones** son bloques de código reutilizables diseñado
 ```
 
 ```ts
-    funcion sumar($a: numero, $b: numero): numero {
-
-    devolver $a \+ $b;
-
-    }
+    funcion sumar($a: numero, $b: numero): numero { 
+    devolver $a + $b;
+}
+$resultado: numero = sumar(5, 3);
 ```
 
 ```ts
     funcion esMayor($num1: numero, $num2: numero): booleano {
 
-    devolver $num1 \> $num2;
+    devolver $num1 > $num2;
 
     }
 ```
@@ -71,6 +70,22 @@ En LibreScript, las **funciones** son bloques de código reutilizables diseñado
     }
 ```
 
+```ts
+    funcion procesarDatos($nombre: texto, $edad: numero, $activo: booleano): vacio {
+    imprimir("Procesando a: " + $nombre);
+    si ($activo && $edad >= 18) {
+        imprimir($nombre + " es un usuario activo y mayor de edad.");
+    } siNo {
+        imprimir($nombre + " no cumple los criterios completos.");
+    }
+}
+
+procesarDatos("Juan", 25, verdadero);
+procesarDatos("Maria", 17, verdadero);
+procesarDatos("Pedro", 30, falso);
+
+```
+
 ### Llamada a Funciones
 
 Para **invocar una función**, se utiliza su nombre seguido de paréntesis `()` que contienen los argumentos (valores reales) correspondientes a sus parámetros, separados por comas.
@@ -83,16 +98,16 @@ Para **invocar una función**, se utiliza su nombre seguido de paréntesis `()` 
 
 ```ts
     // Llamada a función que devuelve texto  
-    $mensaje: texto \= saludar();  
+    $mensaje: texto = saludar();  
     imprimir($mensaje); // Salida: "Saludo completado"
 
     // Llamada a función con parámetros y retorno numérico  
-    $suma: numero \= sumar(10, 5);  
-    imprimir("La suma es: " \+ $suma); // Salida: "La suma es: 15"
+    $suma: numero = sumar(10, 5);  
+    imprimir("La suma es: " + $suma); // Salida: "La suma es: 15"
 
     // Llamada a función con retorno booleano  
-    $mayor: booleano \= esMayor(7, 3);  
-    imprimir("¿7 es mayor que 3? " \+ $mayor); // Salida: "¿7 es mayor que 3? verdadero"
+    $mayor: booleano = esMayor(7, 3);  
+    imprimir("¿7 es mayor que 3? " + $mayor); // Salida: "¿7 es mayor que 3? verdadero"
 
     // Llamada a función que no devuelve valor  
     mostrarMensaje("LibreScript es genial."); // Salida: "Mensaje: LibreScript es genial."

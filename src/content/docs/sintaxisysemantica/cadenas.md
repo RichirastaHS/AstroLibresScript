@@ -1,7 +1,7 @@
 ---
 title: Concatenación de Cadenas
 sidebar:
-    order: 10
+    order: 7
 ---
 
 Las cadenas de texto en LibreScript pueden manejarse utilizando **comillas dobles (`"`) o simples (`'`)**.  

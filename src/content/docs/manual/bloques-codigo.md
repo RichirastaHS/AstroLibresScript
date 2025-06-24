@@ -133,14 +133,14 @@ si ($edad >= 18) {
 $contador: numero = 0;
 mientras ($contador<5) {
     imprimir("Contador: " + aTxt($contador));
-    $contador++;
+    $contador + 1;
 }
 ```
 
 **Bucle para:**
 
 ```ts
-para ($i: numero = 0; $i<10; $i++) {
+para ($i: numero = 0; $i<10; $i+1) {
     imprimir("Iteración: " + aTxt($i));
 }
 ```
@@ -159,12 +159,15 @@ mientras (verdadero) {
 ```ts
 $opcion: numero = 2;
 segun ($opcion) {
-    caso 1:
+    caso 1:{
         imprimir("Seleccionaste la opción 1.");
-    caso 2:
+    }romper;
+    caso 2:{
         imprimir("Seleccionaste la opción 2.");
-    pordefecto:
+    }romper;
+    pordefecto:{
         imprimir("Opción no reconocida.");
+    }
 }
 ```
 
@@ -181,7 +184,7 @@ funcion sumar($a: numero, $b: numero): numero {
     devolver $a + $b;
 }
 
-funcion imprimirMensaje(): vacio {
+funcion imprimirMensaje($msg: texto): vacio {
     imprimir("Este es un mensaje sin retorno.");
 }
 ```
@@ -205,31 +208,12 @@ aNum(valor: texto): Convierte un texto a número.
 **`aTxt(valor: cualquier_primitivo)`:** Convierte cualquier tipo primitivo a texto.
 **`aBool(valor: cualquier_primitivo)`:** Convierte cualquier tipo primitivo a booleano.
 
-### Clases y objetos
-
-Declaración de Clase:
-
-```ts
-clase Persona {
-    $nombre: texto;
-    $edad: numero;
-
-    constructor($nombreParam: texto, $edadParam: numero) {
-        este.nombre = $nombreParam;
-        este.edad = $edadParam;
-    }
-
-    funcion obtenerDescripcion(): texto {
-        devolver "Nombre: " + este.nombre + ", Edad: " + aTxt(este.edad);
-    }
-}
-```
+### Objeto
 
 **Creación de Objeto (Instanciación):**
 
 ```ts
 $miPersona: Objeto = nuevo Persona("Carlos", 30);
-imprimir($miPersona.obtenerDescripcion()); // Salida: "Nombre: Carlos, Edad: 30"
 ```
 
 ### Acceso a Arreglos y Objetos Literales
@@ -241,13 +225,3 @@ $colores: texto[] = ["rojo", "verde", "azul"];
 imprimir($colores[0]); // Salida: "rojo"
 ```
 
-**Creación de Objeto Literal:**
-
-```ts
-$producto: Objeto = {
-    nombre: "Laptop",
-    precio: 1200,
-    disponible: verdadero
-};
-imprimir($producto.nombre); // Salida: "Laptop"
-```

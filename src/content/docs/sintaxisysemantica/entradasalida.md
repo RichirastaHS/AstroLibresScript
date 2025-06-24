@@ -1,7 +1,7 @@
 ---
 title: Entradas y Salidas
 sidebar:
-    order: 11
+    order: 8
 ---
 
 La función imprimir() se utiliza para mostrar información en la consola.  
@@ -13,11 +13,11 @@ La función imprimir() se utiliza para mostrar información en la consola.
 **Salto de línea:** Cada llamada a `imprimir()` termina con un salto de línea por defecto, es decir, el siguiente `imprimir()` comenzará en una nueva línea.
 
 ```ts
-    $nombre: texto \= "Mundo";  
-    $edad: numero \= 30;  
-    $esActivo: booleano \= verdadero;  
-    $miObjeto: Objeto \= {clave: "valor"};  
-    $misNumeros: numero\[\] \= \[1, 2, 3\];
+    $nombre: texto = "Mundo";  
+    $edad: numero = 30;  
+    $esActivo: booleano = verdadero;  
+    $miObjeto: Objeto = {clave: "valor"};  
+    $misNumeros: numero[] = [1, 2, 3];
 
     imprimir("Hola,", $nombre, "\!");  
     imprimir("Tienes", $edad, "años.");  
@@ -37,23 +37,11 @@ La función **`leer()`** se utiliza para obtener una línea de texto del usuario
 **Conversión explícita:** Si necesitas el valor en otro tipo (como `numero` o `booleano`), deberás usar las funciones de conversión explícita (`aNum()`, `aBool()`)
 
 ```ts
-    $nombreUsuario: texto;
+$edadTexto: texto = ""; 
+$edadNumero: numero = 0; 
 
-    imprimir("Por favor, ingresa tu nombre:");
-
-    $nombreUsuario \= leer();
-
-    imprimir("¡Hola,", $nombreUsuario, "\!");
-
-    $edadTexto: texto;
-
-    $edadNumero: numero;
-
-    imprimir("Ingresa tu edad:");
-
-    $edadTexto \= leer();
-
-    $edadNumero \= aNum($edadTexto); // Convertir a número
-
-    imprimir("Tu edad es:", $edadNumero);
+imprimir("Ingresa tu edad:");
+$edadTexto = leer();
+$edadNumero = aNum($edadTexto);
+imprimir("Tu edad es:", $edadNumero);
 ```

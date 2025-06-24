@@ -1,7 +1,7 @@
 ---
     title: Comentarios
     sidebar:
-        order: 6
+        order: 4
 ---
 
 Los comentarios en librescript se escriben de dos maneras:

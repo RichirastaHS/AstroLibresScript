@@ -40,16 +40,6 @@ Estos errores ocurren cuando el código no sigue las reglas gramaticales del len
 
    Revise el código desde la línea del error hacia atrás, buscando bloques sin cerrar o sentencias incompletas.
 
-### ¡Gramática ambigua! Múltiples resultados de parseo encontrados
-
-  ⚠️ **Interpretación:**
-  
-  Esto no es un error en su código, sino una advertencia del compilador. Significa que la gramática de Nearley tiene más de una forma de interpretar la misma secuencia de tokens. Aunque el compilador intentará elegir un resultado, puede llevar a comportamientos inesperados o a la interpretación de su código de una manera no intencionada.
-
-  ✅ **Solución:**
-  
-  Esto generalmente requiere una revisión y ajuste de la gramática (`grammar.ne` o `grammar.txt`) por parte de los desarrolladores del compilador para resolver la ambigüedad. Como usuario, si esto ocurre, puede intentar simplificar la expresión o estructura que parece causar la ambigüedad o informar del problema.
-
 ## Errores Semánticos
 
 Estos errores ocurren cuando el código es sintácticamente correcto, pero su significado es inválido (por ejemplo, usar una variable no declarada, incompatibilidad de tipos, etc.). El compilador de **LibreScript** utiliza una tabla de símbolos para detectarlos.
@@ -67,7 +57,11 @@ Estos errores ocurren cuando el código es sintácticamente correcto, pero su si
   ```ts
   $contador: numero = 0;
 
-  $contador: texto = “hola”; // Error: $contador ya declarado
+  $contador: numero = 10;  
+  ```
+  ```bash
+  --- Análisis Semántico ---
+  Error Semántico 🔴: El identificador '$contador' ya ha sido declarado en este ámbito.
   ```
 
 ### SemanticError: La variable ‘${name}’ no ha sido declarada
@@ -76,25 +70,37 @@ Estos errores ocurren cuando el código es sintácticamente correcto, pero su si
   
   Se intentó usar una variable que no ha sido declarada previamente en el ámbito actual o en uno superior.
 
+  ```ts
+  $a: numero = 10;
+  $b: numero = 20;
+  $res1: numero = $a + $b * $c; 
+  ```
+  ```bash
+  --- Análisis Semántico ---
+  Error Semántico 🔴: El identificador '$c' no ha sido declarado.
+  ```
+
   ✅ **Solución:**
   
-  Declare la variable `$name` con su tipo antes de usarla.
+  Declare la variable `$C` con su tipo antes de usarla.
 
 ### SemanticError: Tipo incompatible: se esperaba `${expectedType}` pero se recibió `${receivedType}`
 
   ⚠️ **Interpretación:**
   
   Se intentó realizar una asignación o una operación con tipos de datos que no son compatibles. Por ejemplo, asignar un texto a una variable de tipo numero.
+   ```ts
+  $miNumero: numero = 'cinco';
+  ```
+  ```bash
+  --- Análisis Semántico ---
+  Error Semántico 🔴: Tipo incompatible para variable '$miNumero'. Se esperaba 'numero' pero se obtuvo 'texto'.
+  ```
 
   ✅ **Solución:**
   
   Asegúrese de que los tipos de datos coincidan. Utilice las funciones de conversión (`aNum`, `aTxt`, `aBool`) si es necesario.
 
-  Ejemplo:
-
-  ```ts
-  $miNumero: numero = “cinco”; // Error: tipo incompatible
-  ```
 
 ### SemanticError: No se puede reasignar un valor a la constante `${name}`
 
@@ -111,6 +117,17 @@ Estos errores ocurren cuando el código es sintácticamente correcto, pero su si
   ⚠️ **Interpretación:**
 
   Se intentó llamar a una función o método que no está definida, o los argumentos proporcionados (número o tipo) no coinciden con la firma de la función.
+    ```ts
+  $miAncho: numero = 10;
+  $miAlto: numero = 5;
+  $resultadoArea: numero = calcularArea($miAncho, $miAlto); 
+  imprimir("El área es: " + $resultadoArea);
+  ```
+  ```bash
+  --- Análisis Semántico ---
+  Error Semántico 🔴: 'calcularArea' no es una función o método, o no ha sido declarada. Se
+  obtuvo: null
+  ```
 
  ✅ **Solución:**
 
@@ -121,17 +138,17 @@ Estos errores ocurren cuando el código es sintácticamente correcto, pero su si
  ⚠️ **Interpretación:**
 
  La palabra clave devolver se usó fuera del cuerpo de una función.
+   ```ts
+  funcion calcularArea($ancho: numero, $alto: numero): numero {
+  $area: numero = $ancho * $alto;
+  }
+  devolver $area;
+  ```
+  ```bash
+  --- Análisis Semántico ---
+  Error Semántico 🔴: Sentencia 'devolver' fuera de una función o método.
+  ```
 
  ✅ **Solución:**
 
  Devolver solo puede usarse para retornar un valor de una función.
-
-### SemanticError: La sentencia `romper` debe estar dentro de un bucle o una sentencia `según`
-
- ⚠️ **Interpretación:**
-
- La palabra clave romper se usó fuera del contexto de un bucle (mientras, para) o una sentencia según.
-
- ✅ **Solución:**
-
- Romper solo puede usarse para salir de un bucle o una rama de según.
