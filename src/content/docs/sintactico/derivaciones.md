@@ -22,7 +22,7 @@ Partiendo del símbolo inicial simplificado para una sentencia: `<Sentencia>`.
 
 Gramática relevante para este ejemplo:
 
-```ts
+```go
 <Programa> ::= <_nl> <Sentencias> <_nl>
 <Sentencias> ::= <Sentencia> <_nl> | <Sentencias> <Sentencia> <_nl> | ε
 <Sentencia> ::= <DeclaracionVariable>
@@ -46,7 +46,7 @@ Gramática relevante para este ejemplo:
 
 Derivación:
 
-```ts
+```go
 <Programa>
 _nl <Sentencias> _nl (aplicando Programa ::= _nl Sentencias _nl)
 _nl <Sentencia> _nl _nl (aplicando Sentencias ::= Sentencia _nl) - asumiendo solo una sentencia para simplificar
@@ -62,7 +62,7 @@ _nl <_IDENTIFICADOR_VAR> _ <_DOS_PUNTOS> _ <_TIPO_NUMERO> _ <_OP_ASIGNACION> _ <
 
 ### Ejemplo de Derivación Más a la Derecha
 
-```ts
+```go
 Partiendo del símbolo inicial: <Programa>
 
 Derivación:

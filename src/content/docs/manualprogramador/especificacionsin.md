@@ -8,7 +8,7 @@ sidebar:
 
 Este compilador utiliza la herramienta Nearley.js para definir la gramática del lenguaje LibreScript. A continuación, se explica cada una de las partes importantes de estas reglas:
 
-```regex
+```go
 _  -> %ws:*        // Cero o más espacios
 __ -> %ws:+        // Uno o más espacios obligatorios
 _nl -> (%ws | %nl | %comentario_linea | %comentario_bloque):*
@@ -20,7 +20,7 @@ Estas reglas permiten que el analizador ignore espacios y saltos de línea de fo
 
 ### Programa y Sentencias
 
-```regex
+```go
 Programa -> _nl Sentencias _nl
 Sentencias -> Sentencia _nl | Sentencias Sentencia _nl | %empty
 ```
@@ -29,7 +29,7 @@ Un programa es una lista de sentencias separadas por líneas o espacios. Si no h
 
 ### Declaraciones
 
-```regex
+```go
 DeclaracionVariable -> %IDENTIFICADOR_VAR _ : _ Tipo _ = _ Expresion _ ;
 DeclaracionConstante -> %IDENTIFICADOR_CONST _ : _ Tipo _ = _ Expresion _ ;
 ```
@@ -38,7 +38,7 @@ Permiten definir variables mutables (`$x`) y constantes (`$$PI`) con tipo y valo
 
 ### Tipos
 
-```regex
+```go
 Tipo -> TipoBase | TipoBase [] | TipoBase [][]
 TipoBase -> numero | texto | booleano | objeto | Identificador personalizado
 ```
@@ -47,7 +47,7 @@ Soporta tipos primitivos, arreglos y matrices.
 
 ### Asignaciones
 
-```regex
+```go
 Asignacion -> Designable = Expresion ;
 Designable -> variable, constante, acceso a arreglo o propiedad
 ```
@@ -56,7 +56,7 @@ Permite asignar valores a elementos designables.
 
 ### Estructuras de control
 
-```regex
+```go
 CondicionalSi -> si (condición) {bloque} [sino_si]* [sino]
 BucleMientras -> mientras (condición) {bloque}
 BuclePara -> para (inicio; condición; incremento) {bloque}
@@ -67,7 +67,7 @@ Permite control de flujo como condicionales y bucles anidados.
 
 ### Funciones y Clases
 
-```regex
+```go
 DeclaracionFuncion -> funcion nombre(parámetros): tipo {bloque}
 DeclaracionClase -> clase Nombre { propiedades, constructor, métodos }
 ```
@@ -76,7 +76,7 @@ La gramática permite declarar funciones con tipo de retorno y clases con visibi
 
 ### Expresiones
 
-```regex
+```go
 Expresiones están divididas por niveles de precedencia:
 Lógica: &&, ||
 Igualdad: ==, !=
@@ -88,7 +88,7 @@ Postfijas: x++, x--
 
 ### Literales y llamadas
 
-```regex
+```go
 LiteralPrimario -> números, textos, booleanos, variables, objetos
 LlamadaFuncion -> nombre o propiedad seguido de paréntesis con argumentos
 ```
@@ -97,7 +97,7 @@ Estas reglas permiten formar expresiones completas y ejecutar funciones.
 
 ### Creación de estructuras
 
-```regex
+```go
 CreacionObjeto -> nuevo Clase(...)
 CreacionArreglo -> [elem1, elem2, ...]
 CreacionObjetoLiteral -> {clave: valor, ...}

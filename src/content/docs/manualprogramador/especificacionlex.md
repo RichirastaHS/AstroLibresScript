@@ -7,32 +7,32 @@ sidebar:
 
 El análisis léxico se realiza en el archivo `lexer.js`, que implementa una serie de reglas que define como reconocer:
 
-- **Palabras clave:** como si, sino, mientras, para, funcion, clase, devolver, romper, nuevo, etc.
+- **Palabras clave:** `como si`, `sino`, `mientras`, `para`, `funcion`, `clase`, `devolver`, `romper`, `nuevo`, etc.
 
-- **Identificadores:** que representan variables ($x), constantes ($$Pi), funciones o nombres de clases.
+- **Identificadores:** que representan variables (`$x`), constantes (`$$Pi`), funciones o nombres de clases.
 
 - **Literales:** valores como 123, "texto", true, false, [].
 
--**Operadores:** +, -, *, /, =, ==, !=, &&, ||, ++, --, etc.
-Separadores y delimitadores: ;, ,, (, ), {, }.
+-**Operadores:** `+`, `-`, `*`, `/`, `=`, `==`, `!=`, `&&`, `||`, `++`, `--`, etc.
+Separadores y delimitadores: `;`, `,`, `(`, `)`, `{`, `}`.
 
-### Expresiones regulares usadas para los tokens (están escritas usando el formato que proporciona regex)
+## Expresiones regulares usadas para los tokens (están escritas usando el formato que proporciona regex)
 
-#### Comentarios
+### Comentarios
 
 ```regex
 comentario_linea: /\/\/.*/,
 comentario_bloque: /\/\*[^]*?\*\//
 ```
 
-#### Literales
+### Literales
 
 ```regex
 numero: /[0-9]+(?:\.[0-9]+)?/,
  texto: /\"(?:[^\"\\]|\\.)*\"|'(?:[^'\\]|\\.)*'/
 ```
 
-#### Palabras reservadas
+### Palabras reservadas
 
 Para definir el token con su expresión regular seguimos el formato ya definido comenzamos nombrando el token con el sufijo PR para identificarlo como Palabra Reservada, seguimos con un guion bajo para separar el sufijo del nombre que le vamos a dar al token. En seguida codificamos la expresión regular encerrándola entre diagonales invertidas para que sea entendida por el lexer.js
 
@@ -57,7 +57,7 @@ Para definir el token con su expresión regular seguimos el formato ya definido 
   PR_PARA:      /\bpara\b/,
 ```
 
-#### Identificadores
+### Identificadores
 
 Los identificadores deben estar escritos con notación cameCase, es decir la primera palabra debe ser minúscula posterior mente la primera letra de cada palabra deberá ser mayúscula y no se aceptan espacios entre palabras. Ejemplo: estaEsUnIdentificador
 

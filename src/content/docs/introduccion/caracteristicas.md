@@ -22,28 +22,28 @@ La sintaxis de LibreScript está diseñada para ser clara y concisa, inspirándo
 
 LibreScript define un conjunto de palabras reservadas que tienen un significado especial y no pueden ser utilizadas como identificadores (nombres de variables, funciones, etc.).
 
-1. clase
-2. constructor
-3. nuevo
-4. este
-5. vacio
-6. imprimir
-7. leer
-8. devolver
-9. funcion
-10. si
-11. siNo
-12. siNo si
-13. segun
-14. caso
-15. pordefecto
-16. romper
-17. mientras
-18. para
-19. numero
-20. texto
-21. booleano
-22. arreglo
-23. Objeto
-24. verdadero
-25. falso
+1. `clase`
+2. `constructor`
+3. `nuevo`
+4. `este`
+5. `vacio`
+6. `imprimir`
+7. `leer`
+8. `devolver`
+9. `funcion`
+10. `si`
+11. `siNo`
+12. `siNo` `si`
+13. `segun`
+14. `caso`
+15. `pordefecto`
+16. `romper`
+17. `mientras`
+18. `para`
+19. `numero`
+20. `texto`
+21. `booleano`
+22. `arreglo`
+23. `Objeto`
+24. `verdadero`
+25. `falso`
