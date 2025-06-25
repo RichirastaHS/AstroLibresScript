@@ -5,11 +5,11 @@ sidebar:
 ---
 
 
-La **tabla de símbolos** es una estructura de datos central en el análisis semántico. Actúa como un repositorio que almacena información sobre todos los identificadores (variables, constantes, funciones, clases, etc.) encontrados en el código fuente. El analizador semántico utiliza la tabla de símbolos para verificar que los identificadores se utilicen de manera consistente y de acuerdo con las reglas del lenguaje.
+La **tabla de símbolos** es una estructura de datos central en el análisis semántico. Actúa como un repositorio que almacena información sobre todos los identificadores (variables, constantes, funciones, etc.) encontrados en el código fuente. El analizador semántico utiliza la tabla de símbolos para verificar que los identificadores se utilicen de manera consistente y de acuerdo con las reglas del lenguaje.
 
 ### ¿Qué es y cómo se construye?
 
-La tabla de símbolos es esencialmente un conjunto de mapeos (diccionarios) que asocian nombres de identificadores con información detallada sobre ellos. En un lenguaje con ámbitos anidados como LibreScript, la tabla de símbolos se organiza jerárquicamente, con una tabla global y tablas locales para cada ámbito (funciones, clases, bloques).
+La tabla de símbolos es esencialmente un conjunto de mapeos (diccionarios) que asocian nombres de identificadores con información detallada sobre ellos. En un lenguaje con ámbitos anidados como LibreScript, la tabla de símbolos se organiza jerárquicamente, con una tabla global y tablas locales para cada ámbito (funciones y bloques).
 
 **Construcción:**
 

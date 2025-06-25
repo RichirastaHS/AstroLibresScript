@@ -57,7 +57,7 @@ const lexer = moo.compile({
   // Identificadores (DEBEN ir DESPUÉS de las palabras clave)
   IDENTIFICADOR_CONST: /\<span class="math-inline">\\</span>[a-zA-Z_][a-zA-Z0-9_]*/, // Empieza con $<span class="math-inline">, seguido de letra/\_ y luego letra/numero/\_
 IDENTIFICADOR\_VAR\:   /\\</span>[a-zA-Z_][a-zA-Z0-9_]*/,   // Empieza con $, seguido de letra/_ y luego letra/numero/_
-  IDENTIFICADOR_GRAL:  /[a-zA-Z_][a-zA-Z0-9_]*/,    // Nombres de funciones, clases, propiedades, etc.
+  IDENTIFICADOR_GRAL:  /[a-zA-Z_][a-zA-Z0-9_]*/,    // Nombres de funciones, propiedades, etc.
 
   // Operadores (multi-carácter primero para evitar conflictos)
   OP_POTENCIA:  /\*\*/,  // Potencia

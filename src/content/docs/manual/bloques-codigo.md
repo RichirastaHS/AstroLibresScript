@@ -12,50 +12,46 @@ Aquí se presenta una guía básica de la sintaxis y ejemplos para empezar a esc
 
 * Ejemplo de declaración:
 
-    ```ts
-
-    $a: numero = 0;
-
-    ```
+```ts
+$a: numero = 0;
+```
 
 **`texto`**: Para cadenas de texto.
 
 * Ejemplo de declaración:
 
-    ```ts
-    $mensaje: texto = "Hola, mundo soy: !LibreScript!";
-    ```
+```ts
+$mensaje: texto = "Hola, mundo soy: !LibreScript!";
+```
 
 **`booleano`**: Para valores lógicos verdadero y falso.
 
 * Ejemplo de declaración :
 
-    ```ts
-
-    $estaHecho: booleano = falso; 
-    $tienePermiso: booleano = verdadero;
-    
-    ```
+```ts
+$estaHecho: booleano = falso; 
+$tienePermiso: booleano = verdadero;
+```
 
 **`Objeto`**: Para estructuras de datos con pares clave-valor
 
 * Ejemplo de declaración y asignación:
 
-    ```ts
-    $persona: Objeto = {
-      nombre: "Juan",
-      edad: 25
-    };
-    ```
+```ts
+$persona: Objeto = {
+    nombre: "Juan",
+    edad: 25
+};
+```
 
 **`Arreglos (Arrays)`**: Para colecciones de elementos del mismo tipo.
 
 * Ejemplo de declaración y asignación de un arreglo de texto:
 
-    ```ts
-    $numeros: numero[] = [1, 2, 3, 4, 5];
-    $nombres: texto[] = ["Ana", "Luis", "Carlos"];
-    ```
+```ts
+$numeros: numero[] = [1, 2, 3, 4, 5];
+$nombres: texto[] = ["Ana", "Luis", "Carlos"];
+```
 
 ### Declaración y Asignación de Variables
 
@@ -65,15 +61,15 @@ Aquí se presenta una guía básica de la sintaxis y ejemplos para empezar a esc
 
 * Declaración y Asignación: `$nombreVariable: TipoDeDato = valor;`
 
-  ```ts
-    $cantidad: numero;
+```ts
+  $cantidad: numero=200;
 
-    $cantidad = 100;
+  $cantidad = 100;
 
-    $mensaje: texto = "LibreScript es genial!";
+  $mensaje: texto = "LibreScript es genial!";
 
-    $esValido: booleano = verdadero;
-  ```
+  $esValido: booleano = verdadero;
+```
 
 ### Constantes
 
@@ -224,4 +220,3 @@ $miPersona: Objeto = nuevo Persona("Carlos", 30);
 $colores: texto[] = ["rojo", "verde", "azul"];
 imprimir($colores[0]); // Salida: "rojo"
 ```
-

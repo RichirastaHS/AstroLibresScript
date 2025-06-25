@@ -31,13 +31,13 @@ Sintaxis:
 3. **Llaves `{}`** (`LBRACE`, `RBRACE` tokens) que delimitan el **bloque de código** que se ejecutará si la condición es verdadera.
 4. La **palabra reservada `siNo`** (`PR_SINO` token), seguida de otro **bloque de código** entre llaves `{}`, que se ejecutará si la condición es falsa.
 
-```js
-    si ($x > 0) { 
-        imprimir("Positivo");
-    } 
-    siNo { 
-        imprimir("Negativo"); 
-    }
+```ts
+$x: numero = 25;
+si ($x > 30) {
+  imprimir("Mas de 30.");
+} siNo {
+  imprimir("Menos de 30.");
+}
 ```
 
 ## Estructura `segun`
@@ -80,7 +80,7 @@ El bucle `mientras` permite repetir un bloque de código mientras se cumpla una 
 Aquí un ejemplo:
 
 ```javascript
-    $i: Número = 1;
+    $i: numero = 1;
     mientras ($i <= 5) {
         imprimir("Contando: " + $i);
         $i = $i + 1;

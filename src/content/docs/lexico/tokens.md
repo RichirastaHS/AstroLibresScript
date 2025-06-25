@@ -19,7 +19,7 @@ En LibreScript, los tokens se clasifican de la siguiente manera:
     * Ejemplos: `numero`, `texto`, `booleano`.
 
 3. **Identificadores:**
-    Nombres definidos por el programador para variables, constantes, funciones, clases, propiedades de objetos. Siguen reglas específicas de prefijo.
+    Nombres definidos por el programador para variables, constantes, funciones, propiedades de objetos. Siguen reglas específicas de prefijo.
     * **Variables:** Prefijo `$`. Ejemplo: `$miVariable`, `$contador`.
     * **Constantes:** Prefijo `$$`. Ejemplo: `$$PI`, `$$MAX_VALOR`.
     * **Generales:** Nombres de funciones (sin prefijo `$`). Ejemplo: `saludar`.

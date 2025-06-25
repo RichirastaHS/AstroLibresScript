@@ -36,16 +36,6 @@ En LibreScript, las **funciones** son bloques de código reutilizables diseñado
 **Ejemplos declaración de funciones:**
 
 ```ts
-    funcion saludar(): texto {
-
-        imprimir("¡Hola desde la función\!");
-
-        devolver "Saludo completado";
-
-    }
-```
-
-```ts
     funcion sumar($a: numero, $b: numero): numero { 
     devolver $a + $b;
 }
@@ -97,10 +87,6 @@ Para **invocar una función**, se utiliza su nombre seguido de paréntesis `()` 
   * Sintaxis: `$variable: tipo = nombreDeFuncion(argumento1, ...);`
 
 ```ts
-    // Llamada a función que devuelve texto  
-    $mensaje: texto = saludar();  
-    imprimir($mensaje); // Salida: "Saludo completado"
-
     // Llamada a función con parámetros y retorno numérico  
     $suma: numero = sumar(10, 5);  
     imprimir("La suma es: " + $suma); // Salida: "La suma es: 15"

@@ -29,7 +29,8 @@ En librescript, el **tipado es obligatorio**.
 * Ejemplo de declaración y asignación:
 
     ```ts
-    $estaHecho: booleano = falso;, $ejemplo: booleano = verdadero;`
+    $estaHecho: booleano = falso;
+    $ejemplo: booleano = verdadero;
     ```
 
 **`Objeto`**: Para representar estructuras de datos con pares clave-valor.

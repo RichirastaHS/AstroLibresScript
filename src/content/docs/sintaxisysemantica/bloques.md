@@ -20,7 +20,7 @@ Los bloques de código se delimitan utilizando llaves `{}`. Un bloque de código
 - Delimitación con `{}`: Todo bloque de código debe iniciarse con `{` y finalizar con `}`.
 
 ```js
-  $estatura: number = 1.60;
+  $estatura: numero = 1.60;
   si ($estatura >= 1.50) { 
       imprimir("Eres chaparro");
   } siNo {

@@ -9,7 +9,7 @@ El análisis léxico se realiza en el archivo `lexer.js`, que implementa una ser
 
 - **Palabras clave:** `como si`, `sino`, `mientras`, `para`, `funcion`, `clase`, `devolver`, `romper`, `nuevo`, etc.
 
-- **Identificadores:** que representan variables (`$x`), constantes (`$$Pi`), funciones o nombres de clases.
+- **Identificadores:** que representan variables (`$x`), constantes (`$$Pi`) o funciones.
 
 - **Literales:** valores como 123, "texto", true, false, [].
 

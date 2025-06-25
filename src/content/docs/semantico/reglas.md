@@ -7,7 +7,7 @@ LibreScript, como lenguaje de tipado fuerte y explícito, debe cumplir con varia
 
 ### Reglas de Declaración y Ámbitos
 
-Todos los identificadores (variables, constantes, funciones, clases) deben ser declarados antes de su uso. La redeclaración de un identificador en el mismo ámbito no está permitida. Los ámbitos definen la visibilidad y el tiempo de vida de los identificadores.
+Todos los identificadores (variables, constantes, funciones) deben ser declarados antes de su uso. La redeclaración de un identificador en el mismo ámbito no está permitida. Los ámbitos definen la visibilidad y el tiempo de vida de los identificadores.
 
 * **Variables y Constantes Declaradas Únicamente:**
   * **Cumplimiento:**

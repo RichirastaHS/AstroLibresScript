@@ -52,11 +52,11 @@ La declaración de variables es **explícita**, lo que significa que siempre deb
 * Ejemplo:
 
     ```ts
-        $a: numero \= 5;
+        $a: numero = 5;
 
-        $b: texto \= "5";
+        $b: texto = "5";
 
-        $suma: numero \= $a \+ aNum($b);
+        $suma: numero = $a + aNum($b);
     ```
 
 **Reasignación:** Una vez declarada una variable (que no sea una constante `$$`), se le puede asignar un nuevo valor utilizando el **operador de asignación (`=`)**. Es importante que el nuevo valor **coincida con el tipo declarado** de la variable.

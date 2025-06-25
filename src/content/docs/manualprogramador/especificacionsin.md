@@ -65,14 +65,14 @@ EstructuraSegun -> segun (expresión) {casos...}
 
 Permite control de flujo como condicionales y bucles anidados.
 
-### Funciones y Clases
+### Funciones
 
 ```go
 DeclaracionFuncion -> funcion nombre(parámetros): tipo {bloque}
 DeclaracionClase -> clase Nombre { propiedades, constructor, métodos }
 ```
 
-La gramática permite declarar funciones con tipo de retorno y clases con visibilidad pública o privada.
+La gramática permite declarar funciones con tipo de retorno y con visibilidad pública o privada.
 
 ### Expresiones
 
