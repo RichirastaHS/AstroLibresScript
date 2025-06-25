@@ -60,7 +60,7 @@ _nl <_IDENTIFICADOR_VAR> _ <_DOS_PUNTOS> _ <_TIPO_NUMERO> _ <_OP_ASIGNACION> _ <
 ... (reemplazando _ y _nl con sus lexemas de espacio/salto de línea)
 ```
 
-Ejemplo de Derivación Más a la Derecha
+### Ejemplo de Derivación Más a la Derecha
 
 ```ts
 Partiendo del símbolo inicial: <Programa>
