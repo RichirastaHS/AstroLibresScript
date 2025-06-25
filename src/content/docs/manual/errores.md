@@ -50,6 +50,8 @@ Estos errores ocurren cuando el código es sintácticamente correcto, pero su si
   
   Se intentó declarar una variable, constante o función con el mismo nombre que una ya existente en el mismo ámbito.
 
+  ![LiveServer](/AstroLibresScript/img/errores/yadeclarado.png)
+
   ✅ **Solución:**
 
  Renombre una de las declaraciones para que sean únicas en ese ámbito.
@@ -71,6 +73,8 @@ Estos errores ocurren cuando el código es sintácticamente correcto, pero su si
   
   Se intentó usar una variable que no ha sido declarada previamente en el ámbito actual o en uno superior.
 
+  ![LiveServer](/AstroLibresScript/img/errores/vnodeclarada.png)
+
   ```ts
   $a: numero = 10;
   $b: numero = 20;
@@ -85,6 +89,8 @@ Estos errores ocurren cuando el código es sintácticamente correcto, pero su si
   ✅ **Solución:**
   
   Declare la variable `$C` con su tipo antes de usarla.
+
+  ![LiveServer](/AstroLibresScript/img/errores/vnodeclarada2.png)
 
 ### SemanticError: Tipo incompatible: se esperaba `${expectedType}` pero se recibió `${receivedType}`
 
@@ -101,9 +107,13 @@ Estos errores ocurren cuando el código es sintácticamente correcto, pero su si
   Error Semántico 🔴: Tipo incompatible para variable '$miNumero'. Se esperaba 'numero' pero se obtuvo 'texto'.
   ```
 
+  ![LiveServer](/AstroLibresScript/img/errores/tipoincorrecto.png)
+
   ✅ **Solución:**
   
   Asegúrese de que los tipos de datos coincidan. Utilice las funciones de conversión (`aNum`, `aTxt`, `aBool`) si es necesario.
+
+  ![LiveServer](/AstroLibresScript/img/errores/tipoincorrecto2.png)
 
 ### SemanticError: No se puede reasignar un valor a la constante `${name}`
 
@@ -134,9 +144,13 @@ Estos errores ocurren cuando el código es sintácticamente correcto, pero su si
   obtuvo: null
   ```
 
+ ![LiveServer](/AstroLibresScript/img/errores/noexiste.png)
+
  ✅ **Solución:**
 
  Verifique el nombre de la función y asegúrese de que esté declarada. Revise la cantidad y los tipos de los argumentos que está pasando a la función y compárelos con la definición de la función.
+
+ ![LiveServer](/AstroLibresScript/img/errores/noexiste2.png)
 
 ### SemanticError: La sentencia `devolver` debe estar dentro de una función
 
@@ -156,6 +170,10 @@ Estos errores ocurren cuando el código es sintácticamente correcto, pero su si
   Error Semántico 🔴: Sentencia 'devolver' fuera de una función o método.
   ```
 
+  ![LiveServer](/AstroLibresScript/img/errores/fueradefun.png)
+
  ✅ **Solución:**
 
  Devolver solo puede usarse para retornar un valor de una función.
+
+  ![LiveServer](/AstroLibresScript/img/errores/fueradefun2.png)
