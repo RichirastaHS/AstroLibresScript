@@ -5,50 +5,128 @@ sidebar:
 ---
 import { Steps } from '@astrojs/starlight/components';
 
+Para utilizar el compilador de LibreScript, su sistema debe cumplir con los siguientes requisitos:
+
 ## Hardware
 
-- Procesador: Cualquier procesador moderno (Intel Core i3 o equivalente AMD, o superior).
-- RAM: 4 GB de RAM como mínimo.
-- Almacenamiento: 10 MB de espacio libre en disco.
+- **Procesador:** Cualquier procesador moderno (Intel Core i3 o equivalente AMD, o superior).
+- **RAM:** 4 GB de RAM 4 GB de RAM como mínimo (8 GB o más recomendados para un rendimiento óptimo).
+- **Almacenamiento:** 500 MB de espacio libre en disco.
 
 ## Software
 
-- Sistema Operativo:
+- **Sistema Operativo:**
   - Windows 10 o posterior.
   - macOS 10.15 (Catalina) o posterior.
   - Distribuciones de Linux modernas (Ubuntu 20.04+, Fedora 34+, Debian 11+, etc.).
-  -Editor de Texto o IDE:** Cualquier editor de código como:
-    - Visual Studio Code (recomendado)
-    - Sublime Text
-    - Atom
-  - Node.js: Versión 14.x o superior. Node.js es necesario para ejecutar el compilador, ya que está desarrollado en JavaScript.
-  - npm (Node Package Manager): Generalmente viene incluido con Node.js. Se utiliza para gestionar las dependencias del proyecto.
+- **Node.js:** Versión 14.x o superior. Node.js es necesario para ejecutar el compilador, ya que está desarrollado en JavaScript.
+  - Puede descargarlo desde el sitio web oficial de Node.js: https://nodejs.org/
+  ![Alt text](/AstroLibresScript/img/nodejs.webp)
+- **npm (Node Package Manager):** 
+  - Generalmente viene incluido con Node.js. Se utiliza para gestionar las dependencias del proyecto.
+  ![Alt text](/AstroLibresScript/img/npm.webp)
+- **Editor de Código, se recomienda utilizar el editor de código Visual Studio Code.**
+  - Este editor es una herramienta ligera pero potente que se ejecuta en el escritorio y es compatible con los sistemas operativos Windows, macOS y Linux. Puedes descargarlo desde el siguiente enlace oficial: https://code.visualstudio.com/download
+  ![Alt text](/AstroLibresScript/img/vsc.jpg)
 
 ## Instalación
-
 Siga estos pasos para instalar el compilador de LibreScript
 
 <Steps>
-1. **Clonar o Descargar el Repositorio:** Obtenga los archivos del compilador. Si está utilizando Git, puede clonar el repositorio:
+1. **Clonar o Descargar el Repositorio:** Obtenga los archivos del compilador. Si está utilizando Git, puede clonar el repositorio: [Repositorio LibreScript](https://github.com/Ness024/LibreScript-IDE)
+
+    ---
+
+    ![Repositorio de librescript codigo](/AstroLibresScript/img/clonarrepo1.jpg)
+    
+    ---
+    
+    ![Repositorio de librescript ZIP](/AstroLibresScript/img/clonarrepo2.png)
+    
+    ---
+
+    ABRIMOS EL EXPLORADOR DE ARCHIVOS Y CREAMOS UNA CARPETA EN EL APARTADO DE NUESTRA CONVENENCIA:
+
+    ![Explorador de archivos](/AstroLibresScript/img/exploradorarchivos.png)
+    
+    ---
+
+    ![Nueva carpeta](/AstroLibresScript/img/carpetanueva.png)
+    
+    ---
 
     ``` bash
-    git clone [https://github.com/AdrCrz/librescript.git](https://github.com/AdrCrz/librescript.git)
-        cd librescript
+    git clone https://github.com/Ness024/LibreScript-IDE
+    cd <directorio_del_repositorio>
     ```
+
+    ---
+
+    ![terminal](/AstroLibresScript/img/terminal.jpg)
+    
+    ---
+
     :::note
     Si descargó un archivo ZIP, descomprímalo en la ubicación deseada y navegue hasta el directorio del proyecto.
+    ![librescript en zip](/AstroLibresScript/img/zip.png)
     :::
 
-2. **Instalar Dependencias:** Una vez dentro del directorio del proyecto (donde se encuentra package.json), instale las dependencias necesarias utilizando npm:
+2. **Instalar Dependencias:** Una vez dentro del directorio del proyecto (donde se encuentra `package.json`). 
+    ![Package.json](/AstroLibresScript/img/packagejson.png)
+    
+    Instale las dependencias necesarias utilizando `npm install` dentro de la terminal:
 
     ```bash
     npm install
     ```
-    Este comando instalará moo (para el lexer) y nearley (para el parser), tal como se especifica en package.json.
 
-3. **Verificar la instalación:** Para asegurarte de que todo está configurado correctamente, puedes intentar analizar el archivo de ejemplo `test.ls`.
+    ---
+
+    ![Instalando dependencias](/AstroLibresScript/img/npminstall.png)
+
+    ---
+
+    Este comando instalará `moo` (para el lexer) y `nearley` (para el parser), tal como se especifica en `package.json`.
+
+3. **Compilar la Gramática:** El parser de LibreScript utiliza `nearley`. Debe compilar la gramática de Nearley antes de poder ejecutar el compilador. Esto generará el archivo `grammar.js` a partir de `grammar.ne` (o `grammar.txt` si lo renombró).
+    
     ```bash
-    node main.js
+    npm run build:gramar 
     ```
+
+    ---
+
+    ![npm run](/AstroLibresScript/img/npmrun.png)
+
+    ---
+
+    Este comando ejecuta nearleyc `grammar.ne` -o `grammar.js`. Asegúrese de que su archivo de gramática se llame `grammar.ne` o ajuste el comando en `package.json` si tiene un nombre diferente (por ejemplo, `grammar.txt`).
+
+    ---
+
+    ![Compilando gramática](/AstroLibresScript/img/runnearley.png)
+
+    ---
+    
     ¡Con estos pasos, el compilador estará listo para ser utilizado!
+
+4. **Live Server**
+    Buscamos la extensión de LIVE SERVER en Visual Studio Code.
+    ![Live Server](/AstroLibresScript/img/extliveserver.png)
+    
+    ---
+
+    Instalamos la extensión y abrimos el proyecto en Visual Studio Code.
+
+    ![Instalando Live Server](/AstroLibresScript/img/installliveserver.png)
+
+5. **Ejecutamos nuestro `LibreScript` nos vamos a la carpeta de `LibreSriptIDE.html`**
+    
+    ![LiveServer](/AstroLibresScript/img/opnwls.png)
+
+    ---
+
+6. **!ESTA LISTO PARA ESCRIBIR CODIGO¡**
+    ![LiveServer](/AstroLibresScript/img/ide.png)
+
 </Steps>

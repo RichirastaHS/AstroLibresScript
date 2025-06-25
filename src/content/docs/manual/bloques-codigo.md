@@ -16,6 +16,8 @@ Aquí se presenta una guía básica de la sintaxis y ejemplos para empezar a esc
 $a: numero = 0;
 ```
 
+![LiveServer](/AstroLibresScript/img/ide/numero.png)
+
 **`texto`**: Para cadenas de texto.
 
 * Ejemplo de declaración:
@@ -23,6 +25,8 @@ $a: numero = 0;
 ```ts
 $mensaje: texto = "Hola, mundo soy: !LibreScript!";
 ```
+
+![LiveServer](/AstroLibresScript/img/ide/texto.png)
 
 **`booleano`**: Para valores lógicos verdadero y falso.
 
@@ -32,6 +36,8 @@ $mensaje: texto = "Hola, mundo soy: !LibreScript!";
 $estaHecho: booleano = falso; 
 $tienePermiso: booleano = verdadero;
 ```
+
+![LiveServer](/AstroLibresScript/img/ide/booleano.png)
 
 **`Objeto`**: Para estructuras de datos con pares clave-valor
 
@@ -44,6 +50,8 @@ $persona: Objeto = {
 };
 ```
 
+![LiveServer](/AstroLibresScript/img/ide/objeto.png)
+
 **`Arreglos (Arrays)`**: Para colecciones de elementos del mismo tipo.
 
 * Ejemplo de declaración y asignación de un arreglo de texto:
@@ -52,6 +60,8 @@ $persona: Objeto = {
 $numeros: numero[] = [1, 2, 3, 4, 5];
 $nombres: texto[] = ["Ana", "Luis", "Carlos"];
 ```
+
+![LiveServer](/AstroLibresScript/img/ide/arreglos.png)
 
 ### Declaración y Asignación de Variables
 
@@ -79,6 +89,8 @@ Las constantes se declaran con un doble signo de dólar `$$`. Su valor no puede 
 $$PI: numero = 3.14159;
 $$GRAVEDAD: numero = 9.81;
 ```
+
+![LiveServer](/AstroLibresScript/img/ide/constantes.png)
 
 ### Operadores
 
@@ -109,6 +121,8 @@ $cond2: booleano = ($a<$b) || ($b<$c); // (verdadero) || (falso) = verdadero
 $cond3: booleano = !($a == $b); // !(falso) = verdadero
 ```
 
+![LiveServer](/AstroLibresScript/img/ide/operadores.png)
+
 ### Estructuras de control
 
 **Condicional si / siNo si / siNo:**
@@ -123,6 +137,10 @@ si ($edad >= 18) {
 }
 ```
 
+![LiveServer](/AstroLibresScript/img/ide/estructurasdecontrol1.png)
+
+![LiveServer](/AstroLibresScript/img/ide/estructurasdecontrol2.png)
+
 **Bucle mientras:**
 
 ```ts
@@ -133,6 +151,8 @@ mientras ($contador<5) {
 }
 ```
 
+![LiveServer](/AstroLibresScript/img/ide/mientras.png)
+
 **Bucle para:**
 
 ```ts
@@ -140,6 +160,8 @@ para ($i: numero = 0; $i<10; $i+1) {
     imprimir("Iteración: " + aTxt($i));
 }
 ```
+
+![LiveServer](/AstroLibresScript/img/ide/para.png)
 
 **Sentencia romper: Para salir de un bucle.**
 
@@ -149,6 +171,8 @@ mientras (verdadero) {
     romper;
 }
 ```
+
+![LiveServer](/AstroLibresScript/img/ide/romper.png)
 
 **Sentencia segun (switch):**
 
@@ -166,6 +190,8 @@ segun ($opcion) {
     }
 }
 ```
+
+![LiveServer](/AstroLibresScript/img/ide/segun.png)
 
 ### Funciones
 
@@ -185,38 +211,14 @@ funcion imprimirMensaje($msg: texto): vacio {
 }
 ```
 
+![LiveServer](/AstroLibresScript/img/ide/funciones.png)
+
 **Llamada a Función:**
 
-```ts
-$mensajePersonalizado: texto = saludar("Mundo");
-imprimir($mensajePersonalizado); // Salida: "Hola, Mundo!"
+**Objeto** Creación de Objeto (Instanciación)
 
-$resultadoSuma: numero = sumar(5, 3);
-imprimir(aTxt($resultadoSuma)); // Salida: "8"
+![LiveServer](/AstroLibresScript/img/ide/objeto.png)
 
-imprimirMensaje(); // Salida: "Este es un mensaje sin retorno."
-```
+**Acceso a Arreglos y Objetos Literales** Acceso a Elementos de Arreglo:
 
-**Funciones Predefinidas:**
-**`imprimir(valor: cualquier_tipo)`:** Imprime el valor en la consola.
-**`leer()`:** Lee una línea de entrada desde la consola (suponiendo que esta función se implemente).
-aNum(valor: texto): Convierte un texto a número.
-**`aTxt(valor: cualquier_primitivo)`:** Convierte cualquier tipo primitivo a texto.
-**`aBool(valor: cualquier_primitivo)`:** Convierte cualquier tipo primitivo a booleano.
-
-### Objeto
-
-**Creación de Objeto (Instanciación):**
-
-```ts
-$miPersona: Objeto = nuevo Persona("Carlos", 30);
-```
-
-### Acceso a Arreglos y Objetos Literales
-
-**Acceso a Elementos de Arreglo:**
-
-```ts
-$colores: texto[] = ["rojo", "verde", "azul"];
-imprimir($colores[0]); // Salida: "rojo"
-```
+![LiveServer](/AstroLibresScript/img/ide/accarreglo.png)
