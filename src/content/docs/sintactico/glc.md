@@ -37,7 +37,6 @@ La gramática de LibreScript se presenta a continuación utilizando una notació
               | <EstructuraControl>
               | <LlamadaImprimir>
               | <DeclaracionFuncion>
-              | <DeclaracionClase>
               | <SentenciaDevolver>
               | <SentenciaRomper>
               | <ExpresionSentencia>
@@ -136,27 +135,6 @@ La gramática de LibreScript se presenta a continuación utilizando una notació
                     | <ListaParametros> <_> <_COMA> <_> <Parametro>
 
 <Parametro> ::= <_IDENTIFICADOR_VAR> <_> <_DOS_PUNTOS> <_> <Tipo>
-
----
-
-<DeclaracionClase> ::= <_PR_CLASE> <__> <_IDENTIFICADOR_GRAL> <_> <BloqueClase>
-
-<BloqueClase> ::= <_LBRACE> <_nl> <MiembrosClase> <_nl> <_RBRACE>
-
-<MiembrosClase> ::= <MiembroClase> <_nl>
-                  | <MiembrosClase> <MiembroClase> <_nl>
-                  | ε
-
-<MiembroClase> ::= <PropiedadClase>
-                 | <ConstructorClase>
-                 | <MetodoClase>
-
-<PropiedadClase> ::= <_ALMOHADILLA> <_> <_IDENTIFICADOR_GRAL> <_> <_PUNTO_Y_COMA>
-                   | <_IDENTIFICADOR_GRAL> <_> <_PUNTO_Y_COMA>
-
-<ConstructorClase> ::= <_PR_CONSTRUCTOR> <_> <_LPAREN> <_> <ListaParametrosOpcional> <_> <_RPAREN> <_> <BloqueCodigo>
-
-<MetodoClase> ::= <_IDENTIFICADOR_GRAL> <_> <_LPAREN> <_> <ListaParametrosOpcional> <_> <_RPAREN> <_> <_DOS_PUNTOS> <_> <Tipo> <_> <BloqueCodigo>
 
 ---
 

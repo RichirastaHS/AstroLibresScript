@@ -9,7 +9,7 @@ El **analizador sintáctico** (o *parser*) toma el flujo de tokens (la salida de
 
 **Papel dentro del Compilador:**
 
-1. **Verificación Gramatical:** Asegura que los tokens están organizados de una manera que es gramaticalmente válida según las reglas del lenguaje. Por ejemplo, verifica que los paréntesis y llaves estén balanceados, que las sentencias terminen con un punto y coma, y que las estructuras de control (`si`, `mientras`, `clase`) estén bien formadas.
+1. **Verificación Gramatical:** Asegura que los tokens están organizados de una manera que es gramaticalmente válida según las reglas del lenguaje. Por ejemplo, verifica que los paréntesis y llaves estén balanceados, que las sentencias terminen con un punto y coma, y que las estructuras de control (`si`, `mientras`) estén bien formadas.
 2. **Construcción del Árbol de Sintaxis Abstracta (AST):** Si el código es sintácticamente correcto, el analizador sintáctico construye una representación jerárquica del programa, conocida como el Árbol de Sintaxis Abstracta (AST). El AST elimina detalles superfluos del código fuente (como paréntesis redundantes o la mayoría de los espacios en blanco) y se centra en la estructura esencial y el significado del programa. Este AST será la entrada para la siguiente fase: el análisis semántico.
 3. **Detección y Reporte de Errores Sintácticos:** Cuando el analizador sintáctico encuentra una secuencia de tokens que no puede ser parseada según la gramática (ej., un token inesperado o la ausencia de un token esperado), reporta un error sintáctico, indicando la ubicación y la naturaleza del problema.
 

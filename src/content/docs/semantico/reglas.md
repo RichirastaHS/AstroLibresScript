@@ -25,7 +25,7 @@ Todos los identificadores (variables, constantes, funciones) deben ser declarado
         imprimir($desconocida); // Error: El identificador '$desconocida' no ha sido declarado.
         ```
 
-* **Ámbitos de Bloque:** Los identificadores declarados dentro de bloques (`{...}` asociados a `si`, `mientras`, `funcion`, `clase`, etc.) son locales a ese bloque y no son visibles fuera de él una vez que el bloque finaliza.
+* **Ámbitos de Bloque:** Los identificadores declarados dentro de bloques (`{...}` asociados a `si`, `mientras`, `funcion`, etc.) son locales a ese bloque y no son visibles fuera de él una vez que el bloque finaliza.
   * **Cumplimiento:**
         ```librescript
         si (verdadero) {

@@ -7,7 +7,7 @@ sidebar:
 
 El análisis léxico se realiza en el archivo `lexer.js`, que implementa una serie de reglas que define como reconocer:
 
-- **Palabras clave:** `como si`, `sino`, `mientras`, `para`, `funcion`, `clase`, `devolver`, `romper`, `nuevo`, etc.
+- **Palabras clave:** `como si`, `sino`, `mientras`, `para`, `funcion`, `devolver`, `romper`, `nuevo`, etc.
 
 - **Identificadores:** que representan variables (`$x`), constantes (`$$Pi`) o funciones.
 
@@ -43,7 +43,6 @@ Para definir el token con su expresión regular seguimos el formato ya definido 
   PR_LEER:      /\bleer\b/,         
   PR_DEVOLVER:  /\bdevolver\b/,
   PR_FUNCION:   /\bfuncion\b/,
-  PR_CLASE:     /\bclase\b/,
   PR_NUEVO:     /\bnuevo\b/,
   PR_ESTE:      /\beste\b/,        
   PR_VACIO:     /\bvacio\b/,         

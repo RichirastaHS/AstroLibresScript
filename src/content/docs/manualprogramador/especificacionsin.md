@@ -69,7 +69,6 @@ Permite control de flujo como condicionales y bucles anidados.
 
 ```go
 DeclaracionFuncion -> funcion nombre(parámetros): tipo {bloque}
-DeclaracionClase -> clase Nombre { propiedades, constructor, métodos }
 ```
 
 La gramática permite declarar funciones con tipo de retorno y con visibilidad pública o privada.
@@ -98,7 +97,6 @@ Estas reglas permiten formar expresiones completas y ejecutar funciones.
 ### Creación de estructuras
 
 ```go
-CreacionObjeto -> nuevo Clase(...)
 CreacionArreglo -> [elem1, elem2, ...]
 CreacionObjetoLiteral -> {clave: valor, ...}
 ```

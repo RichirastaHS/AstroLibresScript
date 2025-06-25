@@ -32,7 +32,6 @@ const lexer = moo.compile({
   PR_LEER:      /\bleer\b/,
   PR_DEVOLVER:  /\bdevolver\b/,
   PR_FUNCION:   /\bfuncion\b/,
-  PR_CLASE:     /\bclase\b/,
   PR_NUEVO:     /\bnuevo\b/,
   PR_ESTE:      /\beste\b/,
   PR_VACIO:     /\bvacio\b/,
