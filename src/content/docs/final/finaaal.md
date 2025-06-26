@@ -11,6 +11,8 @@ El compilador **LibreScript** es un sistema desarrollado en JavaScript con Node.
 
 ### Repositorio
 
+[LibreScritp](https://github.com/Ness024/LibreScript-IDE)
+
 ### Diagramas detallados
 
 ### Capturas de pantalla

@@ -1,0 +1,1518 @@
+---
+title: Código Comentado
+sidebar:
+  order: 2
+---
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+
+<Tabs>
+  <TabItem label="main.js">
+  ```ts
+  // main.js
+  import fs from 'fs'; // Importa el módulo 'fs' para interactuar con el sistema de archivos.
+import { parseCode } from './parser.js'; // Importa la función de parseo desde el archivo parser.js.
+import lexer from './lexer.js'; // Importa el lexer para tokenizar el código primero.
+
+// Si usas CommonJS:
+ //const fs = require('fs');
+ //const { parseCode } = require('./parser.js');
+ //const lexer = require('./lexer.js');
+// --- CLASE PARA LA TABLA DE SÍMBOLOS (Symbol Table) ---
+class SymbolTable { // Define una clase para gestionar los símbolos (variables, funciones, etc.) en diferentes ámbitos.
+  constructor(parentScope = null) { // El constructor recibe un ámbito padre opcional.
+    this.symbols = new Map(); // Crea un mapa para almacenar los símbolos de este ámbito.
+    this.parentScope = parentScope; // Establece el ámbito padre, permitiendo la búsqueda en ámbitos superiores.
+    this.currentFunctionContext = parentScope ? parentScope.currentFunctionContext : null; // Hereda el contexto de función del padre.
+    this.currentLoopContext = parentScope ? parentScope.currentLoopContext : null; // Hereda el contexto de bucle del padre.
+    this.currentClassContext = parentScope ? parentScope.currentClassContext : null; // Hereda el contexto de clase del padre.
+    this.currentSwitchContext = parentScope ? parentScope.currentSwitchContext : null; // Hereda el contexto de 'segun' del padre.
+  }
+
+  addSymbol(name, type, kind, extra = {}) { // Método para añadir un nuevo símbolo al ámbito actual.
+    if (this.symbols.has(name) && kind !== 'metodo' /* Permitir sobrecarga si se implementa */) { // Comprueba si el símbolo ya existe en el ámbito actual.
+      throw new SemanticError(`El identificador '${name}' ya ha sido declarado en este ámbito.`); // Lanza un error si hay una redeclaración.
+    }
+    this.symbols.set(name, { name, type, kind, scope: this, ...extra }); // Añade el símbolo y su información al mapa.
+  }
+
+  lookupSymbol(name) { // Método para buscar un símbolo por su nombre.
+    let current = this; // Comienza la búsqueda en el ámbito actual.
+    while (current) { // Itera hacia arriba a través de los ámbitos padres.
+      if (current.symbols.has(name)) { // Si el símbolo se encuentra en el ámbito actual.
+        return current.symbols.get(name); // Devuelve la información del símbolo.
+      }
+      current = current.parentScope; // Si no se encuentra, pasa al ámbito padre.
+    }
+    return null; // Devuelve null si el símbolo no se encuentra en ningún ámbito.
+  }
+
+  enterScope(contextType = 'block') { // Método para crear y entrar en un nuevo ámbito anidado.
+    const newScope = new SymbolTable(this); // Crea una nueva tabla de símbolos con el actual como padre.
+    if (contextType === 'function') newScope.currentFunctionContext = newScope; // Si es un ámbito de función, establece el contexto de función.
+    if (contextType === 'loop') newScope.currentLoopContext = newScope; // Si es un ámbito de bucle, establece el contexto de bucle.
+    if (contextType === 'class') newScope.currentClassContext = newScope; // Si es un ámbito de clase, establece el contexto de clase.
+    if (contextType === 'switch') newScope.currentSwitchContext = newScope; // Si es un ámbito de 'segun', establece el contexto de switch.
+    return newScope; // Devuelve el nuevo ámbito creado.
+  }
+}
+
+// --- CLASE PARA ERRORES SEMÁNTICOS ---
+class SemanticError extends Error { // Define una clase de error personalizada para problemas semánticos.
+  constructor(message) { // El constructor recibe el mensaje de error.
+    super(message); // Llama al constructor de la clase base 'Error'.
+    this.name = "SemanticError"; // Asigna un nombre al tipo de error para una fácil identificación.
+  }
+}
+
+// --- FUNCIÓN PRINCIPAL DE ANÁLISIS SEMÁNTICO ---
+function analyzeSemantics(astNode, scope) { // Función recursiva que analiza un nodo del AST dentro de un ámbito (scope) dado.
+  if (!astNode) return { base: "void" }; // Si el nodo es nulo, no hace nada y devuelve tipo "void".
+
+  const nodeType = astNode.type; // Obtiene el tipo del nodo del AST para determinar cómo analizarlo.
+
+  switch (nodeType) { // Evalúa el tipo de nodo para aplicar la lógica de análisis semántico correspondiente.
+    case "Programa": // Si el nodo es la raíz del programa.
+      astNode.sentencias.forEach(sentencia => analyzeSemantics(sentencia, scope)); // Analiza cada sentencia del programa.
+      return { base: "void" }; // El programa en sí no tiene un tipo de retorno.
+
+    case "DeclaracionVariable": // Para la declaración de una variable.
+    case "DeclaracionConstante": { // Para la declaración de una constante.
+      const varName = astNode.nombre.value; // Obtiene el nombre de la variable/constante del token.
+      const declaredType = resolveTypeNode(astNode.tipo, scope); // Resuelve el nodo de tipo a un objeto de tipo semántico.
+
+      let initializerType = { base: "void" }; // Inicializa el tipo del valor de inicialización como "void".
+      if (astNode.valor) { // Si hay un valor de inicialización.
+        initializerType = analyzeSemantics(astNode.valor, scope); // Analiza la expresión del valor para obtener su tipo.
+      } else if (nodeType === "DeclaracionConstante") { // Si es una constante sin valor inicial.
+        throw new SemanticError(`La constante '${varName}' debe ser inicializada.`); // Lanza un error porque las constantes deben ser inicializadas.
+      }
+      
+      // Si no hay valor inicial, no se necesita chequeo de compatibilidad (se podría asignar 'nulo' o 'indefinido' implícitamente si el lenguaje lo soporta)
+      // LibreScript requiere inicialización para constantes y permite declaración sin inicialización para variables (implícito de la sintaxis, aunque no hay ejemplo).
+      // Por seguridad, si el tipo declarado no es compatible con "void" (si no hay valor), podría ser un error o advertencia.
+      // Pero si hay valor, el chequeo es mandatorio.
+      if (astNode.valor && !areTypesCompatible(declaredType, initializerType)) { // Si hay valor y los tipos no son compatibles.
+        throw new SemanticError( // Lanza un error de tipo incompatible.
+          `Tipo incompatible para ${nodeType === "DeclaracionConstante" ? "constante" : "variable"} '${varName}'. Se esperaba '${formatType(declaredType)}' pero se obtuvo '${formatType(initializerType)}'.`
+        );
+      }
+      // Si no hay valor de inicialización y el tipo declarado no puede ser "nulo" o "void" implícitamente
+      // (LibreScript no tiene `nulo` explícito), esto podría ser un punto a definir.
+      // Por ahora, se asume que una variable declarada sin valor tiene un valor "por defecto" compatible o que el lenguaje lo permite.
+
+
+      const kind = nodeType === "DeclaracionConstante" ? "constante" : "variable"; // Determina el "tipo" de símbolo (constante o variable).
+      scope.addSymbol(varName, declaredType, kind, { mutable: astNode.mutable }); // Añade el nuevo símbolo a la tabla de símbolos del ámbito actual.
+      return { base: "void" }; // Las declaraciones son sentencias, no expresiones con valor.
+    }
+
+    case "Asignacion": { // Para una sentencia de asignación.
+      let lhsNode = astNode.designable; // Obtiene el nodo del lado izquierdo de la asignación.
+      let lhsType; // Variable para almacenar el tipo del lado izquierdo.
+      let targetSymbolInfo = {}; // Objeto para almacenar información sobre el símbolo objetivo.
+
+      if (lhsNode.type === "IDENTIFICADOR_VAR" || lhsNode.type === "Variable" || lhsNode.type === "IDENTIFICADOR_CONST" ) { // Si el lado izquierdo es un identificador de variable/constante.
+        const varName = lhsNode.value || lhsNode.nombre; // Obtiene el nombre del identificador.
+        const symbol = scope.lookupSymbol(varName); // Busca el símbolo en la tabla de símbolos.
+        if (!symbol) throw new SemanticError(`El identificador '${varName}' no ha sido declarado.`); // Lanza error si no está declarado.
+        if (symbol.kind === "constante") throw new SemanticError(`No se puede reasignar a la constante '${symbol.name}'.`); // Lanza error si se intenta reasignar una constante.
+        if (!symbol.mutable && astNode.operador === "=") { // Verifica si el símbolo es mutable (actualmente solo para variables).
+            // Esto podría ser para parámetros de función si se hicieran inmutables por defecto.
+            // Por ahora, las variables ($) son mutables.
+        }
+        if (symbol.kind === "funcion" || symbol.kind === "clase") { // No se puede asignar a una función o clase.
+            throw new SemanticError(`No se puede asignar a '${symbol.name}' porque es una ${symbol.kind}.`); // Lanza error.
+        }
+        lhsType = symbol.type; // Obtiene el tipo del símbolo.
+        targetSymbolInfo = symbol; // Guarda la información del símbolo.
+      } else if (lhsNode.type === "AccesoArreglo" || lhsNode.type === "AccesoArregloDoble") { // Si es un acceso a un elemento de un arreglo/matriz.
+        lhsType = analyzeSemantics(lhsNode, scope); // Analiza el acceso para obtener el tipo del elemento.
+        targetSymbolInfo.mutable = true;  // Los elementos de un arreglo se consideran mutables.
+      } else if (lhsNode.type === "AccesoMiembro") { // Si es un acceso a un miembro de un objeto.
+        lhsType = analyzeSemantics(lhsNode, scope); // Analiza el acceso para obtener el tipo del miembro.
+        if (lhsType.kind === 'metodo') { // Si el miembro es un método.
+            throw new SemanticError(`No se puede asignar a un método '${lhsNode.propiedad}'.`); // No se puede asignar a un método.
+        }
+        targetSymbolInfo.mutable = true; // Las propiedades de objeto se consideran mutables (simplificación).
+      } else if (lhsNode.type === "Este") { // Si se intenta asignar a 'este'.
+          throw new SemanticError(`Asignación directa a 'este' no permitida. Use 'este.propiedad'.`); // 'este' no es un L-value válido.
+      } else { // Si el lado izquierdo no es asignable.
+        throw new SemanticError(`Lado izquierdo de asignación inválido: ${JSON.stringify(lhsNode)}`); // Lanza un error.
+      }
+
+      const rhsType = analyzeSemantics(astNode.valor, scope); // Analiza la expresión del lado derecho para obtener su tipo.
+
+      if (astNode.operador !== "=") { // Para operadores de asignación compuesta (+=, -=, etc.).
+        if (!areTypesCompatible(lhsType, rhsType)) { // Comprueba si los tipos son compatibles para la operación.
+          // Tratar de obtener un nombre más descriptivo para el LHS en el mensaje de error
+          let lhsName = "LHS"; // Nombre por defecto para el lado izquierdo en el mensaje de error.
+          if (lhsNode.value) lhsName = lhsNode.value; // Si es un token de identificador.
+          else if (lhsNode.nombre) lhsName = lhsNode.nombre; // Si es un nodo de Variable/Constante.
+          else if (lhsNode.objeto && lhsNode.propiedad) { // Si es un acceso a miembro.
+             try { // Intenta construir un nombre descriptivo.
+                const objName = lhsNode.objeto.nombre || (lhsNode.objeto.type === "Este" ? "este" : "objeto_desconocido"); // Obtiene el nombre del objeto.
+                lhsName = `${objName}.${lhsNode.propiedad}`; // Forma el nombre como "objeto.propiedad".
+             } catch(e){ /* best effort */ } // Si falla, no hace nada (mejor esfuerzo).
+          } else if (lhsNode.arreglo || lhsNode.matriz) { // Si es un acceso a arreglo/matriz.
+             try { // Intenta construir un nombre descriptivo.
+                const arrNameNode = lhsNode.arreglo || lhsNode.matriz; // Obtiene el nodo del arreglo/matriz.
+                const arrName = arrNameNode.nombre || (arrNameNode.type === "Este" ? "este" : "arreglo_desconocido"); // Obtiene el nombre del arreglo.
+                lhsName = `${arrName}[...]`; // Forma el nombre como "arreglo[...]".
+             } catch(e){ /* best effort */ } // Si falla, no hace nada.
+          }
+
+          throw new SemanticError( // Lanza un error de tipo incompatible para la asignación.
+            `Tipo incompatible en asignación a '${lhsName}'. Se esperaba '${formatType(lhsType)}' pero se obtuvo '${formatType(rhsType)}'.`
+          );
+        }
+      }
+      return rhsType; // Una asignación como expresión devuelve el tipo del valor asignado.
+    }
+
+    
+
+    case "Variable": // Usado para acceder al valor de una variable.
+    case "Constante": { // Usado para acceder al valor de una constante.
+      const varName = astNode.nombre; // Obtiene el nombre del identificador del nodo.
+      const symbol = scope.lookupSymbol(varName); // Busca el símbolo en la tabla de símbolos.
+      if (!symbol) { // Si el símbolo no se encuentra.
+        throw new SemanticError(`El identificador '${varName}' no ha sido declarado.`); // Lanza un error.
+      }
+      if (symbol.kind === "funcion" || symbol.kind === "clase") { // Si el símbolo es una función o una clase.
+         return symbol.type; // Devuelve el tipo funcional o de clase.
+      }
+      return symbol.type; // Devuelve el tipo del símbolo encontrado.
+    }
+    
+    case "IdentificadorGral": { // Para un identificador general (nombre de función, clase, etc.).
+        const name = astNode.nombre; // Obtiene el nombre del identificador.
+        const symbol = scope.lookupSymbol(name); // Busca el símbolo en la tabla de símbolos.
+        if (!symbol) { // Si no se encuentra.
+            throw new SemanticError(`Identificador '${name}' no encontrado.`); // Lanza un error.
+        }
+        return symbol.type; // Devuelve el tipo del símbolo (puede ser tipo de función, clase, etc.).
+    }
+    case "Este": { // Para la palabra clave 'este'.
+        const esteSymbol = scope.lookupSymbol("este"); // Busca el símbolo especial 'este'.
+        if (!esteSymbol) { // Si no se encuentra en el ámbito actual (no está dentro de un método).
+            throw new SemanticError("'este' solo puede ser usado dentro de un método o constructor de clase."); // Lanza un error.
+        }
+        return esteSymbol.type; // Devuelve el tipo de la instancia de la clase actual.
+    }
+
+
+    case "OpBinaria": { // Para una operación binaria.
+      const leftType = analyzeSemantics(astNode.izquierda, scope); // Analiza el operando izquierdo para obtener su tipo.
+      const rightType = analyzeSemantics(astNode.derecha, scope); // Analiza el operando derecho para obtener su tipo.
+      return checkOpBinariaTypes(astNode, leftType, rightType, scope); // Llama a una función auxiliar para verificar la compatibilidad de tipos y devolver el tipo resultante.
+    }
+
+    case "OpUnaria": { // Para una operación unaria.
+        const operandType = analyzeSemantics(astNode.operando, scope); // Analiza el operando para obtener su tipo.
+        const op = astNode.operador; // Obtiene el operador unario.
+        if (op === '!') { // Si es el operador de negación lógica.
+            if (!isBoolean(operandType)) throw new SemanticError(`Operador '!' requiere un operando booleano, se obtuvo '${formatType(operandType)}'.`); // Debe ser booleano.
+            return { base: "booleano" }; // El resultado es booleano.
+        } else if (op === '-') { // Si es el operador de negación numérica (unario).
+            if (!isNumeric(operandType)) throw new SemanticError(`Operador '-' (unario) requiere un operando numérico, se obtuvo '${formatType(operandType)}'.`); // Debe ser numérico.
+            return { base: "numero" }; // El resultado es numérico.
+        } else if (op === '++_post' || op === '--_post') { // Si es un operador de incremento/decremento postfijo.
+            // El operando de ++/-- debe ser un LValue (algo asignable)
+            if (!isAssignable(astNode.operando, scope)) { // Verifica si el operando es asignable.
+                throw new SemanticError(`El operando de '${op.substring(0,2)}' debe ser una variable o propiedad asignable.`); // Lanza error si no lo es.
+            }
+            if (!isNumeric(operandType)) throw new SemanticError(`Operador '${op.substring(0,2)}' requiere un operando numérico, se obtuvo '${formatType(operandType)}'.`); // El operando debe ser numérico.
+            return { base: "numero" }; // El resultado de la expresión es numérico.
+        }
+        throw new SemanticError(`Operador unario '${op}' no implementado o tipo incompatible.`); // Error para operadores no manejados.
+    }
+
+    case "LiteralNumero": return { base: "numero" }; // Un literal numérico tiene tipo 'numero'.
+    case "LiteralTexto": return { base: "texto" }; // Un literal de texto tiene tipo 'texto'.
+    case "LiteralBooleano": return { base: "booleano" }; // Un literal booleano tiene tipo 'booleano'.
+
+    case "CondicionalSi": { // Para una estructura 'si'.
+      const conditionType = analyzeSemantics(astNode.condicion, scope); // Analiza la condición para obtener su tipo.
+      if (!isBoolean(conditionType)) { // La condición debe ser booleana.
+        throw new SemanticError(`La condición del 'si' debe ser booleana, pero se obtuvo '${formatType(conditionType)}'.`); // Lanza error si no lo es.
+      }
+      analyzeSemantics(astNode.bloqueSi, scope.enterScope('block')); // Analiza el bloque 'si' en un nuevo ámbito.
+      (astNode.bloquesSiNoSi || []).forEach(clausulaSiNoSi => { // Itera sobre las cláusulas 'siNo si'.
+        const elseIfConditionType = analyzeSemantics(clausulaSiNoSi.condicion, scope); // Analiza la condición de cada 'siNo si'.
+        if (!isBoolean(elseIfConditionType)) { // La condición debe ser booleana.
+          throw new SemanticError(`La condición del 'siNo si' debe ser booleana, pero se obtuvo '${formatType(elseIfConditionType)}'.`); // Lanza error si no lo es.
+        }
+        analyzeSemantics(clausulaSiNoSi.bloque, scope.enterScope('block')); // Analiza el bloque 'siNo si' en un nuevo ámbito.
+      });
+      if (astNode.bloqueSiNo) { // Si existe un bloque 'siNo'.
+        analyzeSemantics(astNode.bloqueSiNo.bloque, scope.enterScope('block')); // Analiza el bloque 'siNo' en un nuevo ámbito.
+      }
+      return { base: "void" }; // La estructura 'si' es una sentencia, no tiene valor.
+    }
+
+    case "Bloque": // Para un bloque de código { ... }.
+      const newScopeForBlock = scope.enterScope('block'); // Crea un nuevo ámbito para el bloque.
+      astNode.sentencias.forEach(sentencia => analyzeSemantics(sentencia, newScopeForBlock)); // Analiza cada sentencia dentro del nuevo ámbito.
+      return { base: "void" }; // Un bloque es una sentencia, no tiene valor.
+
+    case "BucleMientras": { // Para un bucle 'mientras'.
+      const conditionType = analyzeSemantics(astNode.condicion, scope); // Analiza la condición para obtener su tipo.
+      if (!isBoolean(conditionType)) { // La condición debe ser booleana.
+        throw new SemanticError(`La condición del 'mientras' debe ser booleana, pero se obtuvo '${formatType(conditionType)}'.`); // Lanza error si no lo es.
+      }
+      analyzeSemantics(astNode.bloque, scope.enterScope('loop')); // Analiza el cuerpo del bucle en un nuevo ámbito de tipo 'loop'.
+      return { base: "void" }; // Un bucle es una sentencia, no tiene valor.
+    }
+    
+    case "BuclePara": { // Para un bucle 'para'.
+        const forScope = scope.enterScope('loop'); // Crea un nuevo ámbito de tipo 'loop' para todo el bucle.
+        if (astNode.inicializacion) { // Si hay una expresión de inicialización.
+           analyzeSemantics(astNode.inicializacion, forScope); // La analiza dentro del ámbito del bucle.
+        }
+        if (astNode.condicion) { // Si hay una condición.
+            const conditionType = analyzeSemantics(astNode.condicion, forScope); // Analiza la condición dentro del ámbito del bucle.
+            if (!isBoolean(conditionType)) { // La condición debe ser booleana.
+                throw new SemanticError(`La condición del 'para' debe ser booleana, pero se obtuvo '${formatType(conditionType)}'.`); // Lanza error si no lo es.
+            }
+        }
+        if (astNode.incremento) { // Si hay una expresión de incremento.
+            analyzeSemantics(astNode.incremento, forScope); // La analiza dentro del ámbito del bucle.
+        }
+        analyzeSemantics(astNode.bloque, forScope); // Analiza el cuerpo del bucle dentro del mismo ámbito.
+        return { base: "void" }; // Un bucle es una sentencia, no tiene valor.
+    }
+    
+    case "EstructuraSegun": { // Para una estructura 'segun' (switch).
+        const evalType = analyzeSemantics(astNode.expresionEvaluar, scope); // Analiza la expresión a evaluar.
+        // 'segun' usualmente funciona con tipos ordinales (numero, texto). No booleanos directamente.
+        if (!isNumeric(evalType) && !isText(evalType)) { // Verifica que el tipo sea 'numero' o 'texto'.
+            throw new SemanticError(`La expresión a evaluar en 'segun' debe ser de tipo numero o texto, se obtuvo '${formatType(evalType)}'.`); // Lanza error si no lo es.
+        }
+        const switchScope = scope.enterScope('switch'); // Crea un nuevo ámbito de tipo 'switch' para la estructura.
+        let hasDefault = false; // Bandera para verificar si hay un caso 'pordefecto'.
+        for (const caso of astNode.casos) { // Itera sobre cada caso.
+            const casoType = analyzeSemantics(caso.valorComparar, switchScope); // Analiza el valor del caso.
+            if (!areTypesCompatible(evalType, casoType)) { // El tipo del valor del caso debe ser compatible con la expresión principal.
+                 throw new SemanticError(`El tipo del 'caso' ('${formatType(casoType)}') es incompatible con la expresión del 'segun' ('${formatType(evalType)}').`); // Lanza error si no es compatible.
+            }
+            analyzeSemantics(caso.bloque, switchScope.enterScope('block')); // Analiza el bloque del caso en un nuevo sub-ámbito.
+        }
+        if (astNode.pordefecto) { // Si hay un caso 'pordefecto'.
+            hasDefault = true; // Marca que existe.
+            analyzeSemantics(astNode.pordefecto.bloque, switchScope.enterScope('block')); // Analiza su bloque en un nuevo sub-ámbito.
+        }
+        return { base: "void" }; // La estructura 'segun' es una sentencia, no tiene valor.
+    }
+
+
+    case "LlamadaFuncion": { // Para una llamada a función.
+      let functionSymbol; // Variable para almacenar la información de la función/método.
+      let calleeName = "función/método desconocido"; // Nombre por defecto para mensajes de error.
+
+      if (astNode.callee.type === "IdentificadorGral") { // Si la llamada es a un identificador general (ej. miFuncion()).
+        calleeName = astNode.callee.nombre; // Obtiene el nombre de la función.
+        functionSymbol = scope.lookupSymbol(calleeName); // Busca la función en la tabla de símbolos.
+      } else if (astNode.callee.type === "AccesoMiembro") { // Si la llamada es a un miembro de un objeto (ej. objeto.metodo()).
+          // Primero, analiza el objeto para obtener su tipo
+          const objetoType = analyzeSemantics(astNode.callee.objeto, scope); // Analiza el objeto.
+          if (!objetoType.isClassInstance && !objetoType.isClass) { // Verifica si es una instancia o una clase.
+              throw new SemanticError(`Intento de llamar a un miembro de algo que no es un objeto de clase: '${formatType(objetoType)}'.`); // Lanza error si no lo es.
+          }
+          const classInfo = objetoType.classInfo || objetoType; // Obtiene la información de la clase.
+          if (!classInfo || !classInfo.members) { // Verifica que la información de la clase esté disponible.
+              throw new SemanticError(`No se pudo obtener información de la clase para '${formatType(objetoType)}'.`); // Lanza error si no.
+          }
+          const methodName = astNode.callee.propiedad; // Obtiene el nombre del método.
+          calleeName = `${classInfo.base}.${methodName}`; // Construye el nombre completo para mensajes de error.
+          functionSymbol = classInfo.members.get(methodName); // Obtiene la información del método desde los miembros de la clase.
+
+          if (functionSymbol && functionSymbol.kind !== "metodo") { // Verifica que el miembro sea un método.
+              throw new SemanticError(`'${calleeName}' es una propiedad, no un método.`); // Lanza error si es una propiedad.
+          }
+           // Para la llamada a 'este.metodo()', el 'este' ya está resuelto y functionSymbol será la info del método.
+      } else { // Si el invocador no es válido.
+        throw new SemanticError(`El invocador de la función no es válido: ${astNode.callee.type}.`); // Lanza error.
+      }
+
+      if (!functionSymbol || (functionSymbol.kind !== "funcion" && functionSymbol.kind !== "metodo")) { // Si el símbolo no se encuentra o no es una función/método.
+        throw new SemanticError(`'${calleeName}' no es una función o método, o no ha sido declarada. Se obtuvo: ${functionSymbol ? functionSymbol.kind : 'null'}`); // Lanza error.
+      }
+      
+      checkFunctionCallArguments(astNode, functionSymbol, scope, calleeName); // Llama a una función auxiliar para verificar los argumentos.
+      return functionSymbol.tipoRetorno; // Devuelve el tipo de retorno de la función.
+    }
+    
+    case "Imprimir": // Para la llamada a la función predefinida 'imprimir'.
+        const imprimirSymbol = scope.lookupSymbol("imprimir"); // Busca el símbolo 'imprimir' en el ámbito global.
+        checkFunctionCallArguments({ argumentos: astNode.argumentos} , imprimirSymbol, scope, "imprimir"); // Verifica los argumentos de la llamada.
+        return { base: "void" }; // 'imprimir' no devuelve ningún valor.
+
+    // MODIFICADO: Caso para LlamadaLeer
+    case "LlamadaLeer": { // Para la llamada a la función predefinida 'leer'.
+        const leerSymbol = scope.lookupSymbol("leer"); // Busca el símbolo 'leer' en el ámbito global.
+        checkFunctionCallArguments({ argumentos: astNode.argumentos }, leerSymbol, scope, "leer"); // Verifica los argumentos de la llamada (puede tener un prompt opcional).
+        return leerSymbol.tipoRetorno; // Devuelve el tipo de retorno de 'leer' (que es 'texto').
+    }
+
+
+    case "DeclaracionFuncion": { // Para la declaración de una función.
+      const funcName = astNode.nombre.value; // Obtiene el nombre de la función del token.
+      const returnType = resolveTypeNode(astNode.tipoRetorno, scope); // Resuelve el tipo de retorno a un objeto de tipo semántico.
+      
+      const paramInfos = (astNode.parametros || []).map(p => ({ // Mapea los nodos de parámetros a objetos de información de parámetro.
+          name: p.nombre.value, // Obtiene el nombre del parámetro del token.
+          type: resolveTypeNode(p.tipo, scope) // Resuelve el tipo del parámetro.
+      }));
+
+      scope.addSymbol(funcName, returnType, "funcion", { // Añade la función a la tabla de símbolos del ámbito actual.
+        parametros: paramInfos,                         // Almacena la información de los parámetros.
+        tipoRetorno: returnType, // Almacena el tipo de retorno.
+        isVariadic: false, // Las funciones definidas por el usuario no son variádicas por defecto.
+        node: astNode // Guarda una referencia al nodo AST de la función.
+      });
+
+      const functionScope = scope.enterScope('function'); // Crea un nuevo ámbito de tipo 'function' para el cuerpo de la función.
+      functionScope.currentFunctionContext.expectedReturnType = returnType; // Establece el tipo de retorno esperado en el contexto de la función.
+      functionScope.currentFunctionContext.name = funcName; // Guarda el nombre de la función para mensajes de error.
+
+      paramInfos.forEach(pInfo => { // Itera sobre la información de los parámetros.
+        functionScope.addSymbol(pInfo.name, pInfo.type, "parametro", { mutable: true }); // Añade cada parámetro como un símbolo al ámbito de la función.
+      });
+
+      analyzeSemantics(astNode.bloque, functionScope); // Analiza el cuerpo (bloque) de la función en su nuevo ámbito.
+      // Aquí se podría verificar si todas las rutas de código devuelven un valor si el tipoRetorno no es 'vacio'.
+      // Esta es una verificación más avanzada (análisis de flujo de control).
+      return { base: "void" }; // La declaración de una función es una sentencia, no tiene valor.
+    }
+
+    case "SentenciaDevolver": { // Para una sentencia 'devolver'.
+      if (!scope.currentFunctionContext) { // Verifica si la sentencia está dentro de una función.
+        throw new SemanticError("Sentencia 'devolver' fuera de una función o método."); // Lanza error si no lo está.
+      }
+      const funcContext = scope.currentFunctionContext; // Obtiene el contexto de la función actual.
+      const expectedType = funcContext.expectedReturnType; // Obtiene el tipo de retorno esperado para esta función.
+      let actualReturnType = { base: "vacio" }; // Tipo por defecto si 'devolver' no tiene valor.
+
+      if (astNode.valor) { // Si 'devolver' tiene una expresión de valor.
+        actualReturnType = analyzeSemantics(astNode.valor, scope); // Analiza la expresión para obtener su tipo.
+      }
+
+      if (expectedType.base === "vacio" && astNode.valor) { // Si la función debe ser 'vacio' pero devuelve un valor.
+        throw new SemanticError(`Una función/método '${funcContext.name || ''}' con retorno '${formatType(expectedType)}' no puede devolver un valor.`); // Lanza error.
+      }
+      if (expectedType.base !== "vacio" && !astNode.valor) { // Si la función debe devolver un valor pero no lo hace.
+          throw new SemanticError(`La función/método '${funcContext.name || ''}' debe devolver un valor de tipo '${formatType(expectedType)}'.`); // Lanza error.
+      }
+      if (astNode.valor && !areTypesCompatible(expectedType, actualReturnType)) { // Si el tipo devuelto no es compatible con el esperado.
+        throw new SemanticError( // Lanza error de tipo incompatible.
+          `Tipo de retorno incompatible en '${funcContext.name || ''}'. Se esperaba '${formatType(expectedType)}' pero se obtuvo '${formatType(actualReturnType)}'.`
+        );
+      }
+      return { base: "void" }; // 'devolver' es una sentencia, no tiene valor.
+    }
+
+    case "SentenciaRomper": // Para una sentencia 'romper'.
+        if (!scope.currentLoopContext && !scope.currentSwitchContext) { // Verifica si está dentro de un bucle o un 'segun'.
+            throw new SemanticError("Sentencia 'romper' fuera de un bucle ('mientras', 'para') o estructura 'segun'."); // Lanza error si no lo está.
+        }
+        return { base: "void" }; // 'romper' es una sentencia, no tiene valor.
+    
+    case "AccesoArreglo": // Para el acceso a un elemento de un arreglo (ej. arr[i]).
+    case "AccesoArregloDoble": { // Para el acceso a un elemento de una matriz (ej. matriz[i][j]).
+        const arrayNode = astNode.arreglo || astNode.matriz; // Obtiene el nodo que representa el arreglo/matriz.
+        const baseArrayType = analyzeSemantics(arrayNode, scope); // Analiza ese nodo para obtener su tipo.
+
+        if (!baseArrayType.isArray) { // Verifica que la base sea un arreglo.
+            throw new SemanticError(`Intento de acceso por índice a un tipo no arreglo: '${formatType(baseArrayType)}'.`); // Lanza error si no lo es.
+        }
+
+        const index1Node = astNode.indice || astNode.indice1; // Obtiene el nodo del primer índice.
+        const index1Type = analyzeSemantics(index1Node, scope); // Analiza el índice para obtener su tipo.
+        if (!isNumeric(index1Type)) { // El índice debe ser numérico.
+            throw new SemanticError(`El índice del arreglo debe ser numérico, se obtuvo '${formatType(index1Type)}'.`); // Lanza error si no lo es.
+        }
+
+        if (nodeType === "AccesoArregloDoble") { // Si es un acceso de doble índice.
+            if ((baseArrayType.dimensions || 1) < 2) { // La base debe ser al menos una matriz (2D).
+                 throw new SemanticError(`Se esperaba una matriz (arreglo 2D) para acceso doble [], se obtuvo '${formatType(baseArrayType)}'.`); // Lanza error si no.
+            }
+            const index2Type = analyzeSemantics(astNode.indice2, scope); // Analiza el segundo índice.
+            if (!isNumeric(index2Type)) { // El segundo índice también debe ser numérico.
+                throw new SemanticError(`El segundo índice de la matriz debe ser numérico, se obtuvo '${formatType(index2Type)}'.`); // Lanza error si no.
+            }
+            // Si baseArrayType.tipoElemento es el tipo del arreglo interno, entonces su tipoElemento es el tipo final.
+            return baseArrayType.tipoElemento.tipoElemento; // Devuelve el tipo del elemento final.
+        } else { // Si es un acceso simple.
+             if (baseArrayType.dimensions > 1) { // Si se accede con un solo índice a una matriz.
+                // Si accedes a una matriz 'matriz[i]', obtienes un arreglo.
+                return baseArrayType.tipoElemento; // El resultado es un arreglo (la fila).
+            }
+            return baseArrayType.tipoElemento; // Si es un arreglo 1D, devuelve el tipo del elemento.
+        }
+    }
+    
+    case "CreacionArreglo": { // Para la creación de un arreglo literal (ej. [1, 2, 3]).
+        if (!astNode.elementos || astNode.elementos.length === 0) { // Si el arreglo está vacío.
+            // Arreglo vacío. Su tipo es "arreglo de desconocido" hasta que se infiera por asignación o uso.
+            // Para LibreScript, que es de tipado explícito, esto podría ser un problema si no se asigna a una variable con tipo.
+            // O podría permitirse y el tipo se fija en la primera asignación.
+            // Por ahora, tipoElemento es 'desconocido'.
+            return { base: "desconocido", isArray: true, dimensions: 1, tipoElemento: { base: "desconocido" } }; // Devuelve un tipo de arreglo de elementos 'desconocido'.
+        }
+        const elementTypes = astNode.elementos.map(el => analyzeSemantics(el, scope)); // Analiza cada elemento para obtener su tipo.
+        const firstElementType = elementTypes[0]; // Toma el tipo del primer elemento como referencia.
+
+        for (let i = 1; i < elementTypes.length; i++) { // Itera sobre los demás elementos.
+            if (!areTypesCompatible(firstElementType, elementTypes[i])) { // Todos los elementos deben ser de tipos compatibles.
+                throw new SemanticError( // Lanza un error si se encuentran tipos incompatibles.
+                    `Los elementos de un arreglo literal deben ser del mismo tipo o compatibles. Se encontró '${formatType(firstElementType)}' y '${formatType(elementTypes[i])}'.`
+                );
+            }
+        }
+        // El tipo del arreglo es un arreglo del tipo del primer elemento (o un supertipo común si se implementara)
+        return { // Construye y devuelve el tipo del arreglo.
+            base: firstElementType.base, // El tipo base del arreglo.
+            isArray: true, // Es un arreglo.
+            dimensions: 1, // Los literales son arreglos 1D por defecto.
+            tipoElemento: firstElementType, // El tipo de los elementos.
+            // Si el primer elemento es en sí un arreglo, esto crea un arreglo de arreglos (matriz)
+            ...(firstElementType.isArray && { dimensions: firstElementType.dimensions + 1, tipoElemento: firstElementType }) // Maneja la creación de matrices anidadas.
+         };
+    }
+
+    case "DeclaracionClase": { // Para la declaración de una clase.
+        const className = astNode.nombre.value; // Obtiene el nombre de la clase del token.
+        // Un tipo clase que contiene información sobre sus miembros.
+        const classTypeRepresentation = { base: className, isClass: true, members: new Map(), node: astNode }; // Crea un objeto que representa el tipo de la clase.
+        scope.addSymbol(className, classTypeRepresentation, "clase", { node: astNode }); // Añade el símbolo de la clase al ámbito actual.
+
+        const classScope = scope.enterScope('class'); // Crea un nuevo ámbito de tipo 'class' para el cuerpo de la clase.
+        classScope.currentClassContext.classInfo = classTypeRepresentation; // Almacena la información de la clase en el contexto.
+        classScope.currentClassContext.className = className; // Almacena el nombre de la clase en el contexto.
+
+        if (astNode.cuerpo && astNode.cuerpo.miembros) { // Si la clase tiene un cuerpo con miembros.
+            astNode.cuerpo.miembros.forEach(miembro => { // Itera sobre cada miembro.
+                analyzeSemantics(miembro, classScope); // Analiza cada miembro (propiedad, constructor, método) en el ámbito de la clase.
+            });
+        }
+        // Verificar si hay un constructor si se necesita (algunos lenguajes requieren uno por defecto o explícito)
+        return { base: "void" }; // La declaración de una clase es una sentencia, no tiene valor.
+    }
+
+    // MODIFICADO: PropiedadClase ahora tiene un 'tipo' en el AST
+    case "PropiedadClase": { // Para la declaración de una propiedad de clase.
+        if (!scope.currentClassContext) { // Debe estar dentro de una clase.
+            throw new SemanticError("Declaración de propiedad fuera de una clase."); // Lanza error si no.
+        }
+        const propNameToken = astNode.nombre; // Obtiene el token del nombre de la propiedad.
+        const propName = propNameToken.value; // Extrae el valor del nombre.
+        
+        // astNode.tipo es el nodo de Tipo de la gramática
+        const propType = resolveTypeNode(astNode.tipo, scope.parentScope); // Resuelve el tipo de la propiedad en el ámbito que contiene la clase.
+
+        if (scope.currentClassContext.classInfo.members.has(propName)) { // Verifica si ya existe un miembro con ese nombre.
+            throw new SemanticError(`Miembro '${propName}' ya definido en la clase '${scope.currentClassContext.className}'.`); // Lanza error si está duplicado.
+        }
+
+        scope.currentClassContext.classInfo.members.set(propName, { // Añade la información de la propiedad al mapa de miembros de la clase.
+            name: propName, // Nombre de la propiedad.
+            type: propType, // Tipo de la propiedad.
+            kind: "propiedad", // Es una propiedad.
+            visibilidad: astNode.visibilidad, // Visibilidad ("publica" o "privada").
+            declarerClass: scope.currentClassContext.className // Nombre de la clase que la declara.
+        });
+        return { base: "void" }; // La declaración de propiedad es una sentencia, no tiene valor.
+    }
+
+    case "ConstructorClase": { // Para la declaración de un constructor de clase.
+        if (!scope.currentClassContext) { // Debe estar dentro de una clase.
+            throw new SemanticError("Declaración de constructor fuera de una clase."); // Lanza error si no.
+        }
+        const classInfo = scope.currentClassContext.classInfo; // Obtiene la información de la clase actual.
+        if (classInfo.members.has("constructor")) { // Solo puede haber un constructor.
+            throw new SemanticError(`La clase '${classInfo.base}' ya tiene un constructor definido.`); // Lanza error si ya existe.
+        }
+
+        const paramInfos = (astNode.parametros || []).map(p => ({ // Mapea los nodos de parámetros a objetos de información.
+            name: p.nombre.value, // Obtiene el nombre del parámetro del token.
+            type: resolveTypeNode(p.tipo, scope.parentScope) // Resuelve el tipo del parámetro.
+        }));
+        
+        const constructorSymbolInfo = { // Crea un objeto con la información del constructor.
+            kind: "metodo", // Se trata como un método especial.
+            name: "constructor", // Nombre especial.
+            parametros: paramInfos, // Información de los parámetros.
+            tipoRetorno: { base: classInfo.base, isClassInstance: true, classInfo: classInfo }, // Devuelve una instancia de la clase.
+            isVariadic: false, // No es variádico.
+            node: astNode, // Referencia al nodo AST.
+            declarerClass: scope.currentClassContext.className // Clase que lo declara.
+        };
+        classInfo.members.set("constructor", constructorSymbolInfo); // Añade el constructor a los miembros de la clase.
+
+        const constructorScope = scope.enterScope('function'); // Crea un nuevo ámbito de función para el cuerpo del constructor.
+        constructorScope.currentClassContext = scope.currentClassContext; // Hereda el contexto de la clase.
+        constructorScope.currentFunctionContext.expectedReturnType = { base: "vacio" }; // Los constructores no devuelven valor explícitamente.
+        constructorScope.currentFunctionContext.name = `constructor de ${classInfo.base}`; // Nombre para mensajes de error.
+        // 'este' dentro del constructor
+        constructorScope.addSymbol("este", { base: classInfo.base, isClassInstance: true, classInfo: classInfo }, "variable", { mutable: false }); // Define 'este' dentro del constructor.
+
+
+        paramInfos.forEach(pInfo => { // Itera sobre los parámetros.
+            constructorScope.addSymbol(pInfo.name, pInfo.type, "parametro", { mutable: true }); // Añade cada parámetro al ámbito del constructor.
+        });
+        analyzeSemantics(astNode.bloque, constructorScope); // Analiza el cuerpo del constructor en su nuevo ámbito.
+        return { base: "void" }; // La declaración del constructor es una sentencia.
+    }
+    
+    case "MetodoClase": { // Para la declaración de un método de clase.
+        if (!scope.currentClassContext) { // Debe estar dentro de una clase.
+            throw new SemanticError("Declaración de método fuera de una clase."); // Lanza error si no.
+        }
+        const classInfo = scope.currentClassContext.classInfo; // Obtiene la información de la clase actual.
+        const methodNameToken = astNode.nombre; // Obtiene el token del nombre del método.
+        const methodName = methodNameToken.value; // Extrae el nombre.
+
+        if (classInfo.members.has(methodName)) { // Verifica si ya existe un miembro con ese nombre.
+             throw new SemanticError(`Miembro '${methodName}' ya definido en la clase '${classInfo.base}'.`); // Lanza error si está duplicado.
+        }
+
+        const returnType = resolveTypeNode(astNode.tipoRetorno, scope.parentScope); // Resuelve el tipo de retorno del método.
+        const paramInfos = (astNode.parametros || []).map(p => ({ // Mapea los nodos de parámetros a objetos de información.
+            name: p.nombre.value, // Obtiene el nombre del parámetro del token.
+            type: resolveTypeNode(p.tipo, scope.parentScope) // Resuelve el tipo del parámetro.
+        }));
+
+        classInfo.members.set(methodName, { // Añade la información del método al mapa de miembros de la clase.
+            name: methodName, // Nombre del método.
+            kind: "metodo", // Es un método.
+            tipoRetorno: returnType, // Tipo de retorno.
+            parametros: paramInfos, // Parámetros.
+            visibilidad: astNode.visibilidad, // Visibilidad (actualmente solo "publica").
+            isVariadic: false, // No es variádico.
+            node: astNode, // Referencia al nodo AST.
+            declarerClass: scope.currentClassContext.className // Clase que lo declara.
+        });
+        
+        const methodScope = scope.enterScope('function'); // Crea un nuevo ámbito de función para el cuerpo del método.
+        methodScope.currentClassContext = scope.currentClassContext; // Hereda el contexto de la clase.
+        methodScope.currentFunctionContext.expectedReturnType = returnType; // Establece el tipo de retorno esperado en el contexto.
+        methodScope.currentFunctionContext.name = `${classInfo.base}.${methodName}`; // Nombre para mensajes de error.
+        methodScope.addSymbol("este", { base: classInfo.base, isClassInstance: true, classInfo: classInfo }, "variable", { mutable: false }); // Define 'este' dentro del método.
+
+        paramInfos.forEach(pInfo => { // Itera sobre los parámetros.
+            methodScope.addSymbol(pInfo.name, pInfo.type, "parametro", { mutable: true }); // Añade cada parámetro al ámbito del método.
+        });
+        analyzeSemantics(astNode.bloque, methodScope); // Analiza el cuerpo del método en su nuevo ámbito.
+        return { base: "void" }; // La declaración de método es una sentencia.
+    }
+
+    case "CreacionObjeto": { // Para la creación de un objeto con 'nuevo'.
+        const classNameToken = astNode.clase; // Obtiene el token del nombre de la clase.
+        const className = classNameToken.value; // Extrae el nombre.
+        const classSymbol = scope.lookupSymbol(className); // Busca el símbolo de la clase.
+
+        if (!classSymbol || !classSymbol.type.isClass) { // Si no se encuentra o no es una clase.
+            throw new SemanticError(`'${className}' no es un tipo de clase válido o no ha sido declarada.`); // Lanza un error.
+        }
+
+        const classTypeInfo = classSymbol.type; // Obtiene la representación del tipo de la clase.
+        const constructorSymbol = classTypeInfo.members.get("constructor"); // Busca el constructor en los miembros de la clase.
+        
+        if (constructorSymbol) { // Si la clase tiene un constructor definido.
+            // Simular un nodo de llamada para reutilizar checkFunctionCallArguments
+            const constructorCallNode = { // Crea un nodo de llamada simulado para el constructor.
+                callee: { type: "IdentificadorGral", nombre: "constructor" }, // Placeholder para el invocador.
+                argumentos: astNode.argumentos // Usa los argumentos de la expresión 'nuevo'.
+            };
+            checkFunctionCallArguments(constructorCallNode, constructorSymbol, scope, `constructor de ${className}`); // Verifica los argumentos pasados al constructor.
+        } else if (astNode.argumentos && astNode.argumentos.length > 0) { // Si no hay constructor pero se pasaron argumentos.
+             throw new SemanticError(`La clase '${className}' no tiene un constructor explícito que acepte argumentos (o no se ha definido un constructor).`); // Lanza un error.
+        }
+        return { base: className, isClassInstance: true, classInfo: classTypeInfo }; // La expresión devuelve una nueva instancia de la clase.
+    }
+
+    case "AccesoMiembro": { // Para el acceso a un miembro de un objeto (ej. obj.propiedad).
+      const objetoNode = astNode.objeto; // Obtiene el nodo del objeto.
+      const objectType = analyzeSemantics(objetoNode, scope); // Analiza el objeto para obtener su tipo.
+      const memberName = astNode.propiedad; // Obtiene el nombre del miembro que se está accediendo.
+      // const utilizoAlmohadilla = astNode.accesoConAlmohadilla; // Disponible si necesitas lógica extra
+
+      // Chequeo para .longitud en textos y arreglos
+      if (memberName === "longitud") { // Caso especial para la propiedad 'longitud'.
+          if (isText(objectType) || isArrayType(objectType)) { // Si el objeto es un texto o un arreglo.
+              return { base: "numero" }; // 'longitud' devuelve un número.
+          }
+      }
+
+      if (objectType.isObjectLiteral) { // Si el objeto es un literal.
+        if (!objectType.properties || !objectType.properties.has(memberName)) { // Verifica si la propiedad existe en el literal.
+            // Si el miembro es 'longitud' y el objeto literal no lo tiene, es un error
+            if (memberName === "longitud") { // Maneja el caso de 'longitud' en objetos literales.
+                throw new SemanticError(`Propiedad 'longitud' no es aplicable directamente a objetos literales genéricos a menos que esté definida. Se obtuvo '${formatType(objectType)}'.`);
+            }
+            throw new SemanticError(`La propiedad '${memberName}' no existe en el objeto literal.`); // Lanza error si no existe.
+        }
+        return objectType.properties.get(memberName); // Devuelve el TIPO de la propiedad.
+    }
+
+      if (!objectType.isClassInstance && !objectType.isClass) { // Si el objeto no es una instancia de clase ni una clase.
+          throw new SemanticError(`El operando izquierdo de '.' debe ser una instancia de clase (o 'este'). Se obtuvo '${formatType(objectType)}' para el objeto que precede a '.${memberName}'.`); // Lanza error.
+      }
+      
+      
+      const classInfo = objectType.classInfo || (objectType.isClass ? objectType : null) ; // Obtiene la información de la clase.
+      if (!classInfo || !classInfo.members) { // Verifica que la información de la clase esté disponible.
+           throw new SemanticError(`No se pudo determinar la información de clase para '${formatType(objectType)}' al intentar acceder a '.${memberName}'.`); // Lanza error si no.
+      }
+
+      const memberSymbol = classInfo.members.get(memberName); // Busca el miembro en el mapa de miembros de la clase.
+
+      if (!memberSymbol) { // Si el miembro no se encuentra.
+          // Si se usó # y no se encontró, o si no se usó # y no se encontró.
+          throw new SemanticError(`El miembro '${memberName}' no existe en el tipo '${classInfo.base}'.`); // Lanza error.
+      }
+
+      // Chequeo de visibilidad
+      if (memberSymbol.visibilidad === "privada") { // Si el miembro es privado.
+          if (!scope.currentClassContext || scope.currentClassContext.className !== memberSymbol.declarerClass) { // Verifica si el acceso es desde dentro de la misma clase.
+               throw new SemanticError(`No se puede acceder al miembro privado '${memberName}' de la clase '${memberSymbol.declarerClass}' desde el contexto actual (línea aproximada: ${objetoNode.line || 'desconocida'}).`); // Lanza error si el acceso es inválido.
+          }
+          
+          // Opcional: si quieres que el uso de '#' sea mandatorio para privados
+          // if (!utilizoAlmohadilla) {
+          //    throw new SemanticError(`El miembro privado '${memberName}' debe ser accedido con '#'.`);
+          // }
+      } else { // Si el miembro es público.
+          // Opcional: si quieres prohibir '#' para públicos
+          // if (utilizoAlmohadilla) {
+          //    throw new SemanticError(`El miembro público '${memberName}' no debe ser accedido con '#'.`);
+          // }
+      }
+      
+      if (memberSymbol.kind === "metodo") { // Si el miembro es un método.
+          return { ...memberSymbol, type: memberSymbol.tipoRetorno, onClass: classInfo.base }; // Devuelve la información del método, incluyendo su tipo de retorno.
+      }
+      return memberSymbol.type; // Si es una propiedad, devuelve su tipo.
+  }
+    
+    case "CreacionObjetoLiteral": { // Para la creación de un objeto literal (ej. { clave: valor }).
+        const propertiesInfo = new Map(); // Crea un mapa para almacenar los tipos de las propiedades.
+        let typeToBe = { base: "Objeto", isObjectLiteral: true, properties: propertiesInfo }; // Define el tipo base del objeto literal.
+        
+        if (astNode.propiedades && astNode.propiedades.length > 0) { // Si el objeto tiene propiedades.
+            for (const par of astNode.propiedades) { // Itera sobre cada par clave-valor.
+                const key = par.clave; // Obtiene la clave (string).
+                const valueType = analyzeSemantics(par.valor, scope); // Analiza la expresión del valor para obtener su tipo.
+                if (propertiesInfo.has(key)) { // Las claves no pueden estar duplicadas.
+                    throw new SemanticError(`Clave duplicada '${key}' en objeto literal.`); // Lanza error si hay duplicados.
+                }
+                propertiesInfo.set(key, valueType); // Almacena el tipo del valor en el mapa de propiedades.
+            }
+        }
+        return typeToBe; // Devuelve el tipo del objeto literal creado.
+    }
+    
+    case "ExpresionSentencia": // Para una expresión usada como sentencia (ej. miFuncion();).
+        analyzeSemantics(astNode.expresion, scope); // Analiza la expresión interna (el valor de retorno se ignora).
+        return { base: "void" }; // Como sentencia, no tiene valor.
+
+    default: // Para cualquier tipo de nodo no manejado explícitamente.
+      console.warn(`SEM: Nodo tipo '${nodeType}' no manejado explícitamente: ${JSON.stringify(astNode)}`); // Muestra una advertencia en la consola.
+      return { base: "void" }; // Devuelve un tipo por defecto.
+  }
+}
+
+
+// ---- FUNCIONES AUXILIARES DE TIPOS ----
+function resolveTypeNode(typeNode, scope) { // Función para convertir un nodo de tipo del AST a un objeto de tipo semántico.
+  if (!typeNode) throw new SemanticError("Nodo de tipo indefinido encontrado."); // Lanza error si el nodo de tipo es nulo.
+
+  // Si typeNode es un string (ej. 'numero' de TipoBase -> %TIPO_NUMERO)
+  if (typeof typeNode === 'string') { // Si el nodo de tipo ya es un string simple.
+    if (["numero", "texto", "booleano", "Objeto", "vacio"].includes(typeNode)) { // Si es un tipo primitivo conocido.
+        return { base: typeNode }; // Devuelve el objeto de tipo correspondiente.
+    } else { // Si no, asume que es el nombre de una clase definida por el usuario.
+        const symbol = scope.lookupSymbol(typeNode); // Busca el nombre en la tabla de símbolos.
+        if (symbol && symbol.type.isClass) { // Si se encuentra y es una clase.
+            return symbol.type; // Devuelve la representación del tipo de la clase.
+        }
+        // Podría ser un alias de tipo si se implementan.
+        throw new SemanticError(`Tipo '${typeNode}' desconocido o no declarado.`); // Lanza error si el tipo no se encuentra.
+    }
+  }
+
+  // Si typeNode es un objeto nodo del AST (ej. de Tipo -> TipoBase, TipoArreglo)
+  if (typeNode.type === "TipoArreglo") { // Si el nodo es de tipo arreglo.
+    const baseElementType = resolveTypeNode(typeNode.tipoElemento, scope); // Resuelve recursivamente el tipo del elemento base.
+    return { base: baseElementType.base, isArray: true, dimensions: 1, tipoElemento: baseElementType }; // Devuelve el objeto de tipo arreglo.
+  }
+  if (typeNode.type === "TipoMatriz") { // Si el nodo es de tipo matriz.
+    const baseElementType = resolveTypeNode(typeNode.tipoElemento, scope); // Resuelve recursivamente el tipo del elemento base.
+    return { // Devuelve el objeto de tipo matriz (arreglo de arreglos).
+        base: baseElementType.base, 
+        isArray: true,
+        dimensions: 2,
+        tipoElemento: { // El elemento de este arreglo es OTRO arreglo.
+            base: baseElementType.base,
+            isArray: true,
+            dimensions: 1,
+            tipoElemento: baseElementType
+        }
+    };
+  }
+  // Si el tipo es directamente un identificador general (para nombres de clase como tipo)
+  // Esta situación es manejada cuando typeNode es un string (el valor del token IDENTIFICADOR_GRAL)
+  // y se busca en la tabla de símbolos.
+
+  // Si typeNode ya es un objeto de tipo resuelto (pasado recursivamente)
+  if (typeNode.base) return typeNode; // Si ya está resuelto, lo devuelve directamente.
+
+  throw new SemanticError(`Nodo de tipo AST no reconocido o malformado: ${JSON.stringify(typeNode)}`); // Lanza error para nodos de tipo no válidos.
+}
+
+function formatType(typeObj) { // Función para convertir un objeto de tipo semántico en un string legible.
+  if (!typeObj) return "indefinido"; // Si el objeto es nulo, devuelve 'indefinido'.
+  if (typeof typeObj === 'string') return typeObj; // Si ya es un string, lo devuelve.
+  
+  let s = ""; // Inicializa el string resultante.
+  if (typeObj.isClassInstance) s = `instancia_de_${typeObj.base}`; // Formato para instancias de clase.
+  else if (typeObj.isClass) s = `clase_${typeObj.base}`; // Formato para tipos de clase.
+  else s = typeObj.base || "tipo_desconocido"; // Formato para tipos base.
+  
+  if (typeObj.isArray) { // Si el tipo es un arreglo.
+      let currentType = typeObj; // Variable para navegar la estructura del tipo.
+      let brackets = ""; // String para acumular los corchetes.
+      let baseTypeName = ""; // String para el nombre del tipo base final.
+      
+      // Navegar hasta el tipo base del elemento más interno
+      let temp = currentType; // Variable temporal para la navegación.
+      while (temp && temp.isArray) { // Mientras siga siendo un arreglo anidado.
+          brackets += "[]"; // Añade un par de corchetes.
+          temp = temp.tipoElemento; // Pasa al tipo de elemento interior.
+      }
+      baseTypeName = temp ? temp.base : (typeObj.tipoElemento ? typeObj.tipoElemento.base : "desconocido"); // Obtiene el nombre del tipo base.
+      
+      s = baseTypeName + brackets; // Combina el nombre base con los corchetes.
+  }
+  return s; // Devuelve el string formateado.
+}
+
+function isNumeric(typeObj) { return typeObj && typeObj.base === "numero" && !typeObj.isArray; } // Verifica si un tipo es numérico (y no un arreglo).
+function isText(typeObj) { return typeObj && typeObj.base === "texto" && !typeObj.isArray; } // Verifica si un tipo es texto (y no un arreglo).
+function isBoolean(typeObj) { return typeObj && typeObj.base === "booleano" && !typeObj.isArray; } // Verifica si un tipo es booleano (y no un arreglo).
+function isVoid(typeObj) { return typeObj && typeObj.base === "vacio"; } // Verifica si un tipo es 'vacio'.
+function isArrayType(typeObj) { return typeObj && typeObj.isArray === true; } // Verifica si un tipo es un arreglo.
+function isObjectType(typeObj) { return typeObj && typeObj.base === "Objeto" && !typeObj.isArray; } // Verifica si un tipo es el 'Objeto' genérico.
+function isClassInstance(typeObj) { return typeObj && typeObj.isClassInstance === true; } // Verifica si un tipo es una instancia de clase.
+
+
+function isAssignable(astNode, scope) { // Verifica si un nodo del AST representa un "L-value" (algo a lo que se puede asignar).
+    // Verifica si el astNode representa una "L-value" (algo a lo que se puede asignar)
+    if (astNode.type === "Variable" || (astNode.type === "IDENTIFICADOR_VAR" && scope.lookupSymbol(astNode.value)?.mutable)) { // Si es un nodo de variable o un identificador de variable mutable.
+        const symbol = scope.lookupSymbol(astNode.nombre || astNode.value); // Busca el símbolo.
+        return symbol && symbol.mutable; // Es asignable si el símbolo existe y es mutable.
+    }
+    if (astNode.type === "AccesoArreglo" || astNode.type === "AccesoArregloDoble") { // Si es un acceso a un elemento de arreglo.
+        return true; // Los elementos de arreglo siempre son asignables.
+    }
+    if (astNode.type === "AccesoMiembro") { // Si es un acceso a una propiedad de un objeto.
+        // Se necesitaría resolver el miembro para ver si es una propiedad mutable y no un método.
+        // Por ahora, una simplificación:
+        // const memberType = analyzeSemantics(astNode, scope); // Podría causar recursión infinita si se llama desde OpUnaria -> analyzeSemantics -> AccesoMiembro
+        // Para evitarlo, AccesoMiembro debería devolver suficiente info o tener una forma de chequear sin re-analizar completamente.
+        // Esta función es para ++/--, donde el tipo ya fue resuelto. Asumimos que si es una propiedad, es asignable.
+        const objectType = analyzeSemantics(astNode.objeto, scope); // Analiza el objeto para obtener su tipo.
+        if (objectType && objectType.classInfo && objectType.classInfo.members) { // Si es una instancia de clase con miembros.
+            const member = objectType.classInfo.members.get(astNode.propiedad); // Obtiene la información del miembro.
+            return member && member.kind === 'propiedad'; // Es asignable si el miembro es una propiedad.
+        }
+        return false; // Si no se puede determinar, se asume que no es asignable.
+    }
+    return false; // Por defecto, no es asignable.
+}
+
+
+function areTypesCompatible(expectedType, actualType) { // Comprueba si el tipo 'actual' puede ser asignado a una variable de tipo 'esperado'.
+  if (!expectedType || !actualType) return false; // Si alguno de los tipos es nulo, no son compatibles.
+  // Permitir asignar cualquier cosa a 'Objeto' o si el tipo esperado es 'desconocido'
+  if (expectedType.base === "Objeto" || expectedType.base === "desconocido") return true; // El tipo 'Objeto' o 'desconocido' acepta cualquier cosa.
+  // No se puede asignar 'void' a un tipo que espera un valor, a menos que el esperado también sea 'void'.
+  if (actualType.base === "vacio" && expectedType.base !== "vacio") return false; // No se puede asignar 'vacio' a una variable con tipo.
+  // Se puede "asignar" una expresión con valor a un contexto void (se ignora el valor), pero no al revés.
+  // Esto es más bien para compatibilidad de retorno de funciones, no tanto para asignación directa de variables.
+  // if (expectedType.base === "vacio" && actualType.base !== "vacio") return true;
+
+
+  if (expectedType.isArray !== actualType.isArray) return false; // Si uno es arreglo y el otro no, son incompatibles.
+  
+  if (expectedType.isArray) { // Si ambos son arreglos.
+    // Si el esperado es arreglo de 'desconocido', cualquier arreglo actual es compatible (para arreglos vacíos inicializados)
+    if (expectedType.tipoElemento && expectedType.tipoElemento.base === "desconocido") return true; // Un arreglo de tipo 'desconocido' acepta cualquier otro arreglo.
+    // Si el actual es arreglo de 'desconocido' (ej. `[]`), es compatible si el esperado es un arreglo.
+    if (actualType.tipoElemento && actualType.tipoElemento.base === "desconocido") return true; // Un arreglo vacío `[]` es compatible con cualquier tipo de arreglo.
+
+    if ((expectedType.dimensions || 1) !== (actualType.dimensions || 1)) return false; // Las dimensiones deben coincidir.
+    return areTypesCompatible(expectedType.tipoElemento, actualType.tipoElemento); // Comprueba recursivamente la compatibilidad de los tipos de elementos.
+  }
+  
+  // Compatibilidad de clases/instancias (sin herencia por ahora)
+  if (expectedType.isClassInstance && actualType.isClassInstance) { // Si ambos son instancias de clase.
+    return expectedType.base === actualType.base; // Son compatibles solo si son de la misma clase.
+  }
+  // Si se espera una clase (ej. para un parámetro de tipo Clase) y se pasa una instancia de esa clase
+  // if (expectedType.isClass && actualType.isClassInstance) {
+  //   return expectedType.base === actualType.base;
+  // }
+  // (No se suele asignar una clase (el tipo) a una variable que espera una instancia)
+
+
+  return expectedType.base === actualType.base; // Para tipos primitivos, los nombres base deben ser idénticos.
+}
+
+function areTypesCompatibleForComparison(type1, type2) { // Comprueba si dos tipos son compatibles para operadores de igualdad (==, !=).
+    if (!type1 || !type2) return false; // Si alguno es nulo, no son comparables.
+    // Permitir comparación con 'desconocido' (podría ser nulo o no inicializado)
+    if (type1.base === "desconocido" || type2.base === "desconocido") return true; // Se permite comparar con 'desconocido'.
+    
+    // No se pueden comparar arreglos directamente por valor con == o != en LibreScript
+    if (type1.isArray || type2.isArray) return false; // Los arreglos no son comparables directamente.
+    // No se pueden comparar objetos/instancias de clase directamente por valor con == o !=
+    if (type1.isClassInstance || type2.isClassInstance || type1.isObjectLiteral || type2.isObjectLiteral) return false; // Los objetos/instancias no son comparables directamente.
+    if (type1.base === "Objeto" || type2.base === "Objeto") return false; // El tipo 'Objeto' genérico tampoco es comparable.
+
+    // Solo comparar primitivos si son del mismo tipo base
+    return type1.base === type2.base; // Para primitivos, deben ser del mismo tipo base.
+}
+
+
+function checkOpBinariaTypes(opNode, leftType, rightType, scope) { // Verifica los tipos para una operación binaria y devuelve el tipo resultante.
+    const op = opNode.operador; // Obtiene el operador.
+    switch (op) { // Evalúa el operador.
+      case '+': // Para suma o concatenación.
+        if (isNumeric(leftType) && isNumeric(rightType)) return { base: "numero" }; // numero + numero -> numero
+        // Concatenación si alguno es texto
+        if (isText(leftType) || isText(rightType)) { // Si al menos uno es texto.
+            // En LibreScript, numero + texto -> texto.
+            return { base: "texto" }; // El resultado es texto.
+        }
+        throw new SemanticError(`Operación '+' no válida entre tipos '${formatType(leftType)}' y '${formatType(rightType)}'. Se esperaba numero/numero o al menos un texto.`); // Error si los tipos no son válidos para '+'.
+      case '-': case '*': case '/': case '%': case '**': // Para operadores aritméticos.
+        if (!isNumeric(leftType) || !isNumeric(rightType)) { // Ambos operandos deben ser numéricos.
+          throw new SemanticError(`Operación '${op}' requiere operandos numéricos. Se obtuvieron '${formatType(leftType)}' y '${formatType(rightType)}'.`); // Lanza error si no.
+        }
+        if (op === '/' && opNode.derecha.type === "LiteralNumero" && opNode.derecha.value === 0) { // Comprueba la división estática por cero.
+            // Podría advertir o lanzar error por división por cero estática, pero usualmente es error en tiempo de ejecución.
+            // console.warn("Advertencia Semántica: División por cero literal detectada.");
+        }
+        return { base: "numero" }; // El resultado es numérico.
+      case '==': case '!=': // Para operadores de igualdad.
+        if (!areTypesCompatibleForComparison(leftType, rightType)) { // Verifica si los tipos son comparables.
+             // Damos un mensaje más específico si son incompatibles fundamentalmente.
+             // Si son del mismo tipo base pero no comparables (ej. arreglos), areTypesCompatibleForComparison ya dio falso.
+             throw new SemanticError(`No se pueden comparar tipos '${formatType(leftType)}' y '${formatType(rightType)}' con '${op}' según las reglas de LibreScript (solo primitivos del mismo tipo).`); // Lanza error si no son comparables.
+        }
+        return { base: "booleano" }; // El resultado es booleano.
+      case '<': case '>': case '<=': case '>=': // Para operadores relacionales.
+        // Solo entre números o entre textos.
+        if (!((isNumeric(leftType) && isNumeric(rightType)) || (isText(leftType) && isText(rightType)))) { // Deben ser ambos numéricos o ambos de texto.
+          throw new SemanticError(`Operación relacional '${op}' solo válida entre dos números o entre dos textos. Se obtuvieron '${formatType(leftType)}' y '${formatType(rightType)}'.`); // Lanza error si no.
+        }
+        return { base: "booleano" }; // El resultado es booleano.
+      case '&&': case '||': // Para operadores lógicos.
+        if (!isBoolean(leftType) || !isBoolean(rightType)) { // Ambos operandos deben ser booleanos.
+          throw new SemanticError(`Operador lógico '${op}' requiere operandos booleanos. Se obtuvieron '${formatType(leftType)}' y '${formatType(rightType)}'.`); // Lanza error si no.
+        }
+        return { base: "booleano" }; // El resultado es booleano.
+      default: // Para operadores no reconocidos.
+        throw new SemanticError(`Operador binario desconocido o no implementado en chequeo de tipos: '${op}'.`); // Lanza un error.
+    }
+}
+
+function checkFunctionCallArguments(callNodeOrInfo, callableSymbol, scope, contextName) { // Verifica los argumentos de una llamada a función.
+    const expectedParams = callableSymbol.parametros || []; // Obtiene la lista de parámetros esperados de la información del símbolo.
+    const actualArgs = callNodeOrInfo.argumentos || []; // Obtiene la lista de argumentos reales de la llamada.
+
+    // Para funciones variádicas como imprimir, no hay conteo estricto de parámetros.
+    if (callableSymbol.isVariadic) { // Si la función es variádica (como 'imprimir').
+        actualArgs.forEach(arg => analyzeSemantics(arg, scope)); // Solo analiza cada argumento para detectar errores en ellos.
+        return; // No se realizan más comprobaciones.
+    }
+
+    // Chequeo de cantidad de argumentos
+    const minExpectedArgs = expectedParams.filter(p => !p.optional).length; // Calcula el número mínimo de argumentos requeridos.
+    const maxExpectedArgs = expectedParams.length; // Calcula el número máximo de argumentos permitidos.
+
+    if (actualArgs.length < minExpectedArgs || actualArgs.length > maxExpectedArgs) { // Si el número de argumentos no está en el rango permitido.
+        let msg = `${contextName} esperaba `; // Construye el mensaje de error.
+        if (minExpectedArgs === maxExpectedArgs) { // Si el número es exacto.
+            msg += `${minExpectedArgs}`;
+        } else { // Si es un rango.
+            msg += `entre ${minExpectedArgs} y ${maxExpectedArgs}`;
+        }
+        msg += ` argumentos, pero recibió ${actualArgs.length}.`; // Completa el mensaje.
+        throw new SemanticError(msg); // Lanza un error de número incorrecto de argumentos.
+    }
+
+    // Chequeo de tipos de argumentos
+    for (let i = 0; i < actualArgs.length; i++) { // Itera sobre los argumentos proporcionados.
+        // No debería ir más allá de expectedParams.length debido al chequeo anterior,
+        // a menos que se refinen los opcionales o variádicos.
+        if (i < expectedParams.length) { // Compara cada argumento con su parámetro esperado.
+            const expectedParamType = expectedParams[i].type; // Obtiene el tipo esperado del parámetro.
+            const actualArgType = analyzeSemantics(actualArgs[i], scope); // Analiza el argumento para obtener su tipo real.
+            if (!areTypesCompatible(expectedParamType, actualArgType)) { // Si los tipos no son compatibles.
+                throw new SemanticError( // Lanza un error de tipo de argumento incompatible.
+                    `Argumento ${i + 1} de ${contextName}: se esperaba tipo '${formatType(expectedParamType)}' pero se obtuvo '${formatType(actualArgType)}'.`
+                );
+            }
+        }
+    }
+}
+
+
+ ///////////////////////////////////////////////////////////////////////////
+ // Punto de Entrada Principal para Pruebas
+ ///////////////////////////////////////////////////////////////////////////
+ 
+const filePath = process.argv[2] || './examples/test.ls'; // Obtiene la ruta del archivo a analizar desde los argumentos de la línea de comandos, o usa una por defecto.
+
+fs.readFile(filePath, 'utf8', (err, code) => { // Lee el contenido del archivo de forma asíncrona.
+  if (err) { // Si ocurre un error al leer el archivo.
+    console.error(`Error leyendo el archivo '${filePath}':`, err.message); // Muestra el mensaje de error.
+    return; // Termina la ejecución.
+  }
+
+  console.log("--- Código LibreScript ---"); // Imprime una cabecera para el código.
+  console.log(code); // Muestra el código fuente leído.
+  
+  // ---- FASE LÉXICA (Opcional, para depuración) ----
+   console.log("\n--- Tokens ---"); // Imprime una cabecera para los tokens.
+   try { // Envuelve el análisis léxico en un bloque try-catch.
+     lexer.reset(code); // Reinicia el estado del lexer con el código fuente.
+     const tokens = []; // Array para almacenar los tokens.
+     let token; // Variable para el token actual.
+     while (token = lexer.next()) { // Itera mientras el lexer produzca tokens.
+       if (token.type !== 'ws' && token.type !== 'nl') { // Excluye los tokens de espacio en blanco y saltos de línea puros.
+           tokens.push(token); // Añade el token al array.
+       }
+     }
+     console.log(tokens.map(t => ({ type: t.type, value: t.value, text: t.text, line: t.line, col: t.col }))); // Muestra una versión limpia de los tokens.
+   } catch (lexErr) { // Si ocurre un error léxico.
+     console.error("Error Léxico 🔴:", lexErr.message); // Muestra el error.
+     return; // Detiene la ejecución.
+   }
+  
+  // ---- FASE SINTÁCTICA ----
+  console.log("\n--- AST (Árbol de Sintaxis Abstracta) ---"); // Imprime una cabecera para el AST.
+  const ast = parseCode(code); // Llama a la función de parseo para generar el AST.
+
+  if (ast) { // Si el AST se generó correctamente.
+    console.log(JSON.stringify(ast, null, 2)); // Muestra el AST en formato JSON indentado.
+
+    // ---- FASE SEMÁNTICA ----
+    console.log("\n--- Análisis Semántico ---"); // Imprime una cabecera para el análisis semántico.
+    const globalSemanticScope = new SymbolTable(); // Crea la tabla de símbolos para el ámbito global.
+    
+    // Predefinir funciones/tipos globales
+    // imprimir([args...]): vacio
+    globalSemanticScope.addSymbol("imprimir", // Añade la función predefinida 'imprimir'.
+        { base: "vacio" }, // Tipo de retorno.
+        "funcion", // Es de tipo 'funcion'.
+        { // Información adicional.
+            parametros: [], // Lista de parámetros vacía porque es variádica.
+            tipoRetorno: { base: "vacio" }, // Tipo de retorno explícito.
+            isVariadic: true // Permite cualquier número y tipo de argumentos.
+        }
+    );
+    // leer([prompt: texto]): texto
+    globalSemanticScope.addSymbol("leer", // Añade la función predefinida 'leer'.
+        { base: "texto" }, // Tipo de retorno.
+        "funcion", // Es de tipo 'funcion'.
+        { // Información adicional.
+            parametros: [ { name: "$prompt", type: { base: "texto" }, optional: true } ], // Tiene un parámetro de texto opcional.
+            tipoRetorno: { base: "texto" }, // Devuelve un 'texto'.
+            isVariadic: false // No es variádica.
+        }
+    );
+    // Funciones de conversión de tipo
+    // aNum(valor: texto): numero
+    globalSemanticScope.addSymbol("aNum", { base: "numero" }, "funcion", { // Añade la función 'aNum'.
+        parametros: [ { name: "$valor", type: { base: "texto" } } ], // Recibe un 'texto'.
+        tipoRetorno: { base: "numero" }, // Devuelve un 'numero'.
+        isVariadic: false // No es variádica.
+    });
+    // aTxt(valor: cualquier_primitivo): texto
+    globalSemanticScope.addSymbol("aTxt", { base: "texto" }, "funcion", { // Añade la función 'aTxt'.
+        parametros: [ { name: "$valor", type: { base: "Objeto" } } ], // Acepta cualquier tipo (representado por 'Objeto').
+        tipoRetorno: { base: "texto" }, // Devuelve un 'texto'.
+        isVariadic: false // No es variádica.
+    });
+    // aBool(valor: cualquier_primitivo): booleano
+    globalSemanticScope.addSymbol("aBool", { base: "booleano" }, "funcion", { // Añade la función 'aBool'.
+        parametros: [ { name: "$valor", type: { base: "Objeto" } } ], // Acepta cualquier tipo.
+        tipoRetorno: { base: "booleano" }, // Devuelve un 'booleano'.
+        isVariadic: false // No es variádica.
+    });
+
+    // Tipo 'Objeto' predefinido
+    globalSemanticScope.addSymbol("Objeto", { base: "Objeto", isClass: false, isType: true }, "tipo"); // Añade el tipo global 'Objeto'.
+
+
+    try { // Envuelve el análisis semántico en un bloque try-catch.
+      analyzeSemantics(ast, globalSemanticScope); // Inicia el análisis semántico desde la raíz del AST y el ámbito global.
+      console.log("Análisis semántico completado sin errores. ✅"); // Mensaje de éxito si no hay errores.
+    } catch (e) { // Si se captura un error.
+      if (e instanceof SemanticError) { // Si es un error semántico esperado.
+        console.error("Error Semántico 🔴:", e.message); // Muestra el mensaje de error semántico.
+      } else { // Si es un error inesperado.
+        console.error("Error inesperado durante el análisis semántico 💥:", e); // Muestra el error completo.
+        console.error(e.stack); // Muestra el stack trace del error.
+      }
+    }
+  } else { // Si el AST no se pudo generar.
+    console.log("No se pudo generar el AST debido a errores de parseo."); // Muestra un mensaje indicando el fallo en el parseo.
+  }
+ }); 
+  ```
+  </TabItem>
+  <TabItem label="lexer.js">
+  ```ts
+  // lexer.js
+import moo from 'moo'; // Importa la librería Moo para la creación del lexer.
+
+// Compila y define el lexer con sus reglas.
+const lexer = moo.compile({
+  ws: { match: /[ \t]+/, lineBreaks: false }, // Espacios y tabulaciones, no cuentan como saltos de línea.
+  nl: { match: /\n/, lineBreaks: true }, // Saltos de línea.
+
+  comentario_linea: /\/\/.*/, // Comentarios de una sola línea.
+  comentario_bloque: { match: /\/\*[^]*?\*\//, lineBreaks: true }, // Comentarios de bloque.
+
+  // ---Tokens de lenguaje---
+  // Literales
+  numero: /[0-9]+(?:\.[0-9]+)?/, // Números enteros o decimales.
+  texto: /\"(?:[^\"\\]|\\.)*\"|'(?:[^'\\]|\\.)*'/, // Cadenas de texto con comillas dobles o simples.
+
+  LIT_VERDADERO: /\bverdadero\b/, // Literal booleano 'verdadero'.
+  LIT_FALSO: /\bfalso\b/, // Literal booleano 'falso'.
+
+  // Palabras Reservadas
+  PR_SINO_SI: /\bsiNo\s*si\b/, // Palabra reservada 'sino si'.
+  PR_CONSTRUCTOR: /\bconstructor\b/, // Palabra reservada 'constructor'.
+  PR_IMPRIMIR: /\bimprimir\b/, // Palabra reservada 'imprimir'.
+  PR_LEER: /\bleer\b/, // Palabra reservada 'leer'.
+  PR_DEVOLVER: /\bdevolver\b/, // Palabra reservada 'devolver'.
+  PR_FUNCION: /\bfuncion\b/, // Palabra reservada 'funcion'.
+  PR_CLASE: /\bclase\b/, // Palabra reservada 'clase'.
+  PR_NUEVO: /\bnuevo\b/, // Palabra reservada 'nuevo'.
+  PR_ESTE: /\beste\b/, // Palabra reservada 'este'.
+  PR_VACIO: /\bvacio\b/, // Palabra reservada 'vacio'.
+  PR_SI: /\bsi\b/, // Palabra reservada 'si'.
+  PR_SINO: /\bsiNo\b/, // Palabra reservada 'sino'.
+  PR_SEGUN: /\bsegun\b/, // Palabra reservada 'segun'.
+  PR_CASO: /\bcaso\b/, // Palabra reservada 'caso'.
+  PR_PORDEFECTO: /\bpordefecto\b/, // Palabra reservada 'pordefecto'.
+  PR_ROMPER: /\bromper\b/, // Palabra reservada 'romper'.
+  PR_MIENTRAS: /\bmientras\b/, // Palabra reservada 'mientras'.
+  PR_PARA: /\bpara\b/, // Palabra reservada 'para'.
+
+  // Palabras Clave de Tipo de Datos
+  TIPO_NUMERO: /\bnumero\b/, // Tipo de dato 'numero'.
+  TIPO_TEXTO: /\btexto\b/, // Tipo de dato 'texto'.
+  TIPO_BOOLEANO: /\bbooleano\b/, // Tipo de dato 'booleano'.
+  TIPO_ARREGLO: /\barreglo\b/, // Tipo de dato 'arreglo'.
+  TIPO_OBJETO: /\bObjeto\b/, // Tipo de dato 'Objeto'.
+
+  // Identificadores (DEBEN ir DESPUÉS de las palabras clave)
+  IDENTIFICADOR_CONST: /\$\$[a-zA-Z_][a-zA-Z0-9_]*/, // Identificador de constante (empieza con $$).
+  IDENTIFICADOR_VAR: /\$[a-zA-Z_][a-zA-Z0-9_]*/, // Identificador de variable (empieza con $).
+  IDENTIFICADOR_GRAL: /[a-zA-Z_][a-zA-Z0-9_]*/, // Identificador general, ejemplo funciones.
+
+  // Operadores (multi-caracter primero)
+  OP_POTENCIA: /\*\*/, // Operador de potencia.
+  OP_EQ: /==/, // Operador de igualdad.
+  OP_NEQ: /!=/, // Operador de desigualdad.
+  OP_GTE: />=/, // Operador mayor o igual que.
+  OP_LTE: /<=/, // Operador menor o igual que.
+  OP_AND: /&&/, // Operador lógico AND.
+  OP_OR: /\|\|/, // Operador lógico OR.
+  OP_INCREMENTO: /\+\+/, // Operador de incremento.
+  OP_DECREMENTO: /--/, // Operador de decremento.
+  OP_ASIG_SUMA: /\+=/, // Operador de asignación con suma.
+  OP_ASIG_RESTA: /-/, // Operador de asignación con resta.
+  OP_ASIG_MULT: /\*=/, // Operador de asignación con multiplicación.
+  OP_ASIG_DIV: /\/=/, // Operador de asignación con división.
+
+  // Operadores de un solo caracter
+  OP_ASIGNACION: /=/, // Operador de asignación.
+  OP_SUMA: /\+/, // Operador de suma.
+  OP_RESTA: /\-/, // Operador de resta.
+  OP_MULT: /\*/, // Operador de multiplicación.
+  OP_DIV: /\//, // Operador de división.
+  OP_MODULO: /%/, // Operador de módulo.
+  OP_GT: />/, // Operador mayor que.
+  OP_LT: /</, // Operador menor que.
+  OP_NOT: /!/, // Operador lógico NOT.
+
+  // Delimitadores
+  LPAREN: /\(/, // Paréntesis izquierdo.
+  RPAREN: /\)/, // Paréntesis derecho.
+  LBRACE: /\{/, // Llave izquierda.
+  RBRACE: /\}/, // Llave derecha.
+  LBRACKET: /\[/, // Corchete izquierdo.
+  RBRACKET: /\]/, // Corchete derecho.
+  PUNTO_Y_COMA: /;/, // Punto y coma.
+  COMA: /,/, // Coma.
+  DOS_PUNTOS: /:/, // Dos puntos.
+  PUNTO: /\./, // Punto.
+  ALMOHADILLA: /#/, // Almohadilla.
+
+  error: moo.error // Manejo de errores de caracteres no reconocidos.
+});
+
+export default lexer; // Exporta el lexer.
+  ```
+  </TabItem>
+  <TabItem label="grammar.js">
+  // grammar.js
+  ```ts
+// Generated automatically by nearley, version 2.20.1
+// http://github.com/Hardmath123/nearley
+
+import lexer from "./lexer.js"; // Importa el lexer definido.
+
+// Función auxiliar para crear nodos del árbol de sintaxis abstracta (AST).
+const nodo = (type, properties, value) => { // Define una función para crear nodos AST.
+  if (value !== undefined) return { type, ...properties, value }; // Si hay valor, lo incluye.
+  return { type, ...properties }; // Si no, solo tipo y propiedades.
+};
+
+// Función de identidad, útil para Nearley cuando un símbolo no necesita transformación.
+function id(x) { return x[0]; } // Devuelve el primer elemento del array (el token en sí).
+
+// Función auxiliar para crear nodos de operaciones binarias.
+const opBinaria = (op, izq, der) => nodo("OpBinaria", { operador: op, izquierda: izq, derecha: der }); // Crea nodo para operación binaria.
+
+// Función auxiliar para crear nodos de operaciones unarias.
+const opUnaria = (op, operando) => nodo("OpUnaria", { operador: op, operando: operando }); // Crea nodo para operación unaria.
+
+var grammar = { // Define el objeto de la gramática.
+  Lexer: lexer, // Asigna el lexer a la gramática.
+  ParserRules: [ // Define las reglas de parseo.
+    // Regla principal: un programa consiste en saltos de línea opcionales, sentencias y más saltos de línea opcionales.
+    {"name": "Programa", "symbols": ["_nl", "Sentencias", "_nl"], "postprocess": (d) => nodo("Programa", { sentencias: d[1] })}, // Un programa tiene sentencias y saltos de línea.
+
+    // Reglas para colecciones de sentencias.
+    {"name": "Sentencias", "symbols": ["Sentencia", "_nl"], "postprocess": (d) => [d[0]]}, // Una lista de sentencias puede ser una sola sentencia.
+    {"name": "Sentencias", "symbols": ["Sentencias", "Sentencia", "_nl"], "postprocess": (d) => [...d[0], d[1]]}, // O una lista de sentencias seguida de otra sentencia.
+    {"name": "Sentencias", "symbols": [(lexer.has("empty") ? {type: "empty"} : empty)], "postprocess": () => []}, // Una lista de sentencias puede estar vacía.
+
+    // Definición de los tipos de sentencia que pueden existir.
+    {"name": "Sentencia", "symbols": ["DeclaracionVariable"], "postprocess": id}, // Una sentencia puede ser una declaración de variable.
+    {"name": "Sentencia", "symbols": ["DeclaracionConstante"], "postprocess": id}, // O una declaración de constante.
+    {"name": "Sentencia", "symbols": ["Asignacion"], "postprocess": id}, // O una asignación.
+    {"name": "Sentencia", "symbols": ["EstructuraControl"], "postprocess": id}, // O una estructura de control (if, while, for, switch).
+    {"name": "Sentencia", "symbols": ["LlamadaImprimir"], "postprocess": id}, // O una llamada a la función 'imprimir'.
+    {"name": "Sentencia", "symbols": ["DeclaracionFuncion"], "postprocess": id}, // O una declaración de función.
+    {"name": "Sentencia", "symbols": ["DeclaracionClase"], "postprocess": id}, // O una declaración de clase.
+    {"name": "Sentencia", "symbols": ["SentenciaDevolver"], "postprocess": id}, // O una sentencia 'devolver'.
+    {"name": "Sentencia", "symbols": ["SentenciaRomper"], "postprocess": id}, // O una sentencia 'romper'.
+    {"name": "Sentencia", "symbols": ["ExpresionSentencia"], "postprocess": id}, // O una expresión que se usa como sentencia.
+
+    // Regla para una expresión seguida de punto y coma.
+    {"name": "ExpresionSentencia", "symbols": ["Expresion", "_", (lexer.has("PUNTO_Y_COMA") ? {type: "PUNTO_Y_COMA"} : PUNTO_Y_COMA)], "postprocess": (d) => nodo("ExpresionSentencia", { expresion: d[0] })}, // Una expresión seguida de ';'.
+
+    // Reglas para declaración de variables y constantes.
+    {"name": "DeclaracionVariable", "symbols": [(lexer.has("IDENTIFICADOR_VAR") ? {type: "IDENTIFICADOR_VAR"} : IDENTIFICADOR_VAR), "_", (lexer.has("DOS_PUNTOS") ? {type: "DOS_PUNTOS"} : DOS_PUNTOS), "_", "Tipo", "_", (lexer.has("OP_ASIGNACION") ? {type: "OP_ASIGNACION"} : OP_ASIGNACION), "_", "Expresion", "_", (lexer.has("PUNTO_Y_COMA") ? {type: "PUNTO_Y_COMA"} : PUNTO_Y_COMA)], "postprocess": (d) => nodo("DeclaracionVariable", { mutable: true, nombre: d[0], tipo: d[4], valor: d[8] })}, // Declaración de variable con tipo e inicialización.
+    {"name": "DeclaracionConstante", "symbols": [(lexer.has("IDENTIFICADOR_CONST") ? {type: "IDENTIFICADOR_CONST"} : IDENTIFICADOR_CONST), "_", (lexer.has("DOS_PUNTOS") ? {type: "DOS_PUNTOS"} : DOS_PUNTOS), "_", "Tipo", "_", (lexer.has("OP_ASIGNACION") ? {type: "OP_ASIGNACION"} : OP_ASIGNACION), "_", "Expresion", "_", (lexer.has("PUNTO_Y_COMA") ? {type: "PUNTO_Y_COMA"} : PUNTO_Y_COMA)], "postprocess": (d) => nodo("DeclaracionConstante", { mutable: false, nombre: d[0], tipo: d[4], valor: d[8] })}, // Declaración de constante con tipo e inicialización.
+
+    // Reglas para tipos de datos (base, arreglo, matriz).
+    {"name": "Tipo", "symbols": ["TipoBase"], "postprocess": id}, // Un tipo puede ser un tipo base.
+    {"name": "Tipo", "symbols": ["TipoBase", "_", (lexer.has("LBRACKET") ? {type: "LBRACKET"} : LBRACKET), "_", (lexer.has("RBRACKET") ? {type: "RBRACKET"} : RBRACKET)], "postprocess": (d) => nodo("TipoArreglo", { tipoElemento: d[0] })}, // O un tipo arreglo.
+    {"name": "Tipo", "symbols": ["TipoBase", "_", (lexer.has("LBRACKET") ? {type: "LBRACKET"} : LBRACKET), "_", (lexer.has("RBRACKET") ? {type: "RBRACKET"} : RBRACKET), "_", (lexer.has("LBRACKET") ? {type: "LBRACKET"} : LBRACKET), "_", (lexer.has("RBRACKET") ? {type: "RBRACKET"} : RBRACKET)], "postprocess": (d) => nodo("TipoMatriz", { tipoElemento: d[0] })}, // O un tipo matriz.
+
+    // Tipos de datos base.
+    {"name": "TipoBase", "symbols": [(lexer.has("TIPO_NUMERO") ? {type: "TIPO_NUMERO"} : TIPO_NUMERO)], "postprocess": (d) => d[0].value}, // El tipo 'numero'.
+    {"name": "TipoBase", "symbols": [(lexer.has("TIPO_TEXTO") ? {type: "TIPO_TEXTO"} : TIPO_TEXTO)], "postprocess": (d) => d[0].value}, // El tipo 'texto'.
+    {"name": "TipoBase", "symbols": [(lexer.has("TIPO_BOOLEANO") ? {type: "TIPO_BOOLEANO"} : TIPO_BOOLEANO)], "postprocess": (d) => d[0].value}, // El tipo 'booleano'.
+    {"name": "TipoBase", "symbols": [(lexer.has("TIPO_ARREGLO") ? {type: "TIPO_ARREGLO"} : TIPO_ARREGLO)], "postprocess": (d) => d[0].value}, // El tipo 'arreglo'.
+    {"name": "TipoBase", "symbols": [(lexer.has("TIPO_OBJETO") ? {type: "TIPO_OBJETO"} : TIPO_OBJETO)], "postprocess": (d) => d[0].value}, // El tipo 'Objeto'.
+    {"name": "TipoBase", "symbols": [(lexer.has("PR_VACIO") ? {type: "PR_VACIO"} : PR_VACIO)], "postprocess": (d) => d[0].value}, // El tipo 'vacio'.
+    {"name": "TipoBase", "symbols": [(lexer.has("IDENTIFICADOR_GRAL") ? {type: "IDENTIFICADOR_GRAL"} : IDENTIFICADOR_GRAL)], "postprocess": (d) => d[0].value}, // O un identificador general (para tipos de clase).
+
+    // Reglas para asignaciones (normal y compuestas).
+    {"name": "Asignacion", "symbols": ["Designable", "_", "OperadorAsignacionCompuesto", "_", "Expresion", "_", (lexer.has("PUNTO_Y_COMA") ? {type: "PUNTO_Y_COMA"} : PUNTO_Y_COMA)], "postprocess": (d) => nodo("Asignacion", { designable: d[0], operador: d[2].value, valor: d[4] })}, // Asignación con operador compuesto.
+    {"name": "Asignacion", "symbols": ["Designable", "_", (lexer.has("OP_ASIGNACION") ? {type: "OP_ASIGNACION"} : OP_ASIGNACION), "_", "Expresion", "_", (lexer.has("PUNTO_Y_COMA") ? {type: "PUNTO_Y_COMA"} : PUNTO_Y_COMA)], "postprocess": (d) => nodo("Asignacion", { designable: d[0], operador: d[2].value, valor: d[4] })}, // Asignación simple.
+
+    // Operadores de asignación compuestos.
+    {"name": "OperadorAsignacionCompuesto", "symbols": [(lexer.has("OP_ASIG_SUMA") ? {type: "OP_ASIG_SUMA"} : OP_ASIG_SUMA)], "postprocess": id}, // Operador +=.
+    {"name": "OperadorAsignacionCompuesto", "symbols": [(lexer.has("OP_ASIG_RESTA") ? {type: "OP_ASIG_RESTA"} : OP_ASIG_RESTA)], "postprocess": id}, // Operador -=.
+    {"name": "OperadorAsignacionCompuesto", "symbols": [(lexer.has("OP_ASIG_MULT") ? {type: "OP_ASIG_MULT"} : OP_ASIG_MULT)], "postprocess": id}, // Operador *=.
+    {"name": "OperadorAsignacionCompuesto", "symbols": [(lexer.has("OP_ASIG_DIV") ? {type: "OP_ASIG_DIV"} : OP_ASIG_DIV)], "postprocess": id}, // Operador /=.
+
+    // Elementos que pueden ser objetivo de una asignación.
+    {"name": "Designable", "symbols": [(lexer.has("IDENTIFICADOR_VAR") ? {type: "IDENTIFICADOR_VAR"} : IDENTIFICADOR_VAR)], "postprocess": id}, // Un identificador de variable.
+    {"name": "Designable", "symbols": [(lexer.has("IDENTIFICADOR_CONST") ? {type: "IDENTIFICADOR_CONST"} : IDENTIFICADOR_CONST)], "postprocess": id}, // Un identificador de constante.
+    {"name": "Designable", "symbols": ["AccesoMiembro"], "postprocess": id}, // Un acceso a miembro de objeto.
+    {"name": "Designable", "symbols": ["AccesoArreglo"], "postprocess": id}, // Un acceso a elemento de arreglo.
+
+    // Tipos de estructuras de control.
+    {"name": "EstructuraControl", "symbols": ["CondicionalSi"], "postprocess": id}, // Una estructura 'si'.
+    {"name": "EstructuraControl", "symbols": ["BucleMientras"], "postprocess": id}, // Un bucle 'mientras'.
+    {"name": "EstructuraControl", "symbols": ["BuclePara"], "postprocess": id}, // Un bucle 'para'.
+    {"name": "EstructuraControl", "symbols": ["EstructuraSegun"], "postprocess": id}, // Una estructura 'segun' (switch).
+
+    // Reglas para la estructura condicional 'si'.
+    {"name": "CondicionalSi$ebnf$1", "symbols": ["ClausulasSiNoSi"], "postprocess": id}, // Cero o más clausulas 'sino si'.
+    {"name": "CondicionalSi$ebnf$1", "symbols": [], "postprocess": function(d) {return null;}}, // Permite que no haya clausulas 'sino si'.
+    {"name": "CondicionalSi$ebnf$2", "symbols": ["ClausulaSiNo"], "postprocess": id}, // Cero o una clausula 'sino'.
+    {"name": "CondicionalSi$ebnf$2", "symbols": [], "postprocess": function(d) {return null;}}, // Permite que no haya clausula 'sino'.
+    {"name": "CondicionalSi", "symbols": [(lexer.has("PR_SI") ? {type: "PR_SI"} : PR_SI), "_", (lexer.has("LPAREN") ? {type: "LPAREN"} : LPAREN), "_", "Expresion", "_", (lexer.has("RPAREN") ? {type: "RPAREN"} : RPAREN), "_", "BloqueCodigo", "_", "CondicionalSi$ebnf$1", "_", "CondicionalSi$ebnf$2"], "postprocess": (d) => nodo("CondicionalSi", { condicion: d[4], bloqueSi: d[8], bloquesSiNoSi: d[10] || [], bloqueSiNo: d[12] })}, // Estructura completa del 'si'.
+
+    // Reglas para clausulas 'sino si'.
+    {"name": "ClausulasSiNoSi", "symbols": ["ClausulaSiNoSi"], "postprocess": (d) => [d[0]]}, // Una lista de 'sino si' puede ser una.
+    {"name": "ClausulasSiNoSi", "symbols": ["ClausulasSiNoSi", "_", "ClausulaSiNoSi"], "postprocess": (d) => [...d[0], d[2]]}, // O una lista de 'sino si' seguida de otra.
+    {"name": "ClausulaSiNoSi", "symbols": [(lexer.has("PR_SINO_SI") ? {type: "PR_SINO_SI"} : PR_SINO_SI), "_", (lexer.has("LPAREN") ? {type: "LPAREN"} : LPAREN), "_", "Expresion", "_", (lexer.has("RPAREN") ? {type: "RPAREN"} : RPAREN), "_", "BloqueCodigo"], "postprocess": (d) => nodo("ClausulaSiNoSi", { condicion: d[4], bloque: d[7] })}, // Una clausula 'sino si' con su condición y bloque.
+
+    // Regla para la clausula 'sino'.
+    {"name": "ClausulaSiNo", "symbols": [(lexer.has("PR_SINO") ? {type: "PR_SINO"} : PR_SINO), "__", "BloqueCodigo"], "postprocess": (d) => nodo("ClausulaSiNo", { bloque: d[2] })}, // La clausula 'sino' con su bloque.
+
+    // Regla para un bloque de código (entre llaves).
+    {"name": "BloqueCodigo", "symbols": [(lexer.has("LBRACE") ? {type: "LBRACE"} : LBRACE), "_nl", "Sentencias", "_nl", (lexer.has("RBRACE") ? {type: "RBRACE"} : RBRACE)], "postprocess": (d) => nodo("Bloque", { sentencias: d[2] })}, // Un bloque de código con sentencias.
+
+    // Regla para el bucle 'mientras'.
+    {"name": "BucleMientras", "symbols": [(lexer.has("PR_MIENTRAS") ? {type: "PR_MIENTRAS"} : PR_MIENTRAS), "_", (lexer.has("LPAREN") ? {type: "LPAREN"} : LPAREN), "_", "Expresion", "_", (lexer.has("RPAREN") ? {type: "RPAREN"} : RPAREN), "_", "BloqueCodigo"], "postprocess": (d) => nodo("BucleMientras", { condicion: d[4], bloque: d[8] })}, // Bucle 'mientras' con condición y bloque.
+
+    // Reglas para el bucle 'para'.
+    {"name": "BuclePara$ebnf$1", "symbols": ["InicializadorPara"], "postprocess": id}, // Cero o un inicializador.
+    {"name": "BuclePara$ebnf$1", "symbols": [], "postprocess": function(d) {return null;}}, // Permite no tener inicializador.
+    {"name": "BuclePara$ebnf$2", "symbols": ["CondicionPara"], "postprocess": id}, // Cero o una condición.
+    {"name": "BuclePara$ebnf$2", "symbols": [], "postprocess": function(d) {return null;}}, // Permite no tener condición.
+    {"name": "BuclePara$ebnf$3", "symbols": ["IncrementoPara"], "postprocess": id}, // Cero o un incremento.
+    {"name": "BuclePara$ebnf$3", "symbols": [], "postprocess": function(d) {return null;}}, // Permite no tener incremento.
+    {"name": "BuclePara", "symbols": [(lexer.has("PR_PARA") ? {type: "PR_PARA"} : PR_PARA), "_", (lexer.has("LPAREN") ? {type: "LPAREN"} : LPAREN), "_", "BuclePara$ebnf$1", "_", (lexer.has("PUNTO_Y_COMA") ? {type: "PUNTO_Y_COMA"} : PUNTO_Y_COMA), "_", "BuclePara$ebnf$2", "_", (lexer.has("PUNTO_Y_COMA") ? {type: "PUNTO_Y_COMA"} : PUNTO_Y_COMA), "_", "BuclePara$ebnf$3", "_", (lexer.has("RPAREN") ? {type: "RPAREN"} : RPAREN), "_", "BloqueCodigo"], "postprocess": (d) => nodo("BuclePara", { inicializacion: d[4], condicion: d[8], incremento: d[12], bloque: d[16] })}, // Estructura completa del bucle 'para'.
+
+    // Componentes del bucle 'para'.
+    {"name": "InicializadorPara", "symbols": ["DeclaracionVariableSinPuntoComa"], "postprocess": id}, // Un inicializador puede ser una declaración de variable.
+    {"name": "InicializadorPara", "symbols": ["AsignacionSinPuntoComa"], "postprocess": id}, // O una asignación.
+    {"name": "DeclaracionVariableSinPuntoComa", "symbols": [(lexer.has("IDENTIFICADOR_VAR") ? {type: "IDENTIFICADOR_VAR"} : IDENTIFICADOR_VAR), "_", (lexer.has("DOS_PUNTOS") ? {type: "DOS_PUNTOS"} : DOS_PUNTOS), "_", "Tipo", "_", (lexer.has("OP_ASIGNACION") ? {type: "OP_ASIGNACION"} : OP_ASIGNACION), "_", "Expresion"], "postprocess": (d) => nodo("DeclaracionVariable", { mutable: true, nombre: d[0], tipo: d[4], valor: d[8] })}, // Declaración de variable sin punto y coma final.
+    {"name": "AsignacionSinPuntoComa", "symbols": ["Designable", "_", (lexer.has("OP_ASIGNACION") ? {type: "OP_ASIGNACION"} : OP_ASIGNACION), "_", "Expresion"], "postprocess": (d) => nodo("Asignacion", { designable: d[0], operador: d[2].value, valor: d[4] })}, // Asignación sin punto y coma final.
+    {"name": "CondicionPara", "symbols": ["Expresion"], "postprocess": id}, // La condición del bucle 'para'.
+    {"name": "IncrementoPara", "symbols": ["Expresion"], "postprocess": id}, // El incremento del bucle 'para' puede ser una expresión.
+    {"name": "IncrementoPara", "symbols": ["AsignacionSinPuntoComa"], "postprocess": id}, // O una asignación.
+
+    // Reglas para la estructura 'segun' (switch).
+    {"name": "EstructuraSegun$ebnf$1", "symbols": ["CasosSegun"], "postprocess": id}, // Cero o más casos.
+    {"name": "EstructuraSegun$ebnf$1", "symbols": [], "postprocess": function(d) {return null;}}, // Permite no tener casos.
+    {"name": "EstructuraSegun$ebnf$2", "symbols": ["OpcionPorDefectoSegun"], "postprocess": id}, // Cero o una opción por defecto.
+    {"name": "EstructuraSegun$ebnf$2", "symbols": [], "postprocess": function(d) {return null;}}, // Permite no tener opción por defecto.
+    {"name": "EstructuraSegun", "symbols": [(lexer.has("PR_SEGUN") ? {type: "PR_SEGUN"} : PR_SEGUN), "_", (lexer.has("LPAREN") ? {type: "LPAREN"} : LPAREN), "_", "Expresion", "_", (lexer.has("RPAREN") ? {type: "RPAREN"} : RPAREN), "_", (lexer.has("LBRACE") ? {type: "LBRACE"} : LBRACE), "_nl", "EstructuraSegun$ebnf$1", "_nl", "EstructuraSegun$ebnf$2", "_nl", (lexer.has("RBRACE") ? {type: "RBRACE"} : RBRACE)], "postprocess": (d) => nodo("EstructuraSegun", { expresionEvaluar: d[4], casos: d[10] || [], pordefecto: d[12] })}, // Estructura completa de 'segun'.
+
+    // Reglas para casos dentro de 'segun'.
+    {"name": "CasosSegun", "symbols": ["CasoSegun"], "postprocess": (d) => [d[0]]}, // Una lista de casos puede ser uno.
+    {"name": "CasosSegun", "symbols": ["CasosSegun", "_nl", "CasoSegun"], "postprocess": (d) => [...d[0], d[2]]}, // O una lista de casos seguida de otro.
+    {"name": "CasoSegun", "symbols": [(lexer.has("PR_CASO") ? {type: "PR_CASO"} : PR_CASO), "__", "Expresion", "_", (lexer.has("DOS_PUNTOS") ? {type: "DOS_PUNTOS"} : DOS_PUNTOS), "_", "BloqueCodigo", "_", (lexer.has("PR_ROMPER") ? {type: "PR_ROMPER"} : PR_ROMPER), "_", (lexer.has("PUNTO_Y_COMA") ? {type: "PUNTO_Y_COMA"} : PUNTO_Y_COMA)], "postprocess": (d) => nodo("CasoSegun", { valorComparar: d[2], bloque: d[6] })}, // Un caso con su valor, bloque y 'romper'.
+
+    // Regla para la opción 'pordefecto' en 'segun'.
+    {"name": "OpcionPorDefectoSegun", "symbols": [(lexer.has("PR_PORDEFECTO") ? {type: "PR_PORDEFECTO"} : PR_PORDEFECTO), "_", (lexer.has("DOS_PUNTOS") ? {type: "DOS_PUNTOS"} : DOS_PUNTOS), "_", "BloqueCodigo"], "postprocess": (d) => nodo("PorDefectoSegun", { bloque: d[4] })}, // La opción por defecto con su bloque.
+
+    // Reglas para sentencia 'devolver' y 'romper'.
+    {"name": "SentenciaDevolver$ebnf$1", "symbols": ["Expresion"], "postprocess": id}, // Cero o una expresión a devolver.
+    {"name": "SentenciaDevolver$ebnf$1", "symbols": [], "postprocess": function(d) {return null;}}, // Permite devolver nada.
+    {"name": "SentenciaDevolver", "symbols": [(lexer.has("PR_DEVOLVER") ? {type: "PR_DEVOLVER"} : PR_DEVOLVER), "__", "SentenciaDevolver$ebnf$1", "_", (lexer.has("PUNTO_Y_COMA") ? {type: "PUNTO_Y_COMA"} : PUNTO_Y_COMA)], "postprocess": (d) => nodo("SentenciaDevolver", { valor: d[2] })}, // Sentencia 'devolver' con valor opcional.
+    {"name": "SentenciaRomper", "symbols": [(lexer.has("PR_ROMPER") ? {type: "PR_ROMPER"} : PR_ROMPER), "_", (lexer.has("PUNTO_Y_COMA") ? {type: "PUNTO_Y_COMA"} : PUNTO_Y_COMA)], "postprocess": (d) => nodo("SentenciaRomper", {})}, // Sentencia 'romper'.
+
+    // Reglas para declaración de funciones.
+    {"name": "DeclaracionFuncion", "symbols": [(lexer.has("PR_FUNCION") ? {type: "PR_FUNCION"} : PR_FUNCION), "__", (lexer.has("IDENTIFICADOR_GRAL") ? {type: "IDENTIFICADOR_GRAL"} : IDENTIFICADOR_GRAL), "_", (lexer.has("LPAREN") ? {type: "LPAREN"} : LPAREN), "_", "ListaParametrosOpcional", "_", (lexer.has("RPAREN") ? {type: "RPAREN"} : RPAREN), "_", (lexer.has("DOS_PUNTOS") ? {type: "DOS_PUNTOS"} : DOS_PUNTOS), "_", "Tipo", "_", "BloqueCodigo"], "postprocess": (d) => nodo("DeclaracionFuncion", { nombre: d[2], parametros: d[6], tipoRetorno: d[12], bloque: d[14] })}, // Declaración de función con nombre, parámetros, tipo de retorno y bloque.
+
+    // Reglas para listas de parámetros.
+    {"name": "ListaParametrosOpcional", "symbols": ["ListaParametros"], "postprocess": id}, // Una lista de parámetros puede ser opcional.
+    {"name": "ListaParametrosOpcional", "symbols": [(lexer.has("empty") ? {type: "empty"} : empty)], "postprocess": () => []}, // O puede estar vacía.
+    {"name": "ListaParametros", "symbols": ["Parametro"], "postprocess": (d) => [d[0]]}, // Una lista de parámetros puede ser un parámetro.
+    {"name": "ListaParametros", "symbols": ["ListaParametros", "_", (lexer.has("COMA") ? {type: "COMA"} : COMA), "_", "Parametro"], "postprocess": (d) => [...d[0], d[4]]}, // O una lista seguida de coma y otro parámetro.
+    {"name": "Parametro", "symbols": [(lexer.has("IDENTIFICADOR_VAR") ? {type: "IDENTIFICADOR_VAR"} : IDENTIFICADOR_VAR), "_", (lexer.has("DOS_PUNTOS") ? {type: "DOS_PUNTOS"} : DOS_PUNTOS), "_", "Tipo"], "postprocess": (d) => nodo("Parametro", { nombre: d[0], tipo: d[4] })}, // Un parámetro con nombre y tipo.
+
+    // Reglas para declaración de clases.
+    {"name": "DeclaracionClase", "symbols": [(lexer.has("PR_CLASE") ? {type: "PR_CLASE"} : PR_CLASE), "__", (lexer.has("IDENTIFICADOR_GRAL") ? {type: "IDENTIFICADOR_GRAL"} : IDENTIFICADOR_GRAL), "_", "BloqueClase"], "postprocess": (d) => nodo("DeclaracionClase", { nombre: d[2], cuerpo: d[4] })}, // Declaración de clase con nombre y cuerpo.
+
+    // Reglas para el bloque y miembros de una clase.
+    {"name": "BloqueClase", "symbols": [(lexer.has("LBRACE") ? {type: "LBRACE"} : LBRACE), "_nl", "MiembrosClase", "_nl", (lexer.has("RBRACE") ? {type: "RBRACE"} : RBRACE)], "postprocess": (d) => nodo("BloqueClase", { miembros: d[2] })}, // Bloque de clase con sus miembros.
+    {"name": "MiembrosClase", "symbols": ["MiembroClase", "_nl"], "postprocess": (d) => [d[0]]}, // Una lista de miembros de clase puede ser un miembro.
+    {"name": "MiembrosClase", "symbols": ["MiembrosClase", "MiembroClase", "_nl"], "postprocess": (d) => [...d[0], d[1]]}, // O una lista seguida de otro miembro.
+    {"name": "MiembrosClase", "symbols": [(lexer.has("empty") ? {type: "empty"} : empty)], "postprocess": () => []}, // Una lista de miembros puede estar vacía.
+
+    // Tipos de miembros de clase.
+    {"name": "MiembroClase", "symbols": ["PropiedadClase"], "postprocess": id}, // Un miembro de clase puede ser una propiedad.
+    {"name": "MiembroClase", "symbols": ["ConstructorClase"], "postprocess": id}, // O un constructor.
+    {"name": "MiembroClase", "symbols": ["MetodoClase"], "postprocess": id}, // O un método.
+
+    // Reglas para propiedades de clase (públicas y privadas).
+    {"name": "PropiedadClase", "symbols": [(lexer.has("ALMOHADILLA") ? {type: "ALMOHADILLA"} : ALMOHADILLA), "_", (lexer.has("IDENTIFICADOR_GRAL") ? {type: "IDENTIFICADOR_GRAL"} : IDENTIFICADOR_GRAL), "_", (lexer.has("DOS_PUNTOS") ? {type: "DOS_PUNTOS"} : DOS_PUNTOS), "_", "Tipo", "_", (lexer.has("PUNTO_Y_COMA") ? {type: "PUNTO_Y_COMA"} : PUNTO_Y_COMA)], "postprocess": (d) => nodo("PropiedadClase", { nombre: d[2], tipo: d[6], visibilidad: "privada" })}, // Propiedad de clase privada.
+    {"name": "PropiedadClase", "symbols": [(lexer.has("IDENTIFICADOR_GRAL") ? {type: "IDENTIFICADOR_GRAL"} : IDENTIFICADOR_GRAL), "_", (lexer.has("DOS_PUNTOS") ? {type: "DOS_PUNTOS"} : DOS_PUNTOS), "_", "Tipo", "_", (lexer.has("PUNTO_Y_COMA") ? {type: "PUNTO_Y_COMA"} : PUNTO_Y_COMA)], "postprocess": (d) => nodo("PropiedadClase", { nombre: d[0], tipo: d[4], visibilidad: "publica" })}, // Propiedad de clase pública.
+
+    // Reglas para constructor y métodos de clase.
+    {"name": "ConstructorClase", "symbols": [(lexer.has("PR_CONSTRUCTOR") ? {type: "PR_CONSTRUCTOR"} : PR_CONSTRUCTOR), "_", (lexer.has("LPAREN") ? {type: "LPAREN"} : LPAREN), "_", "ListaParametrosOpcional", "_", (lexer.has("RPAREN") ? {type: "RPAREN"} : RPAREN), "_", "BloqueCodigo"], "postprocess": (d) => nodo("ConstructorClase", { parametros: d[4], bloque: d[7] })}, // Constructor de clase.
+    {"name": "MetodoClase", "symbols": [(lexer.has("IDENTIFICADOR_GRAL") ? {type: "IDENTIFICADOR_GRAL"} : IDENTIFICADOR_GRAL), "_", (lexer.has("LPAREN") ? {type: "LPAREN"} : LPAREN), "_", "ListaParametrosOpcional", "_", (lexer.has("RPAREN") ? {type: "RPAREN"} : RPAREN), "_", (lexer.has("DOS_PUNTOS") ? {type: "DOS_PUNTOS"} : DOS_PUNTOS), "_", "Tipo", "_", "BloqueCodigo"], "postprocess": (d) => nodo("MetodoClase", { nombre: d[0], parametros: d[4], tipoRetorno: d[8], bloque: d[10], visibilidad: "publica" })}, // Método de clase.
+
+    // Reglas para llamadas a 'imprimir' y 'leer'.
+    {"name": "LlamadaImprimir", "symbols": [(lexer.has("PR_IMPRIMIR") ? {type: "PR_IMPRIMIR"} : PR_IMPRIMIR), "_", (lexer.has("LPAREN") ? {type: "LPAREN"} : LPAREN), "_", "ListaArgumentosOpcional", "_", (lexer.has("RPAREN") ? {type: "RPAREN"} : RPAREN), "_", (lexer.has("PUNTO_Y_COMA") ? {type: "PUNTO_Y_COMA"} : PUNTO_Y_COMA)], "postprocess": (d) => nodo("Imprimir", { argumentos: d[4] })}, // Llamada a 'imprimir'.
+    {"name": "LlamadaLeer", "symbols": [(lexer.has("PR_LEER") ? {type: "PR_LEER"} : PR_LEER), "_", (lexer.has("LPAREN") ? {type: "LPAREN"} : LPAREN), "_", "ListaArgumentosOpcional", "_", (lexer.has("RPAREN") ? {type: "RPAREN"} : RPAREN)], "postprocess": (d) => nodo("LlamadaLeer", { argumentos: d[4] })}, // Llamada a 'leer'.
+
+    // Jerarquía de expresiones (desde la de menor a mayor precedencia).
+    {"name": "Expresion", "symbols": ["ExpresionLogicaOr"], "postprocess": id}, // Una expresión es una expresión lógica OR.
+
+    // Expresiones lógicas OR.
+    {"name": "ExpresionLogicaOr", "symbols": ["ExpresionLogicaAnd"], "postprocess": id}, // Una expresión lógica OR puede ser una expresión lógica AND.
+    {"name": "ExpresionLogicaOr", "symbols": ["ExpresionLogicaOr", "_", (lexer.has("OP_OR") ? {type: "OP_OR"} : OP_OR), "_", "ExpresionLogicaAnd"], "postprocess": (d) => opBinaria(d[2].value, d[0], d[4])}, // O una combinación de OR.
+
+    // Expresiones lógicas AND.
+    {"name": "ExpresionLogicaAnd", "symbols": ["ExpresionIgualdad"], "postprocess": id}, // Una expresión lógica AND puede ser una expresión de igualdad.
+    {"name": "ExpresionLogicaAnd", "symbols": ["ExpresionLogicaAnd", "_", (lexer.has("OP_AND") ? {type: "OP_AND"} : OP_AND), "_", "ExpresionIgualdad"], "postprocess": (d) => opBinaria(d[2].value, d[0], d[4])}, // O una combinación de AND.
+
+    // Expresiones de igualdad/desigualdad.
+    {"name": "ExpresionIgualdad", "symbols": ["ExpresionRelacional"], "postprocess": id}, // Una expresión de igualdad puede ser una relacional.
+    {"name": "ExpresionIgualdad", "symbols": ["ExpresionIgualdad", "_", (lexer.has("OP_EQ") ? {type: "OP_EQ"} : OP_EQ), "_", "ExpresionRelacional"], "postprocess": (d) => opBinaria(d[2].value, d[0], d[4])}, // O una igualdad con '=='.
+    {"name": "ExpresionIgualdad", "symbols": ["ExpresionIgualdad", "_", (lexer.has("OP_NEQ") ? {type: "OP_NEQ"} : OP_NEQ), "_", "ExpresionRelacional"], "postprocess": (d) => opBinaria(d[2].value, d[0], d[4])}, // O una desigualdad con '!='.
+
+    // Expresiones relacionales (comparación).
+    {"name": "ExpresionRelacional", "symbols": ["ExpresionAditiva"], "postprocess": id}, // Una expresión relacional puede ser aditiva.
+    {"name": "ExpresionRelacional", "symbols": ["ExpresionRelacional", "_", (lexer.has("OP_LT") ? {type: "OP_LT"} : OP_LT), "_", "ExpresionAditiva"], "postprocess": (d) => opBinaria(d[2].value, d[0], d[4])}, // O una comparación con '<'.
+    {"name": "ExpresionRelacional", "symbols": ["ExpresionRelacional", "_", (lexer.has("OP_GT") ? {type: "OP_GT"} : OP_GT), "_", "ExpresionAditiva"], "postprocess": (d) => opBinaria(d[2].value, d[0], d[4])}, // O una comparación con '>'.
+    {"name": "ExpresionRelacional", "symbols": ["ExpresionRelacional", "_", (lexer.has("OP_LTE") ? {type: "OP_LTE"} : OP_LTE), "_", "ExpresionAditiva"], "postprocess": (d) => opBinaria(d[2].value, d[0], d[4])}, // O una comparación con '<='.
+    {"name": "ExpresionRelacional", "symbols": ["ExpresionRelacional", "_", (lexer.has("OP_GTE") ? {type: "OP_GTE"} : OP_GTE), "_", "ExpresionAditiva"], "postprocess": (d) => opBinaria(d[2].value, d[0], d[4])}, // O una comparación con '>='.
+
+    // Expresiones aditivas (suma/resta).
+    {"name": "ExpresionAditiva", "symbols": ["ExpresionMultiplicativa"], "postprocess": id}, // Una expresión aditiva puede ser multiplicativa.
+    {"name": "ExpresionAditiva", "symbols": ["ExpresionAditiva", "_", (lexer.has("OP_SUMA") ? {type: "OP_SUMA"} : OP_SUMA), "_", "ExpresionMultiplicativa"], "postprocess": (d) => opBinaria(d[2].value, d[0], d[4])}, // O una suma.
+    {"name": "ExpresionAditiva", "symbols": ["ExpresionAditiva", "_", (lexer.has("OP_RESTA") ? {type: "OP_RESTA"} : OP_RESTA), "_", "ExpresionMultiplicativa"], "postprocess": (d) => opBinaria(d[2].value, d[0], d[4])}, // O una resta.
+
+    // Expresiones multiplicativas (multiplicación/división/módulo).
+    {"name": "ExpresionMultiplicativa", "symbols": ["ExpresionPotencia"], "postprocess": id}, // Una expresión multiplicativa puede ser de potencia.
+    {"name": "ExpresionMultiplicativa", "symbols": ["ExpresionMultiplicativa", "_", (lexer.has("OP_MULT") ? {type: "OP_MULT"} : OP_MULT), "_", "ExpresionPotencia"], "postprocess": (d) => opBinaria(d[2].value, d[0], d[4])}, // O una multiplicación.
+    {"name": "ExpresionMultiplicativa", "symbols": ["ExpresionMultiplicativa", "_", (lexer.has("OP_DIV") ? {type: "OP_DIV"} : OP_DIV), "_", "ExpresionPotencia"], "postprocess": (d) => opBinaria(d[2].value, d[0], d[4])}, // O una división.
+    {"name": "ExpresionMultiplicativa", "symbols": ["ExpresionMultiplicativa", "_", (lexer.has("OP_MODULO") ? {type: "OP_MODULO"} : OP_MODULO), "_", "ExpresionPotencia"], "postprocess": (d) => opBinaria(d[2].value, d[0], d[4])}, // O un módulo.
+
+    // Expresiones de potencia.
+    {"name": "ExpresionPotencia", "symbols": ["ExpresionUnaria"], "postprocess": id}, // Una expresión de potencia puede ser unaria.
+    {"name": "ExpresionPotencia", "symbols": ["ExpresionUnaria", "_", (lexer.has("OP_POTENCIA") ? {type: "OP_POTENCIA"} : OP_POTENCIA), "_", "ExpresionPotencia"], "postprocess": (d) => opBinaria(d[2].value, d[0], d[4])}, // O una potencia con '**'.
+
+    // Expresiones unarias (NOT, negación).
+    {"name": "ExpresionUnaria", "symbols": ["ExpresionPostfija"], "postprocess": id}, // Una expresión unaria puede ser postfija.
+    {"name": "ExpresionUnaria", "symbols": [(lexer.has("OP_NOT") ? {type: "OP_NOT"} : OP_NOT), "_", "ExpresionUnaria"], "postprocess": (d) => opUnaria(d[0].value, d[2])}, // O una negación lógica con '!'.
+    {"name": "ExpresionUnaria", "symbols": [(lexer.has("OP_RESTA") ? {type: "OP_RESTA"} : OP_RESTA), "_", "ExpresionUnaria"], "postprocess": (d) => opUnaria(d[0].value, d[2])}, // O una negación numérica con '-'.
+
+    // Expresiones postfijas (incremento/decremento).
+    {"name": "ExpresionPostfija", "symbols": ["LiteralPrimario"], "postprocess": id}, // Una expresión postfija puede ser un literal primario.
+    {"name": "ExpresionPostfija", "symbols": ["ExpresionPostfija", "_", (lexer.has("OP_INCREMENTO") ? {type: "OP_INCREMENTO"} : OP_INCREMENTO)], "postprocess": (d) => opUnaria(d[1].value + "_post", d[0])}, // O un incremento postfijo.
+    {"name": "ExpresionPostfija", "symbols": ["ExpresionPostfija", "_", (lexer.has("OP_DECREMENTO") ? {type: "OP_DECREMENTO"} : OP_DECREMENTO)], "postprocess": (d) => opUnaria(d[1].value + "_post", d[0])}, // O un decremento postfijo.
+
+    // Literales primarios y otras expresiones básicas.
+    {"name": "LiteralPrimario", "symbols": [(lexer.has("numero") ? {type: "numero"} : numero)], "postprocess": (d) => nodo("LiteralNumero", {}, parseFloat(d[0].value))}, // Un literal numérico.
+    {"name": "LiteralPrimario", "symbols": [(lexer.has("texto") ? {type: "texto"} : texto)], "postprocess": (d) => nodo("LiteralTexto", {}, d[0].value.slice(1, -1))}, // Un literal de texto.
+    {"name": "LiteralPrimario", "symbols": [(lexer.has("LIT_VERDADERO") ? {type: "LIT_VERDADERO"} : LIT_VERDADERO)], "postprocess": (d) => nodo("LiteralBooleano", {}, true)}, // El literal booleano 'verdadero'.
+    {"name": "LiteralPrimario", "symbols": [(lexer.has("LIT_FALSO") ? {type: "LIT_FALSO"} : LIT_FALSO)], "postprocess": (d) => nodo("LiteralBooleano", {}, false)}, // El literal booleano 'falso'.
+    {"name": "LiteralPrimario", "symbols": [(lexer.has("IDENTIFICADOR_VAR") ? {type: "IDENTIFICADOR_VAR"} : IDENTIFICADOR_VAR)], "postprocess": (d) => nodo("Variable", {nombre: d[0].value})}, // Un identificador de variable.
+    {"name": "LiteralPrimario", "symbols": [(lexer.has("IDENTIFICADOR_CONST") ? {type: "IDENTIFICADOR_CONST"} : IDENTIFICADOR_CONST)], "postprocess": (d) => nodo("Constante", {nombre: d[0].value})}, // Un identificador de constante.
+    {"name": "LiteralPrimario", "symbols": [(lexer.has("PR_ESTE") ? {type: "PR_ESTE"} : PR_ESTE)], "postprocess": (d) => nodo("Este", {nombre: d[0].value})}, // La palabra clave 'este'.
+    {"name": "LiteralPrimario", "symbols": [(lexer.has("LPAREN") ? {type: "LPAREN"} : LPAREN), "_", "Expresion", "_", (lexer.has("RPAREN") ? {type: "RPAREN"} : RPAREN)], "postprocess": (d) => d[2]}, // Una expresión entre paréntesis.
+    {"name": "LiteralPrimario", "symbols": ["LlamadaFuncion"], "postprocess": id}, // Una llamada a función.
+    {"name": "LiteralPrimario", "symbols": ["AccesoMiembro"], "postprocess": id}, // Un acceso a miembro.
+    {"name": "LiteralPrimario", "symbols": ["AccesoArreglo"], "postprocess": id}, // Un acceso a arreglo.
+    {"name": "LiteralPrimario", "symbols": ["CreacionObjeto"], "postprocess": id}, // Una creación de objeto.
+    {"name": "LiteralPrimario", "symbols": ["CreacionArreglo"], "postprocess": id}, // Una creación de arreglo.
+    {"name": "LiteralPrimario", "symbols": ["CreacionObjetoLiteral"], "postprocess": id}, // Una creación de objeto literal.
+    {"name": "LiteralPrimario", "symbols": ["LlamadaLeer"], "postprocess": id}, // Una llamada a 'leer'.
+
+    // Reglas para llamadas a funciones.
+    {"name": "LlamadaFuncion", "symbols": ["DesignableLlamada", "_", (lexer.has("LPAREN") ? {type: "LPAREN"} : LPAREN), "_", "ListaArgumentosOpcional", "_", (lexer.has("RPAREN") ? {type: "RPAREN"} : RPAREN)], "postprocess": (d) => nodo("LlamadaFuncion", { callee: d[0], argumentos: d[4] })}, // Una llamada a función con sus argumentos.
+    {"name": "DesignableLlamada", "symbols": [(lexer.has("IDENTIFICADOR_GRAL") ? {type: "IDENTIFICADOR_GRAL"} : IDENTIFICADOR_GRAL)], "postprocess": (d) => nodo("IdentificadorGral", {nombre: d[0].value})}, // Un identificador general.
+    {"name": "DesignableLlamada", "symbols": ["AccesoMiembro"], "postprocess": id}, // O un acceso a miembro.
+
+    // Reglas para listas de argumentos.
+    {"name": "ListaArgumentosOpcional", "symbols": ["ListaArgumentos"], "postprocess": id}, // Una lista de argumentos puede ser opcional.
+    {"name": "ListaArgumentosOpcional", "symbols": [(lexer.has("empty") ? {type: "empty"} : empty)], "postprocess": () => []}, // O puede estar vacía.
+    {"name": "ListaArgumentos", "symbols": ["Expresion"], "postprocess": (d) => [d[0]]}, // Una lista de argumentos puede ser una expresión.
+    {"name": "ListaArgumentos", "symbols": ["ListaArgumentos", "_", (lexer.has("COMA") ? {type: "COMA"} : COMA), "_", "Expresion"], "postprocess": (d) => [...d[0], d[4]]}, // O una lista seguida de coma y otra expresión.
+
+    // Reglas para acceso a miembros de objeto y arreglos.
+    {"name": "AccesoMiembro", "symbols": ["LiteralPrimario", "_", (lexer.has("PUNTO") ? {type: "PUNTO"} : PUNTO), "_", (lexer.has("IDENTIFICADOR_GRAL") ? {type: "IDENTIFICADOR_GRAL"} : IDENTIFICADOR_GRAL)], "postprocess": (d) => nodo("AccesoMiembro", { objeto: d[0], propiedad: d[4].value , accesoConAlmohadilla: false })}, // Acceso a miembro con punto.
+    {"name": "AccesoMiembro", "symbols": ["LiteralPrimario", "_", (lexer.has("PUNTO") ? {type: "PUNTO"} : PUNTO), "_", (lexer.has("ALMOHADILLA") ? {type: "ALMOHADILLA"} : ALMOHADILLA), "_", (lexer.has("IDENTIFICADOR_GRAL") ? {type: "IDENTIFICADOR_GRAL"} : IDENTIFICADOR_GRAL)], "postprocess": (d) => nodo("AccesoMiembro", { objeto: d[0], propiedad: d[6].value , accesoConAlmohadilla: true })}, // Acceso a miembro con punto y almohadilla (privado).
+    {"name": "AccesoArreglo", "symbols": ["LiteralPrimario", "_", (lexer.has("LBRACKET") ? {type: "LBRACKET"} : LBRACKET), "_", "Expresion", "_", (lexer.has("RBRACKET") ? {type: "RBRACKET"} : RBRACKET)], "postprocess": (d) => nodo("AccesoArreglo", { arreglo: d[0], indice: d[4] })}, // Acceso a elemento de arreglo.
+    {"name": "AccesoArreglo", "symbols": ["LiteralPrimario", "_", (lexer.has("LBRACKET") ? {type: "LBRACKET"} : LBRACKET), "_", "Expresion", "_", (lexer.has("RBRACKET") ? {type: "RBRACKET"} : RBRACKET), "_", (lexer.has("LBRACKET") ? {type: "LBRACKET"} : LBRACKET), "_", "Expresion", "_", (lexer.has("RBRACKET") ? {type: "RBRACKET"} : RBRACKET)], "postprocess": (d) => nodo("AccesoArregloDoble", { matriz: d[0], indice1: d[4], indice2: d[9] })}, // Acceso a elemento de matriz (doble corchete).
+
+    // Reglas para creación de objetos y arreglos.
+    {"name": "CreacionObjeto", "symbols": [(lexer.has("PR_NUEVO") ? {type: "PR_NUEVO"} : PR_NUEVO), "__", (lexer.has("IDENTIFICADOR_GRAL") ? {type: "IDENTIFICADOR_GRAL"} : IDENTIFICADOR_GRAL), "_", (lexer.has("LPAREN") ? {type: "LPAREN"} : LPAREN), "_", "ListaArgumentosOpcional", "_", (lexer.has("RPAREN") ? {type: "RPAREN"} : RPAREN)], "postprocess": (d) => nodo("CreacionObjeto", { clase: d[2], argumentos: d[6] })}, // Creación de instancia de objeto con 'nuevo'.
+    {"name": "CreacionArreglo", "symbols": [(lexer.has("LBRACKET") ? {type: "LBRACKET"} : LBRACKET), "_", "ListaArgumentosOpcional", "_", (lexer.has("RBRACKET") ? {type: "RBRACKET"} : RBRACKET)], "postprocess": (d) => nodo("CreacionArreglo", { elementos: d[2] })}, // Creación de arreglo con elementos entre corchetes.
+    {"name": "CreacionObjetoLiteral", "symbols": [(lexer.has("LBRACE") ? {type: "LBRACE"} : LBRACE), "_", "ParesClaveValorOpcional", "_", (lexer.has("RBRACE") ? {type: "RBRACE"} : RBRACE)], "postprocess": (d) => nodo("CreacionObjetoLiteral", { propiedades: d[2] })}, // Creación de objeto literal con pares clave-valor.
+
+    // Reglas para pares clave-valor en objetos literales.
+    {"name": "ParesClaveValorOpcional", "symbols": ["ParesClaveValor"], "postprocess": id}, // Los pares clave-valor pueden ser opcionales.
+    {"name": "ParesClaveValorOpcional", "symbols": [(lexer.has("empty") ? {type: "empty"} : empty)], "postprocess": () => []}, // O pueden estar vacíos.
+    {"name": "ParesClaveValor", "symbols": ["ParClaveValor"], "postprocess": (d) => [d[0]]}, // Una lista de pares puede ser un par.
+    {"name": "ParesClaveValor", "symbols": ["ParesClaveValor", "_", (lexer.has("COMA") ? {type: "COMA"} : COMA), "_", "ParClaveValor"], "postprocess": (d) => [...d[0], d[4]]}, // O una lista seguida de coma y otro par.
+    {"name": "ParClaveValor", "symbols": [(lexer.has("IDENTIFICADOR_GRAL") ? {type: "IDENTIFICADOR_GRAL"} : IDENTIFICADOR_GRAL), "_", (lexer.has("DOS_PUNTOS") ? {type: "DOS_PUNTOS"} : DOS_PUNTOS), "_", "Expresion"], "postprocess": (d) => nodo("ParClaveValor", { clave: d[0].value, valor: d[4] })}, // Un par clave-valor con identificador como clave.
+    {"name": "ParClaveValor", "symbols": [(lexer.has("texto") ? {type: "texto"} : texto), "_", (lexer.has("DOS_PUNTOS") ? {type: "DOS_PUNTOS"} : DOS_PUNTOS), "_", "Expresion"], "postprocess": (d) => nodo("ParClaveValor", { clave: d[0].value.slice(1,-1), valor: d[4] })}, // Un par clave-valor con texto como clave.
+
+    // Reglas para manejo de espacios en blanco y saltos de línea (ignorados en el AST).
+    {"name": "_$ebnf$1", "symbols": []}, // Empieza con cero.
+    {"name": "_$ebnf$1", "symbols": ["_$ebnf$1", (lexer.has("ws") ? {type: "ws"} : ws)], "postprocess": function arrpush(d) {return d[0].concat([d[1]]);}}, // Acumula espacios.
+    {"name": "_", "symbols": ["_$ebnf$1"], "postprocess": () => null}, // ' _ ' representa cero o más espacios.
+    {"name": "__$ebnf$1", "symbols": [(lexer.has("ws") ? {type: "ws"} : ws)]}, // Empieza con uno.
+    {"name": "__$ebnf$1", "symbols": ["__$ebnf$1", (lexer.has("ws") ? {type: "ws"} : ws)], "postprocess": function arrpush(d) {return d[0].concat([d[1]]);}}, // Acumula espacios.
+    {"name": "__", "symbols": ["__$ebnf$1"], "postprocess": () => null}, // ' __ ' representa uno o más espacios.
+    {"name": "_nl$ebnf$1", "symbols": []}, // Empieza con cero.
+    {"name": "_nl$ebnf$1$subexpression$1", "symbols": [(lexer.has("ws") ? {type: "ws"} : ws)]}, // Puede ser un espacio.
+    {"name": "_nl$ebnf$1$subexpression$1", "symbols": [(lexer.has("nl") ? {type: "nl"} : nl)]}, // O un salto de línea.
+    {"name": "_nl$ebnf$1$subexpression$1", "symbols": [(lexer.has("comentario_linea") ? {type: "comentario_linea"} : comentario_linea)]}, // O un comentario de línea.
+    {"name": "_nl$ebnf$1$subexpression$1", "symbols": [(lexer.has("comentario_bloque") ? {type: "comentario_bloque"} : comentario_bloque)]}, // O un comentario de bloque.
+    {"name": "_nl$ebnf$1", "symbols": ["_nl$ebnf$1", "_nl$ebnf$1$subexpression$1"], "postprocess": function arrpush(d) {return d[0].concat([d[1]]);}}, // Acumula espacios, saltos de línea o comentarios.
+    {"name": "_nl", "symbols": ["_nl$ebnf$1"], "postprocess": () => null} // ' _nl ' representa cero o más espacios, saltos de línea o comentarios.
+  ],
+  ParserStart: "Programa" // Define 'Programa' como la regla de inicio del parser.
+};
+export default grammar; // Exporta la gramática.
+  ```
+  </TabItem>
+  <TabItem label="parser.js">
+  ```ts
+// parser.js
+import nearley from 'nearley'; // Importa la librería Nearley para el parseo.
+import grammar from './grammar.js'; // Importa la gramática compilada generada por Nearley.
+
+
+export function parseCode(code) {
+  // Inicializa el parser con la gramática compilada.
+  const parser = new nearley.Parser(nearley.Grammar.fromCompiled(grammar));
+
+  try {
+    parser.feed(code); // Alimenta el parser con el código de entrada.
+    if (parser.results.length > 1) {
+      // Si hay múltiples resultados, la gramática es ambigua.
+      console.warn("¡Gramática ambigua! Múltiples resultados de parseo encontrados.");
+      return parser.results[0]; // Devuelve el primer resultado en caso de ambigüedad.
+    } else if (parser.results.length === 1) {
+      return parser.results[0]; // Si hay un resultado único, lo devuelve.
+    } else {
+      // Si no hay resultados de parseo.
+      if (code.trim().length > 0) { // Solo si el código no está vacío o solo espacios.
+        throw new Error("No se pudo parsear el código. No hay resultados válidos o entrada incompleta.");
+      }
+      return null; // Devuelve null si el código está vacío o son solo comentarios/espacios.
+    }
+  } catch (error) {
+    console.error("Error de parseo:", error.message); // Muestra el mensaje de error general.
+    // Intenta obtener más detalles del error de Nearley.
+    if (error.token) {
+      const {line, col, offset, text} = error.token;
+      // Muestra detalles del token problemático.
+      console.error(`Error cerca de la línea ${line}, columna ${col} (offset ${offset}). Token: '${text}' (tipo: ${error.token.type})`);
+    } else if (error.message.includes("Unexpected end of input")) {
+      // Sugerencia para errores de fin de entrada inesperado.
+      console.error("Error: Fin inesperado de la entrada. Puede que falte un ';' o '}'.");
+    }
+    return null; // Devuelve null en caso de cualquier error de parseo.
+  }
+}
+  ```
+  </TabItem>
+</Tabs>
