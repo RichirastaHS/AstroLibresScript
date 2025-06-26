@@ -471,13 +471,149 @@ $saludo: texto = "Hola" + " " + "Mundo";
 
 ## Condicional `mientras`Derecha
 
-```go
+```ts
+mientras ($i <= 5) {
+    imprimir("Contando: " + $i);
+}
+```
 
+```go
+1 <Programa> ::=
+2 <_nl> <Sentencias> <_nl> ::=
+3 <_nl> <Sentencia> <_nl> <_nl> ::=
+4 <_nl> <EstructuraControl> <_nl> <_nl> ::=
+5 <_nl> <BucleMientras> <_nl> <_nl> ::=
+6 <_nl> <_PR_MIENTRAS> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <BloqueCodigo> <_nl> <_nl> ::=
+7 <_nl> <_PR_MIENTRAS> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <_LBRACE> <_nl> <Sentencias> <_nl> <_RBRACE> <_nl> <_nl> ::=
+8 <_nl> <_PR_MIENTRAS> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <_LBRACE> <_nl> <Sentencias> <_nl> < } > <_nl> <_nl> ::=
+9 <_nl> <_PR_MIENTRAS> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <_LBRACE> <_nl> <Sentencia> <_nl> < } > <_nl> <_nl> ::=
+10 <_nl> <_PR_MIENTRAS> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <_LBRACE> <_nl> <LlamadaImprimir> <_nl> < } > <_nl> <_nl> ::=
+11 <_nl> <_PR_MIENTRAS> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <_LBRACE> <_nl> <_PR_IMPRIMIR> <_> <_LPAREN> <_> <ListaArgumentosOpcional> <_> <_RPAREN> <_> <_PUNTO_Y_COMA> <_nl> < } > <_nl> <_nl> ::=
+12 <_nl> <_PR_MIENTRAS> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <_LBRACE> <_nl> <_PR_IMPRIMIR> <_> <_LPAREN> <_> <ListaArgumentosOpcional> <_> <_RPAREN> <_> < ; > <_nl> < } > <_nl> <_nl> ::=
+13 <_nl> <_PR_MIENTRAS> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <_LBRACE> <_nl> <_PR_IMPRIMIR> <_> <_LPAREN> <_> <ListaArgumentosOpcional> <_> < ) > <_> < ; > <_nl> < } > <_nl> <_nl> ::=
+14 <_nl> <_PR_MIENTRAS> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <_LBRACE> <_nl> <_PR_IMPRIMIR> <_> <_LPAREN> <_> <ListaArgumentos> <_> < ) > <_> < ; > <_nl> < } > <_nl> <_nl> ::=
+15 <_nl> <_PR_MIENTRAS> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <_LBRACE> <_nl> <_PR_IMPRIMIR> <_> <_LPAREN> <_> <Expresion> <_> < ) > <_> < ; > <_nl> < } > <_nl> <_nl> ::=
+16 <_nl> <_PR_MIENTRAS> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <_LBRACE> <_nl> <_PR_IMPRIMIR> <_> <_LPAREN> <_> <ExpresionLogicaOr> <_> < ) > <_> < ; > <_nl> < } > <_nl> <_nl> ::=
+17 <_nl> <_PR_MIENTRAS> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <_LBRACE> <_nl> <_PR_IMPRIMIR> <_> <_LPAREN> <_> <ExpresionLogicaAnd> <_> < ) > <_> < ; > <_nl> < } > <_nl> <_nl> ::=
+18 <_nl> <_PR_MIENTRAS> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <_LBRACE> <_nl> <_PR_IMPRIMIR> <_> <_LPAREN> <_> <ExpresionIgualdad> <_> < ) > <_> < ; > <_nl> < } > <_nl> <_nl> ::=
+19 <_nl> <_PR_MIENTRAS> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <_LBRACE> <_nl> <_PR_IMPRIMIR> <_> <_LPAREN> <_> <ExpresionRelacional> <_> < ) > <_> < ; > <_nl> < } > <_nl> <_nl> ::=
+20 <_nl> <_PR_MIENTRAS> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <_LBRACE> <_nl> <_PR_IMPRIMIR> <_> <_LPAREN> <_> <ExpresionAditiva> <_> < ) > <_> < ; > <_nl> < } > <_nl> <_nl> ::=
+21 <_nl> <_PR_MIENTRAS> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <_LBRACE> <_nl> <_PR_IMPRIMIR> <_> <_LPAREN> <_> <ExpresionAditiva> <_> <_OP_SUMA> <_> <ExpresionMultiplicativa> <_> < ) > <_> < ; > <_nl> < } > <_nl> <_nl> ::=
+22 <_nl> <_PR_MIENTRAS> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <_LBRACE> <_nl> <_PR_IMPRIMIR> <_> <_LPAREN> <_> <ExpresionAditiva> <_> <_OP_SUMA> <_> <ExpresionPotencia> <_> < ) > <_> < ; > <_nl> < } > <_nl> <_nl> ::=
+23 <_nl> <_PR_MIENTRAS> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <_LBRACE> <_nl> <_PR_IMPRIMIR> <_> <_LPAREN> <_> <ExpresionAditiva> <_> <_OP_SUMA> <_> <ExpresionUnaria> <_> < ) > <_> < ; > <_nl> < } > <_nl> <_nl> ::=
+24 <_nl> <_PR_MIENTRAS> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <_LBRACE> <_nl> <_PR_IMPRIMIR> <_> <_LPAREN> <_> <ExpresionAditiva> <_> <_OP_SUMA> <_> <ExpresionPostfija> <_> < ) > <_> < ; > <_nl> < } > <_nl> <_nl> ::=
+25 <_nl> <_PR_MIENTRAS> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <_LBRACE> <_nl> <_PR_IMPRIMIR> <_> <_LPAREN> <_> <ExpresionAditiva> <_> <_OP_SUMA> <_> <LiteralPrimero> <_> < ) > <_> < ; > <_nl> < } > <_nl> <_nl> ::=
+26 <_nl> <_PR_MIENTRAS> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <_LBRACE> <_nl> <_PR_IMPRIMIR> <_> <_LPAREN> <_> <ExpresionAditiva> <_> <_OP_SUMA> <_> <_IDENTIFICADOR_VAR> <_> < ) > <_> < ; > <_nl> < } > <_nl> <_nl> ::=
+27 <_nl> <_PR_MIENTRAS> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <_LBRACE> <_nl> <_PR_IMPRIMIR> <_> <_LPAREN> <_> <ExpresionAditiva> <_> <_OP_SUMA> <_> < $i > <_> < ) > <_> < ; > <_nl> < } > <_nl> <_nl> ::=
+28 <_nl> <_PR_MIENTRAS> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <_LBRACE> <_nl> <_PR_IMPRIMIR> <_> <_LPAREN> <_> <ExpresionAditiva> <_> < + > <_> < $i > <_> < ) > <_> < ; > <_nl> < } > <_nl> <_nl> ::=
+29 <_nl> <_PR_MIENTRAS> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <_LBRACE> <_nl> <_PR_IMPRIMIR> <_> <_LPAREN> <_> <ExpresionMultiplicativa> <_> < + > <_> < $i > <_> < ) > <_> < ; > <_nl> < } > <_nl> <_nl> ::=
+30 <_nl> <_PR_MIENTRAS> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <_LBRACE> <_nl> <_PR_IMPRIMIR> <_> <_LPAREN> <_> <ExpresionPotencia> <_> < + > <_> < $i > <_> < ) > <_> < ; > <_nl> < } > <_nl> <_nl> ::=
+31 <_nl> <_PR_MIENTRAS> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <_LBRACE> <_nl> <_PR_IMPRIMIR> <_> <_LPAREN> <_> <ExpresionUnaria> <_> < + > <_> < $i > <_> < ) > <_> < ; > <_nl> < } > <_nl> <_nl> ::=
+32 <_nl> <_PR_MIENTRAS> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <_LBRACE> <_nl> <_PR_IMPRIMIR> <_> <_LPAREN> <_> <ExpresionPostfija> <_> < + > <_> < $i > <_> < ) > <_> < ; > <_nl> < } > <_nl> <_nl> ::=
+33 <_nl> <_PR_MIENTRAS> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <_LBRACE> <_nl> <_PR_IMPRIMIR> <_> <_LPAREN> <_> <LiteralPrimario> <_> < + > <_> < $i > <_> < ) > <_> < ; > <_nl> < } > <_nl> <_nl> ::=
+34 <_nl> <_PR_MIENTRAS> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <_LBRACE> <_nl> <_PR_IMPRIMIR> <_> <_LPAREN> <_> <_texto> <_> < + > <_> < $i > <_> < ) > <_> < ; > <_nl> < } > <_nl> <_nl> ::=
+35 <_nl> <_PR_MIENTRAS> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <_LBRACE> <_nl> <_PR_IMPRIMIR> <_> <_LPAREN> <_> < Contando: > <_> < + > <_> < $i > <_> < ) > <_> < ; > <_nl> < } > <_nl> <_nl> ::=
+36 <_nl> <_PR_MIENTRAS> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <_LBRACE> <_nl> <_PR_IMPRIMIR> <_> < ( > <_> < Contando: > <_> < + > <_> < $i > <_> < ) > <_> < ; > <_nl> < } > <_nl> <_nl> ::=
+37 <_nl> <_PR_MIENTRAS> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <_LBRACE> <_nl> < imprimir > <_> < ( > <_> < Contando: > <_> < + > <_> < $i > <_> < ) > <_> < ; > <_nl> < } > <_nl> <_nl> ::=
+38 <_nl> <_PR_MIENTRAS> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> < { > <_nl> < imprimir > <_> < ( > <_> < Contando: > <_> < + > <_> < $i > <_> < ) > <_> < ; > <_nl> < } > <_nl> <_nl> ::=
+39 <_nl> <_PR_MIENTRAS> <_> <_LPAREN> <_> <Expresion> <_> < ) > <_> < { > <_nl> < imprimir > <_> < ( > <_> < Contando: > <_> < + > <_> < $i > <_> < ) > <_> < ; > <_nl> < } > <_nl> <_nl> ::=
+40 <_nl> <_PR_MIENTRAS> <_> <_LPAREN> <_> <ExpresionLogicaOr> <_> < ) > <_> < { > <_nl> < imprimir > <_> < ( > <_> < Contando: > <_> < + > <_> < $i > <_> < ) > <_> < ; > <_nl> < } > <_nl> <_nl> ::=
+41 <_nl> <_PR_MIENTRAS> <_> <_LPAREN> <_> <ExpresionLogicaAnd> <_> < ) > <_> < { > <_nl> < imprimir > <_> < ( > <_> < Contando: > <_> < + > <_> < $i > <_> < ) > <_> < ; > <_nl> < } > <_nl> <_nl> ::=
+42 <_nl> <_PR_MIENTRAS> <_> <_LPAREN> <_> <ExpresionIgualdad> <_> < ) > <_> < { > <_nl> < imprimir > <_> < ( > <_> < Contando: > <_> < + > <_> < $i > <_> < ) > <_> < ; > <_nl> < } > <_nl> <_nl> ::=
+43 <_nl> <_PR_MIENTRAS> <_> <_LPAREN> <_> <ExpresionRelacional> <_> < ) > <_> < { > <_nl> < imprimir > <_> < ( > <_> < Contando: > <_> < + > <_> < $i > <_> < ) > <_> < ; > <_nl> < } > <_nl> <_nl> ::=
+44 <_nl> <_PR_MIENTRAS> <_> <_LPAREN> <_> <ExpresionRelacional> <_> <_OP_LTE> <_> <ExpresionAditiva> <_> < ) > <_> < { > <_nl> < imprimir > <_> < ( > <_> < Contando: > <_> < + > <_> < $i > <_> < ) > <_> < ; > <_nl> < } > <_nl> <_nl> ::=
+
+45 <_nl> <_PR_MIENTRAS> <_> <_LPAREN> <_> <ExpresionRelacional> <_> <_OP_LTE> <_> <ExpresionMultiplicativa> <_> < ) > <_> < { > <_nl> < imprimir > <_> < ( > <_> < Contando: > <_> < + > <_> < $i > <_> < ) > <_> < ; > <_nl> < } > <_nl> <_nl> ::=
+46 <_nl> <_PR_MIENTRAS> <_> <_LPAREN> <_> <ExpresionRelacional> <_> <_OP_LTE> <_> <ExpresionPotencia> <_> < ) > <_> < { > <_nl> < imprimir > <_> < ( > <_> < Contando: > <_> < + > <_> < $i > <_> < ) > <_> < ; > <_nl> < } > <_nl> <_nl> ::=
+47 <_nl> <_PR_MIENTRAS> <_> <_LPAREN> <_> <ExpresionRelacional> <_> <_OP_LTE> <_> <ExpresionUnaria> <_> < ) > <_> < { > <_nl> < imprimir > <_> < ( > <_> < Contando: > <_> < + > <_> < $i > <_> < ) > <_> < ; > <_nl> < } > <_nl> <_nl> ::=
+48 <_nl> <_PR_MIENTRAS> <_> <_LPAREN> <_> <ExpresionRelacional> <_> <_OP_LTE> <_> <ExpresionPostfija> <_> < ) > <_> < { > <_nl> < imprimir > <_> < ( > <_> < Contando: > <_> < + > <_> < $i > <_> < ) > <_> < ; > <_nl> < } > <_nl> <_nl> ::=
+49 <_nl> <_PR_MIENTRAS> <_> <_LPAREN> <_> <ExpresionRelacional> <_> <_OP_LTE> <_> <LiteralPrimario> <_> < ) > <_> < { > <_nl> < imprimir > <_> < ( > <_> < Contando: > <_> < + > <_> < $i > <_> < ) > <_> < ; > <_nl> < } > <_nl> <_nl> ::=
+50 <_nl> <_PR_MIENTRAS> <_> <_LPAREN> <_> <ExpresionRelacional> <_> <_OP_LTE> <_> <_numero> <_> < ) > <_> < { > <_nl> < imprimir > <_> < ( > <_> < Contando: > <_> < + > <_> < $i > <_> < ) > <_> < ; > <_nl> < } > <_nl> <_nl> ::=
+51 <_nl> <_PR_MIENTRAS> <_> <_LPAREN> <_> <ExpresionRelacional> <_> <_OP_LTE> <_> < 5 > <_> < ) > <_> < { > <_nl> < imprimir > <_> < ( > <_> < Contando: > <_> < + > <_> < $i > <_> < ) > <_> < ; > <_nl> < } > <_nl> <_nl> ::=
+52 <_nl> <_PR_MIENTRAS> <_> <_LPAREN> <_> <ExpresionRelacional> <_> < <= > <_> < 5 > <_> < ) > <_> < { > <_nl> < imprimir > <_> < ( > <_> < Contando: > <_> < + > <_> < $i > <_> < ) > <_> < ; > <_nl> < } > <_nl> <_nl> ::=
+53 <_nl> <_PR_MIENTRAS> <_> <_LPAREN> <_> <ExpresionAditiva> <_> < <= > <_> < 5 > <_> < ) > <_> < { > <_nl> < imprimir > <_> < ( > <_> < Contando: > <_> < + > <_> < $i > <_> < ) > <_> < ; > <_nl> < } > <_nl> <_nl> ::=
+54 <_nl> <_PR_MIENTRAS> <_> <_LPAREN> <_> <ExpresionMultiplicativa> <_> < <= > <_> < 5 > <_> < ) > <_> < { > <_nl> < imprimir > <_> < ( > <_> < Contando: > <_> < + > <_> < $i > <_> < ) > <_> < ; > <_nl> < } > <_nl> <_nl> ::=
+55 <_nl> <_PR_MIENTRAS> <_> <_LPAREN> <_> <ExpresionPotencia> <_> < <= > <_> < 5 > <_> < ) > <_> < { > <_nl> < imprimir > <_> < ( > <_> < Contando: > <_> < + > <_> < $i > <_> < ) > <_> < ; > <_nl> < } > <_nl> <_nl> ::=
+56 <_nl> <_PR_MIENTRAS> <_> <_LPAREN> <_> <ExpresionUnaria> <_> < <= > <_> < 5 > <_> < ) > <_> < { > <_nl> < imprimir > <_> < ( > <_> < Contando: > <_> < + > <_> < $i > <_> < ) > <_> < ; > <_nl> < } > <_nl> <_nl> ::=
+
+57 <_nl> <_PR_MIENTRAS> <_> <_LPAREN> <_> <ExpresionPostfija> <_> < <= > <_> < 5 > <_> < ) > <_> < { > <_nl> < imprimir > <_> < ( > <_> < Contando: > <_> < + > <_> < $i > <_> < ) > <_> < ; > <_nl> < } > <_nl> <_nl> ::=
+57 <_nl> <_PR_MIENTRAS> <_> <_LPAREN> <_> <LiteralPrimario> <_> < <= > <_> < 5 > <_> < ) > <_> < { > <_nl> < imprimir > <_> < ( > <_> < Contando: > <_> < + > <_> < $i > <_> < ) > <_> < ; > <_nl> < } > <_nl> <_nl> ::=
+58 <_nl> <_PR_MIENTRAS> <_> <_LPAREN> <_> <_IDENTIFICADOR_VAR> <_> < <= > <_> < 5 > <_> < ) > <_> < { > <_nl> < imprimir > <_> < ( > <_> < Contando: > <_> < + > <_> < $i > <_> < ) > <_> < ; > <_nl> < } > <_nl> <_nl> ::=
+59 <_nl> <_PR_MIENTRAS> <_> <_LPAREN> <_> < $ i> <_> < <= > <_> < 5 > <_> < ) > <_> < { > <_nl> < imprimir > <_> < ( > <_> < Contando: > <_> < + > <_> < $i > <_> < ) > <_> < ; > <_nl> < } > <_nl> <_nl> ::=
+60 <_nl> <_PR_MIENTRAS> <_> < ( > <_> < $ i> <_> < <= > <_> < 5 > <_> < ) > <_> < { > <_nl> < imprimir > <_> < ( > <_> < Contando: > <_> < + > <_> < $i > <_> < ) > <_> < ; > <_nl> < } > <_nl> <_nl> ::=
+61 <_nl> < mientras > <_> < ( > <_> < $ i> <_> < <= > <_> < 5 > <_> < ) > <_> < { > <_nl> < imprimir > <_> < ( > <_> < Contando: > <_> < + > <_> < $i > <_> < ) > <_> < ; > <_nl> < } > <_nl> <_nl> ::=
 ```
 
 ## Condicional `mientras` Izquierda
 
 ```go
+1 <Programa> ::=
+2 <_nl> <Sentencias> <_nl> ::=
+3 <_nl> <Sentencia> <_nl> <_nl> ::=
+4 <_nl> <EstructuraControl> <_nl> <_nl> ::=
+5 <_nl> <BucleMientras> <_nl> <_nl> ::=
+6 <_nl> <_PR_MIENTRAS> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <BloqueCodigo> <_nl> <_nl> ::=
+7 <_nl> < mientras > <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <BloqueCodigo> <_nl> <_nl> ::=
+8 <_nl> < mientras > <_> < ( > <_> <Expresion> <_> <_RPAREN> <_> <BloqueCodigo> <_nl> <_nl> ::=
+9 <_nl> < mientras > <_> < ( > <_> <ExpresionLogicaOr> <_> <_RPAREN> <_> <BloqueCodigo> <_nl> <_nl> ::=
+10 <_nl> < mientras > <_> < ( > <_> <ExpresionLogicaAnd> <_> <_RPAREN> <_> <BloqueCodigo> <_nl> <_nl> ::=
+11 <_nl> < mientras > <_> < ( > <_> <ExpresionIgualdad> <_> <_RPAREN> <_> <BloqueCodigo> <_nl> <_nl> ::=
+12 <_nl> < mientras > <_> < ( > <_> <ExpresionRelacional> <_> <_RPAREN> <_> <BloqueCodigo> <_nl> <_nl> ::=
+13 <_nl> < mientras > <_> < ( > <_><ExpresionRelacional> <_> <_OP_LTE> <_> <ExpresionAditiva> <_> <_RPAREN> <_> <BloqueCodigo> <_nl> <_nl> ::=
+14 <_nl> < mientras > <_> < ( > <_><ExpresionAditiva> <_> <_OP_LTE> <_> <ExpresionAditiva> <_> <_RPAREN> <_> <BloqueCodigo> <_nl> <_nl> ::=
+15<_nl> < mientras > <_> < ( > <_><ExpresionMultiplicativa> <_> <_OP_LTE> <_> <ExpresionAditiva> <_> <_RPAREN> <_> <BloqueCodigo> <_nl> <_nl> ::=
+
+16 <_nl> < mientras > <_> < ( > <_><ExpresionPotencia> <_> <_OP_LTE> <_> <ExpresionAditiva> <_> <_RPAREN> <_> <BloqueCodigo> <_nl> <_nl> ::=
+17 <_nl> < mientras > <_> < ( > <_><ExpresionUnaria> <_> <_OP_LTE> <_> <ExpresionAditiva> <_> <_RPAREN> <_> <BloqueCodigo> <_nl> <_nl> ::=
+18 <_nl> < mientras > <_> < ( > <_><ExpresionPostfija> <_> <_OP_LTE> <_> <ExpresionAditiva> <_> <_RPAREN> <_> <BloqueCodigo> <_nl> <_nl> ::=
+19 <_nl> < mientras > <_> < ( > <_><LiteralPrimario> <_> <_OP_LTE> <_> <ExpresionAditiva> <_> <_RPAREN> <_> <BloqueCodigo> <_nl> <_nl> ::=
+20 <_nl> < mientras > <_> < ( > <_><_IDENTIFICADOR_VAR> <_> <_OP_LTE> <_> <ExpresionAditiva> <_> <_RPAREN> <_> <BloqueCodigo> <_nl> <_nl> ::=
+21 <_nl> < mientras > <_> < ( > <_>< $i > <_> <_OP_LTE> <_> <ExpresionAditiva> <_> <_RPAREN> <_> <BloqueCodigo> <_nl> <_nl> ::=
+22 <_nl> < mientras > <_> < ( > <_>< $i > <_> < <= > <_> <ExpresionAditiva> <_> <_RPAREN> <_> <BloqueCodigo> <_nl> <_nl> ::=
+23 <_nl> < mientras > <_> < ( > <_>< $i > <_> < <= > <_> <ExpresionMultiplicativa> <_> <_RPAREN> <_> <BloqueCodigo> <_nl> <_nl> ::=
+24 <_nl> < mientras > <_> < ( > <_>< $i > <_> < <= > <_> <ExpresionPotencia> <_> <_RPAREN> <_> <BloqueCodigo> <_nl> <_nl> ::=
+25 <_nl> < mientras > <_> < ( > <_>< $i > <_> < <= > <_> <ExpresionUnaria> <_> <_RPAREN> <_> <BloqueCodigo> <_nl> <_nl> ::=
+26 <_nl> < mientras > <_> < ( > <_>< $i > <_> < <= > <_> <ExpresionPostfija> <_> <_RPAREN> <_> <BloqueCodigo> <_nl> <_nl> ::=
+27 <_nl> < mientras > <_> < ( > <_>< $i > <_> < <= > <_> <LiteralPrimario> <_> <_RPAREN> <_> <BloqueCodigo> <_nl> <_nl> ::=
+28 <_nl> < mientras > <_> < ( > <_>< $i > <_> < <= > <_> <_numero> <_> <_RPAREN> <_> <BloqueCodigo> <_nl> <_nl> ::=
+29 <_nl> < mientras > <_> < ( > <_>< $i > <_> < <= > <_> < 5 > <_> <_RPAREN> <_> <BloqueCodigo> <_nl> <_nl> ::=
+30 <_nl> < mientras > <_> < ( > <_>< $i > <_> < <= > <_> < 5 > <_> < ) > <_> <BloqueCodigo> <_nl> <_nl> ::=
+31 <_nl> < mientras > <_> < ( > <_>< $i > <_> < <= > <_> < 5 > <_> < ) > <_> <_LBRACE> <_nl> <Sentencias> <_nl> <_RBRACE> <_nl> <_nl> ::=
+32 <_nl> < mientras > <_> < ( > <_>< $i > <_> < <= > <_> < 5 > <_> < ) > <_> < { > <_nl> <Sentencias> <_nl> <_RBRACE> <_nl> <_nl> ::=
+
+33 <_nl> < mientras > <_> < ( > <_>< $i > <_> < <= > <_> < 5 > <_> < ) > <_> < { > <_nl> <Sentencia> <_nl> <_RBRACE> <_nl> <_nl> ::=
+34 <_nl> < mientras > <_> < ( > <_>< $i > <_> < <= > <_> < 5 > <_> < ) > <_> < { > <_nl> <LlamadaImprimir> <_nl> <_RBRACE> <_nl> <_nl> ::=
+35 <_nl> < mientras > <_> < ( > <_>< $i > <_> < <= > <_> < 5 > <_> < ) > <_> < { > <_nl> <LlamadaImprimir> <_nl> <_RBRACE> <_nl> <_nl> ::=
+36 <_nl> < mientras > <_> < ( > <_>< $i > <_> < <= > <_> < 5 > <_> < ) > <_> < { > <_nl> <_PR_IMPRIMIR> <_> <_LPAREN> <_> <ListaArgumentosOpcional> <_> <_RPAREN> <_> <_PUNTO_Y_COMA> <_nl> <_RBRACE> <_nl> <_nl> ::=
+37 <_nl> < mientras > <_> < ( > <_>< $i > <_> < <= > <_> < 5 > <_> < ) > <_> < { > <_nl> <imprimir> <_> <_LPAREN> <_> <ListaArgumentosOpcional> <_> <_RPAREN> <_> <_PUNTO_Y_COMA> <_nl> <_RBRACE> <_nl> <_nl> ::=
+38 <_nl> < mientras > <_> < ( > <_>< $i > <_> < <= > <_> < 5 > <_> < ) > <_> < { > <_nl> <imprimir> <_> < ( > <_> <ListaArgumentosOpcional> <_> <_RPAREN> <_> <_PUNTO_Y_COMA> <_nl> <_RBRACE> <_nl> <_nl> ::=
+39 <_nl> < mientras > <_> < ( > <_>< $i > <_> < <= > <_> < 5 > <_> < ) > <_> < { > <_nl> <imprimir> <_> < ( > < “ > <ListaArgumentosOpcional> <_> <_RPAREN> <_> <_PUNTO_Y_COMA> <_nl> <_RBRACE> <_nl> <_nl> ::=
+40 <_nl> < mientras > <_> < ( > <_>< $i > <_> < <= > <_> < 5 > <_> < ) > <_> < { > <_nl> <imprimir> <_> < ( > < “ > <ListaArgumentos> <_> <_RPAREN> <_> <_PUNTO_Y_COMA> <_nl> <_RBRACE> <_nl> <_nl> ::=
+41 <_nl> < mientras > <_> < ( > <_>< $i > <_> < <= > <_> < 5 > <_> < ) > <_> < { > <_nl> <imprimir> <_> < ( > < “ > <Expresion> <_> <_RPAREN> <_> <_PUNTO_Y_COMA> <_nl> <_RBRACE> <_nl> <_nl> ::=
+42 <_nl> < mientras > <_> < ( > <_>< $i > <_> < <= > <_> < 5 > <_> < ) > <_> < { > <_nl> <imprimir> <_> < ( > < “ > <ExpresionLogicaOr> <_> <_RPAREN> <_> <_PUNTO_Y_COMA> <_nl> <_RBRACE> <_nl> <_nl> ::=
+43 <_nl> < mientras > <_> < ( > <_>< $i > <_> < <= > <_> < 5 > <_> < ) > <_> < { > <_nl> <imprimir> <_> < ( > < “ > <ExpresionLogicaAnd> <_> <_RPAREN> <_> <_PUNTO_Y_COMA> <_nl> <_RBRACE> <_nl> <_nl> ::=
+44 <_nl> < mientras > <_> < ( > <_>< $i > <_> < <= > <_> < 5 > <_> < ) > <_> < { > <_nl> <imprimir> <_> < ( > < “ > <ExpresionIgualdad> <_> <_RPAREN> <_> <_PUNTO_Y_COMA> <_nl> <_RBRACE> <_nl> <_nl> ::=
+45 <_nl> < mientras > <_> < ( > <_>< $i > <_> < <= > <_> < 5 > <_> < ) > <_> < { > <_nl> <imprimir> <_> < ( > < “ > <ExpresionRelacional> <_> <_RPAREN> <_> <_PUNTO_Y_COMA> <_nl> <_RBRACE> <_nl> <_nl> ::=
+46 <_nl> < mientras > <_> < ( > <_>< $i > <_> < <= > <_> < 5 > <_> < ) > <_> < { > <_nl> <imprimir> <_> < ( > < “ > <ExpresionAditiva> <_> <_RPAREN> <_> <_PUNTO_Y_COMA> <_nl> <_RBRACE> <_nl> <_nl> ::=
+47 <_nl> < mientras > <_> < ( > <_>< $i > <_> < <= > <_> < 5 > <_> < ) > <_> < { > <_nl> <imprimir> <_> < ( > < “ > <ExpresionAditiva> <_> <_OP_SUMA> <_> <ExpresionMultiplicativa> <_> <_RPAREN> <_> <_PUNTO_Y_COMA> <_nl> <_RBRACE> <_nl> <_nl> ::=
+48 <_nl> < mientras > <_> < ( > <_>< $i > <_> < <= > <_> < 5 > <_> < ) > <_> < { > <_nl> <imprimir> <_> < ( > < “ > <ExpresionMultiplicativa> <_> <_OP_SUMA> <_> <ExpresionMultiplicativa> <_> <_RPAREN> <_> <_PUNTO_Y_COMA> <_nl> <_RBRACE> <_nl> <_nl> ::=
+49 <_nl> < mientras > <_> < ( > <_>< $i > <_> < <= > <_> < 5 > <_> < ) > <_> < { > <_nl> <imprimir> <_> < ( > < “ > <ExpresionPotencia> <_> <_OP_SUMA> <_> <ExpresionMultiplicativa> <_> <_RPAREN> <_> <_PUNTO_Y_COMA> <_nl> <_RBRACE> <_nl> <_nl> ::=
+50 <_nl> < mientras > <_> < ( > <_>< $i > <_> < <= > <_> < 5 > <_> < ) > <_> < { > <_nl> <imprimir> <_> < ( > < “ > <ExpresionUnaria> <_> <_OP_SUMA> <_> <ExpresionMultiplicativa> <_> <_RPAREN> <_> <_PUNTO_Y_COMA> <_nl> <_RBRACE> <_nl> <_nl> ::=
+51 <_nl> < mientras > <_> < ( > <_>< $i > <_> < <= > <_> < 5 > <_> < ) > <_> < { > <_nl> <imprimir> <_> < ( > < “ > <ExpresionPostfija> <_> <_OP_SUMA> <_> <ExpresionMultiplicativa> <_> <_RPAREN> <_> <_PUNTO_Y_COMA> <_nl> <_RBRACE> <_nl> <_nl> ::=
+52 <_nl> < mientras > <_> < ( > <_>< $i > <_> < <= > <_> < 5 > <_> < ) > <_> < { > <_nl> <imprimir> <_> < ( > < “ > <LiteralPrimero> <_> <_OP_SUMA> <_> <ExpresionMultiplicativa> <_> <_RPAREN> <_> <_PUNTO_Y_COMA> <_nl> <_RBRACE> <_nl> <_nl> ::=
+53 <_nl> < mientras > <_> < ( > <_>< $i > <_> < <= > <_> < 5 > <_> < ) > <_> < { > <_nl> <imprimir> <_> < ( > < “ > <_texto> <_> <_OP_SUMA> <_> <ExpresionMultiplicativa> <_> <_RPAREN> <_> <_PUNTO_Y_COMA> <_nl> <_RBRACE> <_nl> <_nl> ::=
+54 <_nl> < mientras > <_> < ( > <_>< $i > <_> < <= > <_> < 5 > <_> < ) > <_> < { > <_nl> <imprimir> <_> < ( > < “ > <Contando: > < “ > <_OP_SUMA> <_> <ExpresionMultiplicativa> <_> <_RPAREN> <_> <_PUNTO_Y_COMA> <_nl> <_RBRACE> <_nl> <_nl> ::=
+55 <_nl> < mientras > <_> < ( > <_>< $i > <_> < <= > <_> < 5 > <_> < ) > <_> < { > <_nl> <imprimir> <_> < ( > < “ > <Contando: > < “ > < + > <_> <ExpresionMultiplicativa> <_> <_RPAREN> <_> <_PUNTO_Y_COMA> <_nl> <_RBRACE> <_nl> <_nl> ::=
+56 <_nl> < mientras > <_> < ( > <_>< $i > <_> < <= > <_> < 5 > <_> < ) > <_> < { > <_nl> <imprimir> <_> < ( > < “ > <Contando: > < “ > < + > <_> <ExpresionMultiplicativa> <_> <_RPAREN> <_> <_PUNTO_Y_COMA> <_nl> <_RBRACE> <_nl> <_nl> ::=
+57 <_nl> < mientras > <_> < ( > <_>< $i > <_> < <= > <_> < 5 > <_> < ) > <_> < { > <_nl> <imprimir> <_> < ( > < “ > <Contando: > < “ > < + > <_> <ExpresionPotencia> <_> <_RPAREN> <_> <_PUNTO_Y_COMA> <_nl> <_RBRACE> <_nl> <_nl> ::=
+58 <_nl> < mientras > <_> < ( > <_>< $i > <_> < <= > <_> < 5 > <_> < ) > <_> < { > <_nl> <imprimir> <_> < ( > < “ > <Contando: > < “ > < + > <_> <ExpresionUnaria> <_> <_RPAREN> <_> <_PUNTO_Y_COMA> <_nl> <_RBRACE> <_nl> <_nl> ::=
+59 <_nl> < mientras > <_> < ( > <_>< $i > <_> < <= > <_> < 5 > <_> < ) > <_> < { > <_nl> <imprimir> <_> < ( > < “ > <Contando: > < “ > < + > <_> <ExpresionPostfija> <_> <_RPAREN> <_> <_PUNTO_Y_COMA> <_nl> <_RBRACE> <_nl> <_nl> ::=
+60 <_nl> < mientras > <_> < ( > <_>< $i > <_> < <= > <_> < 5 > <_> < ) > <_> < { > <_nl> <imprimir> <_> < ( > < “ > <Contando: > < “ > < + > <_> <LiteralPrimario> <_> <_RPAREN> <_> <_PUNTO_Y_COMA> <_nl> <_RBRACE> <_nl> <_nl> ::=
+61 <_nl> < mientras > <_> < ( > <_>< $i > <_> < <= > <_> < 5 > <_> < ) > <_> < { > <_nl> <imprimir> <_> < ( > < “ > <Contando: > < “ > < + > <_> <_IDENTIFICADOR_VAR> <_> <_RPAREN> <_> <_PUNTO_Y_COMA> <_nl> <_RBRACE> <_nl> <_nl> ::=
+62 <_nl> < mientras > <_> < ( > <_>< $i > <_> < <= > <_> < 5 > <_> < ) > <_> < { > <_nl> <imprimir> <_> < ( > < “ > <Contando: > < “ > < + > <_> < $i > <_> <_RPAREN> <_> <_PUNTO_Y_COMA> <_nl> <_RBRACE> <_nl> <_nl> ::=
+63 <_nl> < mientras > <_> < ( > <_>< $i > <_> < <= > <_> < 5 > <_> < ) > <_> < { > <_nl> <imprimir> <_> < ( > < “ > <Contando: > < “ > < + > <_> < $i > <_> < ) > <_> <_PUNTO_Y_COMA> <_nl> <_RBRACE> <_nl> <_nl> ::=
+64 <_nl> < mientras > <_> < ( > <_>< $i > <_> < <= > <_> < 5 > <_> < ) > <_> < { > <_nl> <imprimir> <_> < ( > < “ > <Contando: > < “ > < + > <_> < $i > <_> < ) > <_> < ; > <_nl> <_RBRACE> <_nl> <_nl> ::=
+65 <_nl> < mientras > <_> < ( > <_>< $i > <_> < <= > <_> < 5 > <_> < ) > <_> < { > <_nl> <imprimir> <_> < ( > < “ > <Contando: > < “ > < + > <_> < $i > <_> < ) > <_> < ; > <_nl> < } > <_nl> <_nl> ::=
 
 ```
 
@@ -499,22 +635,163 @@ $saludo: texto = "Hola" + " " + "Mundo";
 
 ```
 
-## Gramatica basde: Condicional `segun`
-
-```go
-
-```
-
 ## Condicional `segun`Derecha
 
+```ts
+segun ($dia) {
+    caso "Lunes": {
+        imprimir("Hoy es lunes de trabajo.");
+    } romper;
+}
+```
+
 ```go
+1 <Programa> ::= <_nl> <Sentencias> <_nl> ::=
+2 <_nl> <Sentencia> <_nl> <_nl>::=
+ 3 <_nl> <EstructuraControl> <_nl> <_nl>::=
+4 <_nl> <EstructuraSegun> <_nl> <_nl>::=
+5 <_nl><_PR_SEGUN> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <_LBRACE> <_nl> <CasosSegun>? <_nl> <OpcionPorDefectoSegun>? <_nl> <_RBRACE>  <_nl> <_nl>::=
+6 <_nl><_PR_SEGUN> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <_LBRACE> <_nl> <CasosSegun>? <_nl> <OpcionPorDefectoSegun>? <_nl> < } >  <_nl> <_nl>::=
+7 <_nl><_PR_SEGUN> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <_LBRACE> <_nl> <CasosSegun> <_nl> < } >  <_nl> <_nl>::=
+8 <_nl><_PR_SEGUN> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <_LBRACE> <_nl> <CasoSegun> <_nl> < } >  <_nl> <_nl>::=
+9 <_nl><_PR_SEGUN> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <_LBRACE> <_nl> <_PR_CASO> <__> <Expresion> <_> <_DOS_PUNTOS> <_> <BloqueCodigo> <_> <_PR_ROMPER> <_> <_PUNTO_Y_COMA> <_nl> < } >  <_nl> <_nl>::=
+10 <_nl><_PR_SEGUN> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <_LBRACE> <_nl> <_PR_CASO> <__> <Expresion> <_> <_DOS_PUNTOS> <_> <BloqueCodigo> <_> <_PR_ROMPER> <_> < ; > <_nl> < } >  <_nl> <_nl>::=
+11 <_nl><_PR_SEGUN> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <_LBRACE> <_nl> <_PR_CASO> <__> <Expresion> <_> <_DOS_PUNTOS> <_> <BloqueCodigo> <_> < romper > <_> < ; > <_nl> < } >  <_nl> <_nl>::=
+12 <_nl><_PR_SEGUN> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <_LBRACE> <_nl> <_PR_CASO> <__> <Expresion> <_> <_DOS_PUNTOS> <_> <_LBRACE> <_nl> <Sentencias> <_nl> <_RBRACE> <_> < romper > <_> < ; > <_nl> < } >  <_nl> <_nl>::=
+13 <_nl><_PR_SEGUN> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <_LBRACE> <_nl> <_PR_CASO> <__> <Expresion> <_> <_DOS_PUNTOS> <_> <_LBRACE> <_nl> <Sentencias> <_nl> < } > <_> < romper > <_> < ; > <_nl> < } >  <_nl> <_nl>::=
+14 <_nl><_PR_SEGUN> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <_LBRACE> <_nl> <_PR_CASO> <__> <Expresion> <_> <_DOS_PUNTOS> <_> <_LBRACE> <_nl> <Sentencia> <_nl> <_nl> < } > <_> < romper > <_> < ; > <_nl> < } >  <_nl> <_nl>::=
+15 <_nl><_PR_SEGUN> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <_LBRACE> <_nl> <_PR_CASO> <__> <Expresion> <_> <_DOS_PUNTOS> <_> <_LBRACE> <_nl> <LlamadaImprimir> <_nl> <_nl> < } > <_> < romper > <_> < ; > <_nl> < } >  <_nl> <_nl>::=
+16 <_nl><_PR_SEGUN> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <_LBRACE> <_nl> <_PR_CASO> <__> <Expresion> <_> <_DOS_PUNTOS> <_> <_LBRACE> <_nl> <_PR_IMPRIMIR> <_> <_LPAREN> <_> <ListaArgumentosOpcional> <_> <_RPAREN> <_> <_PUNTO_Y_COMA> <_nl> <_nl> < } > <_> < romper > <_> < ; > <_nl> < } >  <_nl> <_nl>::=
+17 <_nl><_PR_SEGUN> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <_LBRACE> <_nl> <_PR_CASO> <__> <Expresion> <_> <_DOS_PUNTOS> <_> <_LBRACE> <_nl> <_PR_IMPRIMIR> <_> <_LPAREN> <_> <ListaArgumentosOpcional> <_> <_RPAREN> <_> < ; > <_nl> <_nl> < } > <_> < romper > <_> < ; > <_nl> < } >  <_nl> <_nl>::=
+18 <_nl><_PR_SEGUN> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <_LBRACE> <_nl> <_PR_CASO> <__> <Expresion> <_> <_DOS_PUNTOS> <_> <_LBRACE> <_nl> <_PR_IMPRIMIR> <_> <_LPAREN> <_> <ListaArgumentosOpcional> <_> < ) > <_> < ; > <_nl> <_nl> < } > <_> < romper > <_> < ; > <_nl> < } >  <_nl> <_nl>::=
+19 <_nl><_PR_SEGUN> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <_LBRACE> <_nl> <_PR_CASO> <__> <Expresion> <_> <_DOS_PUNTOS> <_> <_LBRACE> <_nl> <_PR_IMPRIMIR> <_> <_LPAREN> <_> <ListaArgumentos> < “ > < ) > <_> < ; > <_nl> <_nl> < } > <_> < romper > <_> < ; > <_nl> < } >  <_nl> <_nl>::=
+20 <_nl><_PR_SEGUN> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <_LBRACE> <_nl> <_PR_CASO> <__> <Expresion> <_> <_DOS_PUNTOS> <_> <_LBRACE> <_nl> <_PR_IMPRIMIR> <_> <_LPAREN> <_> <Expresion> < “ > < ) > <_> < ; > <_nl> <_nl> < } > <_> < romper > <_> < ; > <_nl> < } >  <_nl> <_nl>::=
+21 <_nl><_PR_SEGUN> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <_LBRACE> <_nl> <_PR_CASO> <__> <Expresion> <_> <_DOS_PUNTOS> <_> <_LBRACE> <_nl> <_PR_IMPRIMIR> <_> <_LPAREN> <_> <ExpresionLogicaOr> < “ > < ) > <_> < ; > <_nl> <_nl> < } > <_> < romper > <_> < ; > <_nl> < } >  <_nl> <_nl>::=
+22 <_nl><_PR_SEGUN> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <_LBRACE> <_nl> <_PR_CASO> <__> <Expresion> <_> <_DOS_PUNTOS> <_> <_LBRACE> <_nl> <_PR_IMPRIMIR> <_> <_LPAREN> <_> <ExpresionLogicaAnd> < “ > < ) > <_> < ; > <_nl> <_nl> < } > <_> < romper > <_> < ; > <_nl> < } >  <_nl> <_nl>::=
+23 <_nl><_PR_SEGUN> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <_LBRACE> <_nl> <_PR_CASO> <__> <Expresion> <_> <_DOS_PUNTOS> <_> <_LBRACE> <_nl> <_PR_IMPRIMIR> <_> <_LPAREN> <_> <ExpresionIgualdad> < “ > < ) > <_> < ; > <_nl> <_nl> < } > <_> < romper > <_> < ; > <_nl> < } >  <_nl> <_nl>::=
+24 <_nl><_PR_SEGUN> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <_LBRACE> <_nl> <_PR_CASO> <__> <Expresion> <_> <_DOS_PUNTOS> <_> <_LBRACE> <_nl> <_PR_IMPRIMIR> <_> <_LPAREN> <_> <ExpresionRelacional> < “ > < ) > <_> < ; > <_nl> <_nl> < } > <_> < romper > <_> < ; > <_nl> < } >  <_nl> <_nl>::=
+25 <_nl><_PR_SEGUN> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <_LBRACE> <_nl> <_PR_CASO> <__> <Expresion> <_> <_DOS_PUNTOS> <_> <_LBRACE> <_nl> <_PR_IMPRIMIR> <_> <_LPAREN> <_> <ExpresionAditiva> < “ > < ) > <_> < ; > <_nl> <_nl> < } > <_> < romper > <_> < ; > <_nl> < } >  <_nl> <_nl>::=
+26 <_nl><_PR_SEGUN> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <_LBRACE> <_nl> <_PR_CASO> <__> <Expresion> <_> <_DOS_PUNTOS> <_> <_LBRACE> <_nl> <_PR_IMPRIMIR> <_> <_LPAREN> <_> <ExpresionMultiplicativa> < “ > < ) > <_> < ; > <_nl> <_nl> < } > <_> < romper > <_> < ; > <_nl> < } >  <_nl> <_nl>::=
+27 <_nl><_PR_SEGUN> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <_LBRACE> <_nl> <_PR_CASO> <__> <Expresion> <_> <_DOS_PUNTOS> <_> <_LBRACE> <_nl> <_PR_IMPRIMIR> <_> <_LPAREN> <_> <ExpresionPotencia> < “ > < ) > <_> < ; > <_nl> <_nl> < } > <_> < romper > <_> < ; > <_nl> < } >  <_nl> <_nl>::=
+28 <_nl><_PR_SEGUN> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <_LBRACE> <_nl> <_PR_CASO> <__> <Expresion> <_> <_DOS_PUNTOS> <_> <_LBRACE> <_nl> <_PR_IMPRIMIR> <_> <_LPAREN> <_> <ExpresionUnaria> < “ > < ) > <_> < ; > <_nl> <_nl> < } > <_> < romper > <_> < ; > <_nl> < } >  <_nl> <_nl>::=
+29 <_nl><_PR_SEGUN> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <_LBRACE> <_nl> <_PR_CASO> <__> <Expresion> <_> <_DOS_PUNTOS> <_> <_LBRACE> <_nl> <_PR_IMPRIMIR> <_> <_LPAREN> <_> <ExpresionPostfija> < “ > < ) > <_> < ; > <_nl> <_nl> < } > <_> < romper > <_> < ; > <_nl> < } >  <_nl> <_nl>::=
+30 <_nl><_PR_SEGUN> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <_LBRACE> <_nl> <_PR_CASO> <__> <Expresion> <_> <_DOS_PUNTOS> <_> <_LBRACE> <_nl> <_PR_IMPRIMIR> <_> <_LPAREN> <_> <LiteralPrimario> < “ > < ) > <_> < ; > <_nl> <_nl> < } > <_> < romper > <_> < ; > <_nl> < } >  <_nl> <_nl>::=
+31 <_nl><_PR_SEGUN> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <_LBRACE> <_nl> <_PR_CASO> <__> <Expresion> <_> <_DOS_PUNTOS> <_> <_LBRACE> <_nl> <_PR_IMPRIMIR> <_> <_LPAREN> <_> <_texto> < “ > < ) > <_> < ; > <_nl> <_nl> < } > <_> < romper > <_> < ; > <_nl> < } >  <_nl> <_nl>::=
+32 <_nl><_PR_SEGUN> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <_LBRACE> <_nl> <_PR_CASO> <__> <Expresion> <_> <_DOS_PUNTOS> <_> <_LBRACE> <_nl> <_PR_IMPRIMIR> <_> <_LPAREN> <_> <Hoy es Lunes de trabajo> < “ > < ) > <_> < ; > <_nl> <_nl> < } > <_> < romper > <_> < ; > <_nl> < } >  <_nl> <_nl>::=
+33 <_nl><_PR_SEGUN> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <_LBRACE> <_nl> <_PR_CASO> <__> <Expresion> <_> <_DOS_PUNTOS> <_> <_LBRACE> <_nl> <_PR_IMPRIMIR> <_> < ( > < “ > <Hoy es Lunes de trabajo> < “ > < ) > <_> < ; > <_nl> <_nl> < } > <_> < romper > <_> < ; > <_nl> < } >  <_nl> <_nl>::=
+
+
+34 <_nl><_PR_SEGUN> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <_LBRACE> <_nl> <_PR_CASO> <__> <Expresion> <_> <_DOS_PUNTOS> <_> <_LBRACE> <_nl> <imprimir> <_> < ( > < “ > <Hoy es Lunes de trabajo> < “ > < ) > <_> < ; > <_nl> <_nl> < } > <_> < romper > <_> < ; > <_nl> < } >  <_nl> <_nl>::=
+35 <_nl><_PR_SEGUN> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <_LBRACE> <_nl> <_PR_CASO> <__> <Expresion> <_> <_DOS_PUNTOS> <_> < { > <_nl> <imprimir> <_> < ( > < “ > <Hoy es Lunes de trabajo> < “ > < ) > <_> < ; > <_nl> <_nl> < } > <_> < romper > <_> < ; > <_nl> < } >  <_nl> <_nl>::=
+36 <_nl><_PR_SEGUN> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <_LBRACE> <_nl> <_PR_CASO> <__> <Expresion> <_> < : > <_> < { > <_nl> <imprimir> <_> < ( > < “ > <Hoy es Lunes de trabajo> < “ > < ) > <_> < ; > <_nl> <_nl> < } > <_> < romper > <_> < ; > <_nl> < } >  <_nl> <_nl>::=
+37 <_nl><_PR_SEGUN> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <_LBRACE> <_nl> <_PR_CASO> <__> <ExpresionLogicaOr> < “ > < : > <_> < { > <_nl> <imprimir> <_> < ( > < “ > <Hoy es Lunes de trabajo> < “ > < ) > <_> < ; > <_nl> <_nl> < } > <_> < romper > <_> < ; > <_nl> < } >  <_nl> <_nl>::=
+38 <_nl><_PR_SEGUN> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <_LBRACE> <_nl> <_PR_CASO> <__> <ExpresionLogicaAnd> < “ > < : > <_> < { > <_nl> <imprimir> <_> < ( > < “ > <Hoy es Lunes de trabajo> < “ > < ) > <_> < ; > <_nl> <_nl> < } > <_> < romper > <_> < ; > <_nl> < } >  <_nl> <_nl>::=
+39 <_nl><_PR_SEGUN> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <_LBRACE> <_nl> <_PR_CASO> <__> <ExpresionIgualdad> < “ > < : > <_> < { > <_nl> <imprimir> <_> < ( > < “ > <Hoy es Lunes de trabajo> < “ > < ) > <_> < ; > <_nl> <_nl> < } > <_> < romper > <_> < ; > <_nl> < } >  <_nl> <_nl>::=
+40 <_nl><_PR_SEGUN> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <_LBRACE> <_nl> <_PR_CASO> <__> <ExpresionRelacional> < “ > < : > <_> < { > <_nl> <imprimir> <_> < ( > < “ > <Hoy es Lunes de trabajo> < “ > < ) > <_> < ; > <_nl> <_nl> < } > <_> < romper > <_> < ; > <_nl> < } >  <_nl> <_nl>::=
+41 <_nl><_PR_SEGUN> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <_LBRACE> <_nl> <_PR_CASO> <__> <ExpresionAditiva> < “ > < : > <_> < { > <_nl> <imprimir> <_> < ( > < “ > <Hoy es Lunes de trabajo> < “ > < ) > <_> < ; > <_nl> <_nl> < } > <_> < romper > <_> < ; > <_nl> < } >  <_nl> <_nl>::=
+42 <_nl><_PR_SEGUN> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <_LBRACE> <_nl> <_PR_CASO> <__> <ExpresionMultiplicativa> < “ > < : > <_> < { > <_nl> <imprimir> <_> < ( > < “ > <Hoy es Lunes de trabajo> < “ > < ) > <_> < ; > <_nl> <_nl> < } > <_> < romper > <_> < ; > <_nl> < } >  <_nl> <_nl>::=
+43 <_nl><_PR_SEGUN> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <_LBRACE> <_nl> <_PR_CASO> <__> <ExpresionPotencia> < “ > < : > <_> < { > <_nl> <imprimir> <_> < ( > < “ > <Hoy es Lunes de trabajo> < “ > < ) > <_> < ; > <_nl> <_nl> < } > <_> < romper > <_> < ; > <_nl> < } >  <_nl> <_nl>::=
+
+44 <_nl><_PR_SEGUN> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <_LBRACE> <_nl> <_PR_CASO> <__> <ExpresionUnaria> < “ > < : > <_> < { > <_nl> <imprimir> <_> < ( > < “ > <Hoy es Lunes de trabajo> < “ > < ) > <_> < ; > <_nl> <_nl> < } > <_> < romper > <_> < ; > <_nl> < } >  <_nl> <_nl>::=
+45 <_nl><_PR_SEGUN> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <_LBRACE> <_nl> <_PR_CASO> <__> <ExpresionPostfija> < “ > < : > <_> < { > <_nl> <imprimir> <_> < ( > < “ > <Hoy es Lunes de trabajo> < “ > < ) > <_> < ; > <_nl> <_nl> < } > <_> < romper > <_> < ; > <_nl> < } >  <_nl> <_nl>::=
+46 <_nl><_PR_SEGUN> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <_LBRACE> <_nl> <_PR_CASO> <__> <LiteralPrimario> < “ > < : > <_> < { > <_nl> <imprimir> <_> < ( > < “ > <Hoy es Lunes de trabajo> < “ > < ) > <_> < ; > <_nl> <_nl> < } > <_> < romper > <_> < ; > <_nl> < } >  <_nl> <_nl>::=
+47 <_nl><_PR_SEGUN> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <_LBRACE> <_nl> <_PR_CASO> <__> <_texto> < “ > < : > <_> < { > <_nl> <imprimir> <_> < ( > < “ > <Hoy es Lunes de trabajo> < “ > < ) > <_> < ; > <_nl> <_nl> < } > <_> < romper > <_> < ; > <_nl> < } >  <_nl> <_nl>::=
+48 <_nl><_PR_SEGUN> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <_LBRACE> <_nl> <_PR_CASO> <__> <Lunes> < “ > < : > <_> < { > <_nl> <imprimir> <_> < ( > < “ > <Hoy es Lunes de trabajo> < “ > < ) > <_> < ; > <_nl> <_nl> < } > <_> < romper > <_> < ; > <_nl> < } >  <_nl> <_nl>::=
+49 <_nl><_PR_SEGUN> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <_LBRACE> <_nl> <caso> <__> <Lunes> < “ > < : > <_> < { > <_nl> <imprimir> <_> < ( > < “ > <Hoy es Lunes de trabajo> < “ > < ) > <_> < ; > <_nl> <_nl> < } > <_> < romper > <_> < ; > <_nl> < } >  <_nl> <_nl>::=
+50 <_nl><_PR_SEGUN> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> < { > <_nl> <caso> <__> <Lunes> < “ > < : > <_> < { > <_nl> <imprimir> <_> < ( > < “ > <Hoy es Lunes de trabajo> < “ > < ) > <_> < ; > <_nl> <_nl> < } > <_> < romper > <_> < ; > <_nl> < } >  <_nl> <_nl>::=
+51 <_nl><_PR_SEGUN> <_> <_LPAREN> <_> <Expresion> <_> < ) > <_> < { > <_nl> <caso> <__> <Lunes> < “ > < : > <_> < { > <_nl> <imprimir> <_> < ( > < “ > <Hoy es Lunes de trabajo> < “ > < ) > <_> < ; > <_nl> <_nl> < } > <_> < romper > <_> < ; > <_nl> < } >  <_nl> <_nl>::=
+52 <_nl><_PR_SEGUN> <_> <_LPAREN> <_> <ExpresionLogicaOr> <_> < ) > <_> < { > <_nl> <caso> <__> <Lunes> < “ > < : > <_> < { > <_nl> <imprimir> <_> < ( > < “ > <Hoy es Lunes de trabajo> < “ > < ) > <_> < ; > <_nl> <_nl> < } > <_> < romper > <_> < ; > <_nl> < } >  <_nl> <_nl>::=
+53 <_nl><_PR_SEGUN> <_> <_LPAREN> <_> <ExpresionLogicaAnd> <_> < ) > <_> < { > <_nl> <caso> <__> <Lunes> < “ > < : > <_> < { > <_nl> <imprimir> <_> < ( > < “ > <Hoy es Lunes de trabajo> < “ > < ) > <_> < ; > <_nl> <_nl> < } > <_> < romper > <_> < ; > <_nl> < } >  <_nl> <_nl>::=
+54 <_nl><_PR_SEGUN> <_> <_LPAREN> <_> <ExpresionIgualdad> <_> < ) > <_> < { > <_nl> <caso> <__> <Lunes> < “ > < : > <_> < { > <_nl> <imprimir> <_> < ( > < “ > <Hoy es Lunes de trabajo> < “ > < ) > <_> < ; > <_nl> <_nl> < } > <_> < romper > <_> < ; > <_nl> < } >  <_nl> <_nl>::=
+55 <_nl><_PR_SEGUN> <_> <_LPAREN> <_> <ExpresionRelacional> <_> < ) > <_> < { > <_nl> <caso> <__> <Lunes> < “ > < : > <_> < { > <_nl> <imprimir> <_> < ( > < “ > <Hoy es Lunes de trabajo> < “ > < ) > <_> < ; > <_nl> <_nl> < } > <_> < romper > <_> < ; > <_nl> < } >  <_nl> <_nl>::=
+56 <_nl><_PR_SEGUN> <_> <_LPAREN> <_> <ExpresionAditiva> <_> < ) > <_> < { > <_nl> <caso> <__> <Lunes> < “ > < : > <_> < { > <_nl> <imprimir> <_> < ( > < “ > <Hoy es Lunes de trabajo> < “ > < ) > <_> < ; > <_nl> <_nl> < } > <_> < romper > <_> < ; > <_nl> < } >  <_nl> <_nl>::=
+57 <_nl><_PR_SEGUN> <_> <_LPAREN> <_> <ExpresionMultiplicativa> <_> < ) > <_> < { > <_nl> <caso> <__> <Lunes> < “ > < : > <_> < { > <_nl> <imprimir> <_> < ( > < “ > <Hoy es Lunes de trabajo> < “ > < ) > <_> < ; > <_nl> <_nl> < } > <_> < romper > <_> < ; > <_nl> < } >  <_nl> <_nl>::=
+58 <_nl><_PR_SEGUN> <_> <_LPAREN> <_> <ExpresionPotencia> <_> < ) > <_> < { > <_nl> <caso> <__> <Lunes> < “ > < : > <_> < { > <_nl> <imprimir> <_> < ( > < “ > <Hoy es Lunes de trabajo> < “ > < ) > <_> < ; > <_nl> <_nl> < } > <_> < romper > <_> < ; > <_nl> < } >  <_nl> <_nl>::=
+59 <_nl><_PR_SEGUN> <_> <_LPAREN> <_> <ExpresionUnaria> <_> < ) > <_> < { > <_nl> <caso> <__> <Lunes> < “ > < : > <_> < { > <_nl> <imprimir> <_> < ( > < “ > <Hoy es Lunes de trabajo> < “ > < ) > <_> < ; > <_nl> <_nl> < } > <_> < romper > <_> < ; > <_nl> < } >  <_nl> <_nl>::=
+60 <_nl><_PR_SEGUN> <_> <_LPAREN> <_> <ExpresionPostfija> <_> < ) > <_> < { > <_nl> <caso> <__> <Lunes> < “ > < : > <_> < { > <_nl> <imprimir> <_> < ( > < “ > <Hoy es Lunes de trabajo> < “ > < ) > <_> < ; > <_nl> <_nl> < } > <_> < romper > <_> < ; > <_nl> < } >  <_nl> <_nl>::=
+61 <_nl><_PR_SEGUN> <_> <_LPAREN> <_> <LiteralPrimario> <_> < ) > <_> < { > <_nl> <caso> <__> <Lunes> < “ > < : > <_> < { > <_nl> <imprimir> <_> < ( > < “ > <Hoy es Lunes de trabajo> < “ > < ) > <_> < ; > <_nl> <_nl> < } > <_> < romper > <_> < ; > <_nl> < } >  <_nl> <_nl>::=
+62 <_nl><_PR_SEGUN> <_> <_LPAREN> <_> <_IDENTIFCADOR_VAR> <_> < ) > <_> < { > <_nl> <caso> <__> <Lunes> < “ > < : > <_> < { > <_nl> <imprimir> <_> < ( > < “ > <Hoy es Lunes de trabajo> < “ > < ) > <_> < ; > <_nl> <_nl> < } > <_> < romper > <_> < ; > <_nl> < } >  <_nl> <_nl>::=
+63 <_nl><_PR_SEGUN> <_> <_LPAREN> <_> <$dia> <_> < ) > <_> < { > <_nl> <caso> <__> <Lunes> < “ > < : > <_> < { > <_nl> <imprimir> <_> < ( > < “ > <Hoy es Lunes de trabajo> < “ > < ) > <_> < ; > <_nl> <_nl> < } > <_> < romper > <_> < ; > <_nl> < } >  <_nl> <_nl>::=
+64 <_nl><_PR_SEGUN> <_> < ( > <_> <$dia> <_> < ) > <_> < { > <_nl> <caso> <__> <Lunes> < “ > < : > <_> < { > <_nl> <imprimir> <_> < ( > < “ > <Hoy es Lunes de trabajo> < “ > < ) > <_> < ; > <_nl> <_nl> < } > <_> < romper > <_> < ; > <_nl> < } >  <_nl> <_nl>::=
+65 <_nl><segun> <_> < ( > <_> <$dia> <_> < ) > <_> < { > <_nl> <caso> <__> <Lunes> < “ > < : > <_> < { > <_nl> <imprimir> <_> < ( > < “ > <Hoy es Lunes de trabajo> < “ > < ) > <_> < ; > <_nl> <_nl> < } > <_> < romper > <_> < ; > <_nl> < } >  <_nl> <_nl>::=
+<segun>  < ( >  <$dia>  < ) >  < { >  <caso> < ” > < Lunes > < ” > < : >  < { >  <imprimir>  < ( > < “ > <Hoy es Lunes de trabajo> < “ > < ) >  < ; >  < } >  < romper > < ; >  < } > ::=
 
 ```
 
 ## Condicional `segun` Izquierda
 
 ```go
+<Programa> ::= <_nl> <Sentencias> <_nl> ::=
+<_nl> <Sentencia> <_nl> <_nl>::=
+<_nl> <EstructuraControl> <_nl> <_nl>::=
+<_nl> <EstructuraSegun> <_nl> <_nl>::=
+<_nl><_PR_SEGUN> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <_LBRACE> <_nl> <CasosSegun>? <_nl> <OpcionPorDefectoSegun>? <_nl> <_RBRACE>  <_nl> <_nl>::=
+<_nl><segun> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <_LBRACE> <_nl> <CasosSegun>? <_nl> <OpcionPorDefectoSegun>? <_nl> <_RBRACE>  <_nl> <_nl>::=
+<_nl><segun> <_> < ( > <_> <Expresion> <_> <_RPAREN> <_> <_LBRACE> <_nl> <CasosSegun>? <_nl> <OpcionPorDefectoSegun>? <_nl> <_RBRACE>  <_nl> <_nl>::=
+<_nl><segun> <_> < ( > <_> <ExpresionLogicaOr> <_> <_RPAREN> <_> <_LBRACE> <_nl> <CasosSegun>? <_nl> <OpcionPorDefectoSegun>? <_nl> <_RBRACE>  <_nl> <_nl>::=
+<_nl><segun> <_> < ( > <_> <ExpresionLogicaAnd> <_> <_RPAREN> <_> <_LBRACE> <_nl> <CasosSegun>? <_nl> <OpcionPorDefectoSegun>? <_nl> <_RBRACE>  <_nl> <_nl>::=
+<_nl><segun> <_> < ( > <_> <ExpresionIgualdad> <_> <_RPAREN> <_> <_LBRACE> <_nl> <CasosSegun>? <_nl> <OpcionPorDefectoSegun>? <_nl> <_RBRACE>  <_nl> <_nl>::=
+<_nl><segun> <_> < ( > <_> <ExpresionRelacional> <_> <_RPAREN> <_> <_LBRACE> <_nl> <CasosSegun>? <_nl> <OpcionPorDefectoSegun>? <_nl> <_RBRACE>  <_nl> <_nl>::=
+<_nl><segun> <_> < ( > <_> <ExpresionAditiva> <_> <_RPAREN> <_> <_LBRACE> <_nl> <CasosSegun>? <_nl> <OpcionPorDefectoSegun>? <_nl> <_RBRACE>  <_nl> <_nl>::=
+<_nl><segun> <_> < ( > <_> <ExpresionMultiplicativa> <_> <_RPAREN> <_> <_LBRACE> <_nl> <CasosSegun>? <_nl> <OpcionPorDefectoSegun>? <_nl> <_RBRACE>  <_nl> <_nl>::=
+<_nl><segun> <_> < ( > <_> <ExpresionPotencia> <_> <_RPAREN> <_> <_LBRACE> <_nl> <CasosSegun>? <_nl> <OpcionPorDefectoSegun>? <_nl> <_RBRACE>  <_nl> <_nl>::=
+<_nl><segun> <_> < ( > <_> <ExpresionUnaria> <_> <_RPAREN> <_> <_LBRACE> <_nl> <CasosSegun>? <_nl> <OpcionPorDefectoSegun>? <_nl> <_RBRACE>  <_nl> <_nl>::=
+<_nl><segun> <_> < ( > <_> <ExpresionPostfija> <_> <_RPAREN> <_> <_LBRACE> <_nl> <CasosSegun>? <_nl> <OpcionPorDefectoSegun>? <_nl> <_RBRACE>  <_nl> <_nl>::=
+<_nl><segun> <_> < ( > <_> <LiteralPrimario> <_> <_RPAREN> <_> <_LBRACE> <_nl> <CasosSegun>? <_nl> <OpcionPorDefectoSegun>? <_nl> <_RBRACE>  <_nl> <_nl>::=
+<_nl><segun> <_> < ( > <_> <_IDENTIFICADOR_VAR> <_> <_RPAREN> <_> <_LBRACE> <_nl> <CasosSegun>? <_nl> <OpcionPorDefectoSegun>? <_nl> <_RBRACE>  <_nl> <_nl>::=
+<_nl><segun> <_> < ( > <_> <$dia> <_> <_RPAREN> <_> <_LBRACE> <_nl> <CasosSegun>? <_nl> <OpcionPorDefectoSegun>? <_nl> <_RBRACE>  <_nl> <_nl>::=
+<_nl><segun> <_> < ( > <_> <$dia> <_> < ) > <_> <_LBRACE> <_nl> <CasosSegun>? <_nl> <OpcionPorDefectoSegun>? <_nl> <_RBRACE>  <_nl> <_nl>::=
+<_nl><segun> <_> < ( > <_> <$dia> <_> < ) > <_> < { > <_nl> <CasosSegun>? <_nl> <OpcionPorDefectoSegun>? <_nl> <_RBRACE>  <_nl> <_nl>::=
+<_nl><segun> <_> < ( > <_> <$dia> <_> < ) > <_> < { > <_nl> <CasosSegun> <_nl> <OpcionPorDefectoSegun>? <_nl> <_RBRACE>  <_nl> <_nl>::=
+<_nl><segun> <_> < ( > <_> <$dia> <_> < ) > <_> < { > <_nl> <_PR_CASO> <__> <Expresion> <_> <_DOS_PUNTOS> <_> <BloqueCodigo> <_> <_PR_ROMPER> <_> <_PUNTO_Y_COMA> <_nl> <OpcionPorDefectoSegun>? <_nl> <_RBRACE>  <_nl> <_nl>::=
+<_nl><segun> <_> < ( > <_> <$dia> <_> < ) > <_> < { > <_nl> <caso> <__> <Expresion> <_> <_DOS_PUNTOS> <_> <BloqueCodigo> <_> <_PR_ROMPER> <_> <_PUNTO_Y_COMA> <_nl> <OpcionPorDefectoSegun>? <_nl> <_RBRACE>  <_nl> <_nl>::=
+<_nl><segun> <_> < ( > <_> <$dia> <_> < ) > <_> < { > <_nl> <caso> < ” > <Expresion> <_> <_DOS_PUNTOS> <_> <BloqueCodigo> <_> <_PR_ROMPER> <_> <_PUNTO_Y_COMA> <_nl> <OpcionPorDefectoSegun>? <_nl> <_RBRACE>  <_nl> <_nl>::=
+<_nl><segun> <_> < ( > <_> <$dia> <_> < ) > <_> < { > <_nl> <caso> < ” > <ExpresionLogicaOr> <_> <_DOS_PUNTOS> <_> <BloqueCodigo> <_> <_PR_ROMPER> <_> <_PUNTO_Y_COMA> <_nl> <OpcionPorDefectoSegun>? <_nl> <_RBRACE>  <_nl> <_nl>::=
+<_nl><segun> <_> < ( > <_> <$dia> <_> < ) > <_> < { > <_nl> <caso> < ” > <ExpresionLogicaAnd> <_> <_DOS_PUNTOS> <_> <BloqueCodigo> <_> <_PR_ROMPER> <_> <_PUNTO_Y_COMA> <_nl> <OpcionPorDefectoSegun>? <_nl> <_RBRACE>  <_nl> <_nl>::=
+<_nl><segun> <_> < ( > <_> <$dia> <_> < ) > <_> < { > <_nl> <caso> < ” > <ExpresionIgualdad> <_> <_DOS_PUNTOS> <_> <BloqueCodigo> <_> <_PR_ROMPER> <_> <_PUNTO_Y_COMA> <_nl> <OpcionPorDefectoSegun>? <_nl> <_RBRACE>  <_nl> <_nl>::=
+<_nl><segun> <_> < ( > <_> <$dia> <_> < ) > <_> < { > <_nl> <caso> < ” > <ExpresionRelacional> <_> <_DOS_PUNTOS> <_> <BloqueCodigo> <_> <_PR_ROMPER> <_> <_PUNTO_Y_COMA> <_nl> <OpcionPorDefectoSegun>? <_nl> <_RBRACE>  <_nl> <_nl>::=
+<_nl><segun> <_> < ( > <_> <$dia> <_> < ) > <_> < { > <_nl> <caso> < ” > <ExpresionAditiva> <_> <_DOS_PUNTOS> <_> <BloqueCodigo> <_> <_PR_ROMPER> <_> <_PUNTO_Y_COMA> <_nl> <OpcionPorDefectoSegun>? <_nl> <_RBRACE>  <_nl> <_nl>::=
+<_nl><segun> <_> < ( > <_> <$dia> <_> < ) > <_> < { > <_nl> <caso> < ” > <ExpresionMultiplicativa> <_> <_DOS_PUNTOS> <_> <BloqueCodigo> <_> <_PR_ROMPER> <_> <_PUNTO_Y_COMA> <_nl> <OpcionPorDefectoSegun>? <_nl> <_RBRACE>  <_nl> <_nl>::=
+<_nl><segun> <_> < ( > <_> <$dia> <_> < ) > <_> < { > <_nl> <caso> < ” > <ExpresionPotencia> <_> <_DOS_PUNTOS> <_> <BloqueCodigo> <_> <_PR_ROMPER> <_> <_PUNTO_Y_COMA> <_nl> <OpcionPorDefectoSegun>? <_nl> <_RBRACE>  <_nl> <_nl>::=
+<_nl><segun> <_> < ( > <_> <$dia> <_> < ) > <_> < { > <_nl> <caso> < ” > <ExpresionUnaria> <_> <_DOS_PUNTOS> <_> <BloqueCodigo> <_> <_PR_ROMPER> <_> <_PUNTO_Y_COMA> <_nl> <OpcionPorDefectoSegun>? <_nl> <_RBRACE>  <_nl> <_nl>::=
+<_nl><segun> <_> < ( > <_> <$dia> <_> < ) > <_> < { > <_nl> <caso> < ” > <ExpresionPostfija> <_> <_DOS_PUNTOS> <_> <BloqueCodigo> <_> <_PR_ROMPER> <_> <_PUNTO_Y_COMA> <_nl> <OpcionPorDefectoSegun>? <_nl> <_RBRACE>  <_nl> <_nl>::=
+<_nl><segun> <_> < ( > <_> <$dia> <_> < ) > <_> < { > <_nl> <caso> < ” > <LiteralPrimario> <_> <_DOS_PUNTOS> <_> <BloqueCodigo> <_> <_PR_ROMPER> <_> <_PUNTO_Y_COMA> <_nl> <OpcionPorDefectoSegun>? <_nl> <_RBRACE>  <_nl> <_nl>::=
+<_nl><segun> <_> < ( > <_> <$dia> <_> < ) > <_> < { > <_nl> <caso> < ” > <_texto> <_> <_DOS_PUNTOS> <_> <BloqueCodigo> <_> <_PR_ROMPER> <_> <_PUNTO_Y_COMA> <_nl> <OpcionPorDefectoSegun>? <_nl> <_RBRACE>  <_nl> <_nl>::=
+<_nl><segun> <_> < ( > <_> <$dia> <_> < ) > <_> < { > <_nl> <caso> < ” > < Lunes > <_> <_DOS_PUNTOS> <_> <BloqueCodigo> <_> <_PR_ROMPER> <_> <_PUNTO_Y_COMA> <_nl> <OpcionPorDefectoSegun>? <_nl> <_RBRACE>  <_nl> <_nl>::=
+<_nl><segun> <_> < ( > <_> <$dia> <_> < ) > <_> < { > <_nl> <caso> < ” > < Lunes > < ” > <_DOS_PUNTOS> <_> <BloqueCodigo> <_> <_PR_ROMPER> <_> <_PUNTO_Y_COMA> <_nl> <OpcionPorDefectoSegun>? <_nl> <_RBRACE>  <_nl> <_nl>::=
+<_nl><segun> <_> < ( > <_> <$dia> <_> < ) > <_> < { > <_nl> <caso> < ” > < Lunes > < ” > < : > <_> <BloqueCodigo> <_> <_PR_ROMPER> <_> <_PUNTO_Y_COMA> <_nl> <OpcionPorDefectoSegun>? <_nl> <_RBRACE>  <_nl> <_nl>::=
+<_nl><segun> <_> < ( > <_> <$dia> <_> < ) > <_> < { > <_nl> <caso> < ” > < Lunes > < ” > < : > <_> <_LBRACE> <_nl> <Sentencias> <_nl> <_RBRACE><_> <_PR_ROMPER> <_> <_PUNTO_Y_COMA> <_nl> <OpcionPorDefectoSegun>? <_nl> <_RBRACE>  <_nl> <_nl>::=
+<_nl><segun> <_> < ( > <_> <$dia> <_> < ) > <_> < { > <_nl> <caso> < ” > < Lunes > < ” > < : > <_> < { > <_nl> <Sentencias> <_nl> <_RBRACE><_> <_PR_ROMPER> <_> <_PUNTO_Y_COMA> <_nl> <OpcionPorDefectoSegun>? <_nl> <_RBRACE>  <_nl> <_nl>::=
+<_nl><segun> <_> < ( > <_> <$dia> <_> < ) > <_> < { > <_nl> <caso> < ” > < Lunes > < ” > < : > <_> < { > <_nl> <Sentencia> <_nl><_nl> <_RBRACE><_> <_PR_ROMPER> <_> <_PUNTO_Y_COMA> <_nl> <OpcionPorDefectoSegun>? <_nl> <_RBRACE>  <_nl> <_nl>::=
+<_nl><segun> <_> < ( > <_> <$dia> <_> < ) > <_> < { > <_nl> <caso> < ” > < Lunes > < ” > < : > <_> < { > <_nl> <LlamadaImprimir> <_nl><_nl> <_RBRACE><_> <_PR_ROMPER> <_> <_PUNTO_Y_COMA> <_nl> <OpcionPorDefectoSegun>? <_nl> <_RBRACE>  <_nl> <_nl>::=
+<_nl><segun> <_> < ( > <_> <$dia> <_> < ) > <_> < { > <_nl> <caso> < ” > < Lunes > < ” > < : > <_> < { > <_nl> <_PR_IMPRIMIR> <_> <_LPAREN> <_> <ListaArgumentosOpcional> <_> <_RPAREN> <_> <_PUNTO_Y_COMA> <_nl><_nl> <_RBRACE><_> <_PR_ROMPER> <_> <_PUNTO_Y_COMA> <_nl> <OpcionPorDefectoSegun>? <_nl> <_RBRACE>  <_nl> <_nl>::=
+<_nl><segun> <_> < ( > <_> <$dia> <_> < ) > <_> < { > <_nl> <caso> < ” > < Lunes > < ” > < : > <_> < { > <_nl> <imprimir> <_> <_LPAREN> <_> <ListaArgumentosOpcional> <_> <_RPAREN> <_> <_PUNTO_Y_COMA> <_nl><_nl> <_RBRACE><_> <_PR_ROMPER> <_> <_PUNTO_Y_COMA> <_nl> <OpcionPorDefectoSegun>? <_nl> <_RBRACE>  <_nl> <_nl>::=
+<_nl><segun> <_> < ( > <_> <$dia> <_> < ) > <_> < { > <_nl> <caso> < ” > < Lunes > < ” > < : > <_> < { > <_nl> <imprimir> <_> < ( > < ” > <ListaArgumentosOpcional> <_> <_RPAREN> <_> <_PUNTO_Y_COMA> <_nl><_nl> <_RBRACE><_> <_PR_ROMPER> <_> <_PUNTO_Y_COMA> <_nl> <OpcionPorDefectoSegun>? <_nl> <_RBRACE>  <_nl> <_nl>::=
+<_nl><segun> <_> < ( > <_> <$dia> <_> < ) > <_> < { > <_nl> <caso> < ” > < Lunes > < ” > < : > <_> < { > <_nl> <imprimir> <_> < ( > < “ > <ListaArgumentos> <_> <_RPAREN> <_> <_PUNTO_Y_COMA> <_nl><_nl> <_RBRACE><_> <_PR_ROMPER> <_> <_PUNTO_Y_COMA> <_nl> <OpcionPorDefectoSegun>? <_nl> <_RBRACE>  <_nl> <_nl>::=
+<_nl><segun> <_> < ( > <_> <$dia> <_> < ) > <_> < { > <_nl> <caso> < ” > < Lunes > < ” > < : > <_> < { > <_nl> <imprimir> <_> < ( > < “ > <Expresion > <_> <_RPAREN> <_> <_PUNTO_Y_COMA> <_nl><_nl> <_RBRACE><_> <_PR_ROMPER> <_> <_PUNTO_Y_COMA> <_nl> <OpcionPorDefectoSegun>? <_nl> <_RBRACE>  <_nl> <_nl>::=
+<_nl><segun> <_> < ( > <_> <$dia> <_> < ) > <_> < { > <_nl> <caso> < ” > < Lunes > < ” > < : > <_> < { > <_nl> <imprimir> <_> < ( > < “ > <ExpresionLogicaOr> <_> <_RPAREN> <_> <_PUNTO_Y_COMA> <_nl><_nl> <_RBRACE><_> <_PR_ROMPER> <_> <_PUNTO_Y_COMA> <_nl> <OpcionPorDefectoSegun>? <_nl> <_RBRACE>  <_nl> <_nl>::=
+<_nl><segun> <_> < ( > <_> <$dia> <_> < ) > <_> < { > <_nl> <caso> < ” > < Lunes > < ” > < : > <_> < { > <_nl> <imprimir> <_> < ( > < “ > <ExpresionLogicaAnd> <_> <_RPAREN> <_> <_PUNTO_Y_COMA> <_nl><_nl> <_RBRACE><_> <_PR_ROMPER> <_> <_PUNTO_Y_COMA> <_nl> <OpcionPorDefectoSegun>? <_nl> <_RBRACE>  <_nl> <_nl>::=
+<_nl><segun> <_> < ( > <_> <$dia> <_> < ) > <_> < { > <_nl> <caso> < ” > < Lunes > < ” > < : > <_> < { > <_nl> <imprimir> <_> < ( > < “ > <ExpresionIgualdad> <_> <_RPAREN> <_> <_PUNTO_Y_COMA> <_nl><_nl> <_RBRACE><_> <_PR_ROMPER> <_> <_PUNTO_Y_COMA> <_nl> <OpcionPorDefectoSegun>? <_nl> <_RBRACE>  <_nl> <_nl>::=
 
+<_nl><segun> <_> < ( > <_> <$dia> <_> < ) > <_> < { > <_nl> <caso> < ” > < Lunes > < ” > < : > <_> < { > <_nl> <imprimir> <_> < ( > < “ > <ExpresionRelacional> <_> <_RPAREN> <_> <_PUNTO_Y_COMA> <_nl><_nl> <_RBRACE><_> <_PR_ROMPER> <_> <_PUNTO_Y_COMA> <_nl> <OpcionPorDefectoSegun>? <_nl> <_RBRACE>  <_nl> <_nl>::=
+<_nl><segun> <_> < ( > <_> <$dia> <_> < ) > <_> < { > <_nl> <caso> < ” > < Lunes > < ” > < : > <_> < { > <_nl> <imprimir> <_> < ( > < “ > <ExpresionAditiva> <_> <_RPAREN> <_> <_PUNTO_Y_COMA> <_nl><_nl> <_RBRACE><_> <_PR_ROMPER> <_> <_PUNTO_Y_COMA> <_nl> <OpcionPorDefectoSegun>? <_nl> <_RBRACE>  <_nl> <_nl>::=
+<_nl><segun> <_> < ( > <_> <$dia> <_> < ) > <_> < { > <_nl> <caso> < ” > < Lunes > < ” > < : > <_> < { > <_nl> <imprimir> <_> < ( > < “ > <ExpresionMultiplicativa> <_> <_RPAREN> <_> <_PUNTO_Y_COMA> <_nl><_nl> <_RBRACE><_> <_PR_ROMPER> <_> <_PUNTO_Y_COMA> <_nl> <OpcionPorDefectoSegun>? <_nl> <_RBRACE>  <_nl> <_nl>::=
+<_nl><segun> <_> < ( > <_> <$dia> <_> < ) > <_> < { > <_nl> <caso> < ” > < Lunes > < ” > < : > <_> < { > <_nl> <imprimir> <_> < ( > < “ > <ExpresionPotencia> <_> <_RPAREN> <_> <_PUNTO_Y_COMA> <_nl><_nl> <_RBRACE><_> <_PR_ROMPER> <_> <_PUNTO_Y_COMA> <_nl> <OpcionPorDefectoSegun>? <_nl> <_RBRACE>  <_nl> <_nl>::=
+<_nl><segun> <_> < ( > <_> <$dia> <_> < ) > <_> < { > <_nl> <caso> < ” > < Lunes > < ” > < : > <_> < { > <_nl> <imprimir> <_> < ( > < “ > <ExpresionUnaria> <_> <_RPAREN> <_> <_PUNTO_Y_COMA> <_nl><_nl> <_RBRACE><_> <_PR_ROMPER> <_> <_PUNTO_Y_COMA> <_nl> <OpcionPorDefectoSegun>? <_nl> <_RBRACE>  <_nl> <_nl>::=
+<_nl><segun> <_> < ( > <_> <$dia> <_> < ) > <_> < { > <_nl> <caso> < ” > < Lunes > < ” > < : > <_> < { > <_nl> <imprimir> <_> < ( > < “ > <ExpresionPostfija> <_> <_RPAREN> <_> <_PUNTO_Y_COMA> <_nl><_nl> <_RBRACE><_> <_PR_ROMPER> <_> <_PUNTO_Y_COMA> <_nl> <OpcionPorDefectoSegun>? <_nl> <_RBRACE>  <_nl> <_nl>::=
+<_nl><segun> <_> < ( > <_> <$dia> <_> < ) > <_> < { > <_nl> <caso> < ” > < Lunes > < ” > < : > <_> < { > <_nl> <imprimir> <_> < ( > < “ > <LiteralPrimario> <_> <_RPAREN> <_> <_PUNTO_Y_COMA> <_nl><_nl> <_RBRACE><_> <_PR_ROMPER> <_> <_PUNTO_Y_COMA> <_nl> <OpcionPorDefectoSegun>? <_nl> <_RBRACE>  <_nl> <_nl>::=
+<_nl><segun> <_> < ( > <_> <$dia> <_> < ) > <_> < { > <_nl> <caso> < ” > < Lunes > < ” > < : > <_> < { > <_nl> <imprimir> <_> < ( > < “ > <_texto> <_> <_RPAREN> <_> <_PUNTO_Y_COMA> <_nl><_nl> <_RBRACE><_> <_PR_ROMPER> <_> <_PUNTO_Y_COMA> <_nl> <OpcionPorDefectoSegun>? <_nl> <_RBRACE>  <_nl> <_nl>::=
+<_nl><segun> <_> < ( > <_> <$dia> <_> < ) > <_> < { > <_nl> <caso> < ” > < Lunes > < ” > < : > <_> < { > <_nl> <imprimir> <_> < ( > < “ > <Hoy es Lunes de trabajo> < “ > <_RPAREN> <_> <_PUNTO_Y_COMA> <_nl><_nl> <_RBRACE><_> <_PR_ROMPER> <_> <_PUNTO_Y_COMA> <_nl> <OpcionPorDefectoSegun>? <_nl> <_RBRACE>  <_nl> <_nl>::=
+
+
+<_nl><segun> <_> < ( > <_> <$dia> <_> < ) > <_> < { > <_nl> <caso> < ” > < Lunes > < ” > < : > <_> < { > <_nl> <imprimir> <_> < ( > < “ > <Hoy es Lunes de trabajo> < “ > < ) > <_> <_PUNTO_Y_COMA> <_nl><_nl> <_RBRACE><_> <_PR_ROMPER> <_> <_PUNTO_Y_COMA> <_nl> <OpcionPorDefectoSegun>? <_nl> <_RBRACE>  <_nl> <_nl>::=
+<_nl><segun> <_> < ( > <_> <$dia> <_> < ) > <_> < { > <_nl> <caso> < ” > < Lunes > < ” > < : > <_> < { > <_nl> <imprimir> <_> < ( > < “ > <Hoy es Lunes de trabajo> < “ > < ) > <_> < ; > <_nl><_nl> <_RBRACE><_> <_PR_ROMPER> <_> <_PUNTO_Y_COMA> <_nl> <OpcionPorDefectoSegun>? <_nl> <_RBRACE>  <_nl> <_nl>::=
+<_nl><segun> <_> < ( > <_> <$dia> <_> < ) > <_> < { > <_nl> <caso> < ” > < Lunes > < ” > < : > <_> < { > <_nl> <imprimir> <_> < ( > < “ > <Hoy es Lunes de trabajo> < “ > < ) > <_> < ; > <_nl><_nl> < } ><_> <_PR_ROMPER> <_> <_PUNTO_Y_COMA> <_nl> <OpcionPorDefectoSegun>? <_nl> <_RBRACE>  <_nl> <_nl>::=
+<_nl><segun> <_> < ( > <_> <$dia> <_> < ) > <_> < { > <_nl> <caso> < ” > < Lunes > < ” > < : > <_> < { > <_nl> <imprimir> <_> < ( > < “ > <Hoy es Lunes de trabajo> < “ > < ) > <_> < ; > <_nl><_nl> < } ><_> < romper > <_> <_PUNTO_Y_COMA> <_nl> <OpcionPorDefectoSegun>? <_nl> <_RBRACE>  <_nl> <_nl>::=
+<_nl><segun> <_> < ( > <_> <$dia> <_> < ) > <_> < { > <_nl> <caso> < ” > < Lunes > < ” > < : > <_> < { > <_nl> <imprimir> <_> < ( > < “ > <Hoy es Lunes de trabajo> < “ > < ) > <_> < ; > <_nl><_nl> < } ><_> < romper > <_> < ; > <_nl> <OpcionPorDefectoSegun>? <_nl> <_RBRACE>  <_nl> <_nl>::=
+<_nl><segun> <_> < ( > <_> <$dia> <_> < ) > <_> < { > <_nl> <caso> < ” > < Lunes > < ” > < : > <_> < { > <_nl> <imprimir> <_> < ( > < “ > <Hoy es Lunes de trabajo> < “ > < ) > <_> < ; > <_nl><_nl> < } ><_> < romper > <_> < ; > <_nl> <_RBRACE>  <_nl> <_nl>::=
+<_nl><segun> <_> < ( > <_> <$dia> <_> < ) > <_> < { > <_nl> <caso> < ” > < Lunes > < ” > < : > <_> < { > <_nl> <imprimir> <_> < ( > < “ > <Hoy es Lunes de trabajo> < “ > < ) > <_> < ; > <_nl><_nl> < } ><_> < romper > <_> < ; > <_nl> < } >  <_nl> <_nl>::=
+<segun>  < ( >  <$dia>  < ) >  < { >  <caso> < ” > < Lunes > < ” > < : >  < { >  <imprimir>  < ( > < “ > <Hoy es Lunes de trabajo> < “ > < ) >  < ; >  < } >  < romper > < ; >  < } > ::=
 ```
 
 ## Gramatica basde: Funcion

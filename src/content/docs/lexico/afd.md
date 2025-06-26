@@ -45,13 +45,13 @@ sidebar:
 
 ## Condicional `segun`
 
-![AFD foto](/AstroLibresScript/img/afd/AFD_Funcion_esmayor.png)
-![AFD foto](/AstroLibresScript/img/afd/AFD_funcion_Mensajevacio.png)
-![AFD foto](/AstroLibresScript/img/afd/AFD_Funcion_suma.png)
+![AFD foto](/AstroLibresScript/img/afd/AFD_Segun.png)
 
 ## Funcion
 
-![AFD foto](/AstroLibresScript/img/afd/AFD_Segun.png)
+![AFD foto](/AstroLibresScript/img/afd/AFD_Funcion_esmayor.png)
+![AFD foto](/AstroLibresScript/img/afd/AFD_funcion_Mensajevacio.png)
+![AFD foto](/AstroLibresScript/img/afd/AFD_Funcion_suma.png)
 
 ## Operacion aritmetica compleja
 

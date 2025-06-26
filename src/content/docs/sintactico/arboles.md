@@ -140,6 +140,8 @@ Los árboles de derivación son una forma visual de entender la estructura sint�
 
 ## Condicional `segun`
 
+![Arreglo booleano](/AstroLibresScript/img/arboles/Arbol_Segun.jpeg)
+
 ## `funcion`
 
 ![Arreglo booleano](/AstroLibresScript/img/arboles/Arbol_Funciones.png)
