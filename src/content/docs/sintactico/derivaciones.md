@@ -445,28 +445,327 @@ $saludo: texto = "Hola" + " " + "Mundo";
 
 ```
 
-## Gramatica basde: Condicional `si-siNo` `si-siNo`
-
-```go
-
-```
-
 ## Condicional `si-siNo` `si-siNo`Derecha
 
-```go
+```ts
+si (verdadero) {
+  imprimir("Hola");
+} siNo si (falso) {
+  imprimir("Adios");
+} siNo {
+  imprimir("Que haces?");
+}
+```
 
+```go
+<Programa>
+::= <_nl> <Sentencias> <_nl>
+::= <_nl><Sentencias> 
+::= <_nl> <Sentencia>  <_nl>
+::= <_nl> <Sentencia> 
+::= <_nl> <EstructuraControl>
+::= <_nl> <CondicionalSi>
+::= <_nl> <_PR_SI> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <BloqueCodigo> <ClausulasSiNoSi>? <ClausulaSiNo>?
+::= <_nl> <_PR_SI> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <BloqueCodigo> <ClausulasSiNoSi>? <_PR_SINO> <__> <BloqueCodigo>
+::= <_nl> <_PR_SI> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <BloqueCodigo> <ClausulasSiNoSi>? <_PR_SINO> <__> <_LBRACE> <_nl> <Sentencias> <_nl> <_RBRACE>
+::= <_nl> <_PR_SI> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <BloqueCodigo> <ClausulasSiNoSi>? <_PR_SINO> <__> <_LBRACE> <_nl> <Sentencias> <_nl> }
+::= <_nl> <_PR_SI> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <BloqueCodigo> <ClausulasSiNoSi>? <_PR_SINO> <__> <_LBRACE> <_nl> <Sentencias> }
+::= <_nl> <_PR_SI> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <BloqueCodigo> <ClausulasSiNoSi>? <_PR_SINO> <__> <_LBRACE> <_nl> <Sentencia>  }
+::= <_nl> <_PR_SI> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <BloqueCodigo> <ClausulasSiNoSi>? <_PR_SINO> <__> <_LBRACE> <_nl> <LlamadaImprimir> }
+::= <_nl> <_PR_SI> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <BloqueCodigo> <ClausulasSiNoSi>? <_PR_SINO> <__> <_LBRACE> <_nl> <_PR_IMPRIMIR> <_> <_LPAREN> <_> <ListaArgumentosOpcional> <_> <_RPAREN> <_> <_PUNTO_Y_COMA> }
+::= <_nl> <_PR_SI> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <BloqueCodigo> <ClausulasSiNoSi>? <_PR_SINO> <__> <_LBRACE> <_nl> <_PR_IMPRIMIR> <_> <_LPAREN> <_> <ListaArgumentosOpcional> <_> <_RPAREN> ; }
+::= <_nl> <_PR_SI> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <BloqueCodigo> <ClausulasSiNoSi>? <_PR_SINO> <__> <_LBRACE> <_nl> <_PR_IMPRIMIR> <_> <_LPAREN> <_> <ListaArgumentosOpcional> ) ; }
+::= <_nl> <_PR_SI> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <BloqueCodigo> <ClausulasSiNoSi>? <_PR_SINO> <__> <_LBRACE> <_nl> <_PR_IMPRIMIR> <_> <_LPAREN> <_> <ListaArgumentos> ) ; }
+::= <_nl> <_PR_SI> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <BloqueCodigo> <ClausulasSiNoSi>? <_PR_SINO> <__> <_LBRACE> <_nl> <_PR_IMPRIMIR> <_> <_LPAREN> <_> <ExpresionL> ) ; }
+::= <_nl> <_PR_SI> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <BloqueCodigo> <ClausulasSiNoSi>? <_PR_SINO> <__> <_LBRACE> <_nl> <_PR_IMPRIMIR> <_> <_LPAREN> <_> <ExpresionLogicaOr> ) ; }
+::= <_nl> <_PR_SI> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <BloqueCodigo> <ClausulasSiNoSi>? <_PR_SINO> <__> <_LBRACE> <_nl> <_PR_IMPRIMIR> <_> <_LPAREN> <_> <ExpresionLogicaAnd> ) ; }
+::= <_nl> <_PR_SI> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <BloqueCodigo> <ClausulasSiNoSi>? <_PR_SINO> <__> <_LBRACE> <_nl> <_PR_IMPRIMIR> <_> <_LPAREN> <_> <ExpresionIgualdad> ) ; }
+::= <_nl> <_PR_SI> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <BloqueCodigo> <ClausulasSiNoSi>? <_PR_SINO> <__> <_LBRACE> <_nl> <_PR_IMPRIMIR> <_> <_LPAREN> <_> <ExpresionRelacional> ) ; }
+::= <_nl> <_PR_SI> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <BloqueCodigo> <ClausulasSiNoSi>? <_PR_SINO> <__> <_LBRACE> <_nl> <_PR_IMPRIMIR> <_> <_LPAREN> <_> <ExpresionAditiva> ) ; }
+::= <_nl> <_PR_SI> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <BloqueCodigo> <ClausulasSiNoSi>? <_PR_SINO> <__> <_LBRACE> <_nl> <_PR_IMPRIMIR> <_> <_LPAREN> <_> <ExpresionMultiplicativa> ) ; }
+::= <_nl> <_PR_SI> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <BloqueCodigo> <ClausulasSiNoSi>? <_PR_SINO> <__> <_LBRACE> <_nl> <_PR_IMPRIMIR> <_> <_LPAREN> <_> <ExpresionPotencia> ) ; }
+::= <_nl> <_PR_SI> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <BloqueCodigo> <ClausulasSiNoSi>? <_PR_SINO> <__> <_LBRACE> <_nl> <_PR_IMPRIMIR> <_> <_LPAREN> <_> <ExpresionUnaria> ) ; }
+::= <_nl> <_PR_SI> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <BloqueCodigo> <ClausulasSiNoSi>? <_PR_SINO> <__> <_LBRACE> <_nl> <_PR_IMPRIMIR> <_> <_LPAREN> <_> <ExpresionPostfija> ) ; }
+::= <_nl> <_PR_SI> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <BloqueCodigo> <ClausulasSiNoSi>? <_PR_SINO> <__> <_LBRACE> <_nl> <_PR_IMPRIMIR> <_> <_LPAREN> <_> <LiteralPrimario> ) ; }
+::= <_nl> <_PR_SI> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <BloqueCodigo> <ClausulasSiNoSi>? <_PR_SINO> <__> <_LBRACE> <_nl> <_PR_IMPRIMIR> <_> <_LPAREN> <_> <_texto> ) ; }
+::= <_nl> <_PR_SI> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <BloqueCodigo> <ClausulasSiNoSi>? <_PR_SINO> <__> <_LBRACE> <_nl> <_PR_IMPRIMIR> <_> <_LPAREN> "Que haces?" ) ; }
+::= <_nl> <_PR_SI> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <BloqueCodigo> <ClausulasSiNoSi>? <_PR_SINO> <__> <_LBRACE> <_nl> <_PR_IMPRIMIR> ( "Que haces?" ) ; }
+::= <_nl> <_PR_SI> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <BloqueCodigo> <ClausulasSiNoSi>? <_PR_SINO> <__> <_LBRACE> <_nl> imprimir ( "Que haces?" ) ; }
+::= <_nl> <_PR_SI> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <BloqueCodigo> <ClausulasSiNoSi>? siNo { imprimir("Que haces?"); }
+::= <_nl> <_PR_SI> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <BloqueCodigo> <ClausulasSiNoSi> siNo { imprimir("Que haces?"); }
+::= <_nl> <_PR_SI> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <BloqueCodigo> <ClausulaSiNoSi> siNo { imprimir("Que haces?"); }
+::= <_nl> <_PR_SI> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <BloqueCodigo> <_PR_SINO> <__> <_PR_SI> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <BloqueCodigo> siNo { imprimir("Que haces?"); }
+::= <_nl> <_PR_SI> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <BloqueCodigo> <_PR_SINO> <__> <_PR_SI> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <_LBRACE> <_nl> <Sentencias> <_nl> <_RBRACE> siNo { imprimir("Que haces?"); }
+::= <_nl> <_PR_SI> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <BloqueCodigo> <_PR_SINO> <__> <_PR_SI> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <_LBRACE> <_nl> <Sentencias> <_nl> } siNo { imprimir("Que haces?"); }
+::= <_nl> <_PR_SI> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <BloqueCodigo> <_PR_SINO> <__> <_PR_SI> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <_LBRACE> <_nl> <Sentencias> } siNo { imprimir("Que haces?"); }
+::= <_nl> <_PR_SI> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <BloqueCodigo> <_PR_SINO> <__> <_PR_SI> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <_LBRACE> <_nl> <Sentencia>  } siNo { imprimir("Que haces?"); }
+::= <_nl> <_PR_SI> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <BloqueCodigo> <_PR_SINO> <__> <_PR_SI> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <_LBRACE> <_nl> <LlamadaImprimir> } siNo { imprimir("Que haces?"); }
+::= <_nl> <_PR_SI> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <BloqueCodigo> <_PR_SINO> <__> <_PR_SI> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <_LBRACE> <_nl> <_PR_IMPRIMIR> <_> <_LPAREN> <_> <ListaArgumentosOpcional> <_> 
+<_RPAREN> <_> <_PUNTO_Y_COMA> } siNo { imprimir("Que haces?"); }
+::= <_nl> <_PR_SI> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <BloqueCodigo> <_PR_SINO> <__> <_PR_SI> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <_LBRACE> <_nl> <_PR_IMPRIMIR> <_> <_LPAREN> <_> <ListaArgumentosOpcional> <_> 
+<_RPAREN> ; } siNo { imprimir("Que haces?"); }
+::= <_nl> <_PR_SI> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <BloqueCodigo> <_PR_SINO> <__> <_PR_SI> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <_LBRACE> <_nl> <_PR_IMPRIMIR> <_> <_LPAREN> <_> <ListaArgumentosOpcional> ) ; } siNo 
+{ imprimir("Que haces?"); }
+::= <_nl> <_PR_SI> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <BloqueCodigo> <_PR_SINO> <__> <_PR_SI> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <_LBRACE> <_nl> <_PR_IMPRIMIR> <_> <_LPAREN> <_> <ListaArgumentos> ) ; } siNo { 
+imprimir("Que haces?"); }
+::= <_nl> <_PR_SI> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <BloqueCodigo> <_PR_SINO> <__> <_PR_SI> <_> <_LPAREN> <_> <ExpresionL> ) ; } siNo { imprimir("Que haces?"); }
+::= <_nl> <_PR_SI> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <BloqueCodigo> <_PR_SINO> <__> <_PR_SI> <_> <_LPAREN> <_> <ExpresionLogicaOr> ) ; } siNo { imprimir("Que haces?"); }
+::= <_nl> <_PR_SI> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <BloqueCodigo> <_PR_SINO> <__> <_PR_SI> <_> <_LPAREN> <_> <ExpresionLogicaAnd> ) ; } siNo { imprimir("Que haces?"); }
+::= <_nl> <_PR_SI> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <BloqueCodigo> <_PR_SINO> <__> <_PR_SI> <_> <_LPAREN> <_> <ExpresionIgualdad> ) ; } siNo { imprimir("Que haces?"); }
+::= <_nl> <_PR_SI> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <BloqueCodigo> <_PR_SINO> <__> <_PR_SI> <_> <_LPAREN> <_> <ExpresionRelacional> ) ; } siNo { imprimir("Que haces?"); }
+::= <_nl> <_PR_SI> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <BloqueCodigo> <_PR_SINO> <__> <_PR_SI> <_> <_LPAREN> <_> <ExpresionAditiva> ) ; } siNo { imprimir("Que haces?"); }
+::= <_nl> <_PR_SI> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <BloqueCodigo> <_PR_SINO> <__> <_PR_SI> <_> <_LPAREN> <_> <ExpresionMultiplicativa> ) ; } siNo { imprimir("Que haces?"); }
+::= <_nl> <_PR_SI> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <BloqueCodigo> <_PR_SINO> <__> <_PR_SI> <_> <_LPAREN> <_> <ExpresionPotencia> ) ; } siNo { imprimir("Que haces?"); }
+::= <_nl> <_PR_SI> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <BloqueCodigo> <_PR_SINO> <__> <_PR_SI> <_> <_LPAREN> <_> <ExpresionUnaria> ) ; } siNo { imprimir("Que haces?"); }
+::= <_nl> <_PR_SI> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <BloqueCodigo> <_PR_SINO> <__> <_PR_SI> <_> <_LPAREN> <_> <ExpresionPostfija> ) ; } siNo { imprimir("Que haces?"); }
+::= <_nl> <_PR_SI> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <BloqueCodigo> <_PR_SINO> <__> <_PR_SI> <_> <_LPAREN> <_> <LiteralPrimario> ) ; } siNo { imprimir("Que haces?"); }
+::= <_nl> <_PR_SI> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <BloqueCodigo> <_PR_SINO> <__> <_PR_SI> <_> <_LPAREN> <_> <_texto> ) ; } siNo { imprimir("Que haces?"); }
+::= <_nl> <_PR_SI> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <BloqueCodigo> <_PR_SINO> <__> <_PR_SI> <_> <_LPAREN> "Adios" ) ; } siNo { imprimir("Que haces?"); }
+::= <_nl> <_PR_SI> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <BloqueCodigo> <_PR_SINO> <__> <_PR_SI> <_> <_LPAREN> imprimir ( "Adios" ) ; } siNo { imprimir("Que haces?"); }
+::= <_nl> <_PR_SI> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <BloqueCodigo> <_PR_SINO> <__> <_PR_SI> <_> <_LPAREN> <_> <Expresion> ) { imprimir("Adios"); } siNo { imprimir("Que haces?"); }
+::= <_nl> <_PR_SI> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <BloqueCodigo> <_PR_SINO> <__> <_PR_SI> <_> <_LPAREN> <_> <ExpresionLogicaOr> ) { imprimir("Adios"); } siNo { imprimir("Que haces?"); }
+::= <_nl> <_PR_SI> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <BloqueCodigo> <_PR_SINO> <__> <_PR_SI> <_> <_LPAREN> <_> <ExpresionLogicaAnd> ){ imprimir("Adios"); } siNo { imprimir("Que haces?"); }
+::= <_nl> <_PR_SI> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <BloqueCodigo> <_PR_SINO> <__> <_PR_SI> <_> <_LPAREN> <_> <ExpresionIgualdad>){ imprimir("Adios"); } siNo { imprimir("Que haces?"); }
+::= <_nl> <_PR_SI> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <BloqueCodigo> <_PR_SINO> <__> <_PR_SI> <_> <_LPAREN> <_> <ExpresionRelacional> ) { imprimir("Adios"); } siNo { imprimir("Que haces?"); }
+::= <_nl> <_PR_SI> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <BloqueCodigo> <_PR_SINO> <__> <_PR_SI> <_> <_LPAREN> <_> <ExpresionAditiva> ) { imprimir("Adios"); } siNo { imprimir("Que haces?"); }
+::= <_nl> <_PR_SI> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <BloqueCodigo> <_PR_SINO> <__> <_PR_SI> <_> <_LPAREN> <_> <ExpresionMultiplicativa> ) { imprimir("Adios"); } siNo { imprimir("Que haces?"); }
+::= <_nl> <_PR_SI> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <BloqueCodigo> <_PR_SINO> <__> <_PR_SI> <_> <_LPAREN> <_> <ExpresionPotencia> ) { imprimir("Adios"); } siNo { imprimir("Que haces?"); }
+::= <_nl> <_PR_SI> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <BloqueCodigo> <_PR_SINO> <__> <_PR_SI> <_> <_LPAREN> <_> <ExpresionUnaria> ) { imprimir("Adios"); } siNo { imprimir("Que haces?"); }
+::= <_nl> <_PR_SI> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <BloqueCodigo> <_PR_SINO> <__> <_PR_SI> <_> <_LPAREN> <_> <ExpresionPostfija> ) { imprimir("Adios"); } siNo { imprimir("Que haces?"); }
+::= <_nl> <_PR_SI> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <BloqueCodigo> <_PR_SINO> <__> <_PR_SI> <_> <_LPAREN> <_> <LiteralPrimario> ) { imprimir("Adios"); } siNo { imprimir("Que haces?"); }
+::= <_nl> <_PR_SI> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <BloqueCodigo> <_PR_SINO> <__> <_PR_SI> <_> <_LPAREN> <_> <_LIT_FALSO> ){ imprimir("Adios"); } siNo { imprimir("Que haces?"); }
+::= <_nl> <_PR_SI> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <BloqueCodigo> <_PR_SINO> <__> <_PR_SI> <_> <_LPAREN> falso) { imprimir("Adios"); } siNo { imprimir("Que haces?"); }
+::= <_nl> <_PR_SI> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <BloqueCodigo> <_PR_SINO> <__> <_PR_SI> ( falso ) { imprimir("Adios"); } siNo { imprimir("Que haces?"); }
+::= <_nl> <_PR_SI> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <BloqueCodigo> <_PR_SINO> <__> si  ( falso )  { imprimir("Adios"); } siNo { imprimir("Que haces?"); }
+::= <_nl> <_PR_SI> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <BloqueCodigo> <_PR_SINO> si ( falso ) { imprimir("Adios"); } siNo { imprimir("Que haces?"); }
+::= <_nl> <_PR_SI> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <BloqueCodigo> siNo si ( falso ) { imprimir("Adios"); } siNo { imprimir("Que haces?"); }
+::= <_nl> <_PR_SI>  <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <_LBRACE> <_nl> <Sentencias> <_nl> <_RBRACE> siNo si ( falso ) { imprimir("Adios"); } siNo { imprimir("Que haces?"); }
+::= <_nl> <_PR_SI>  <_> <_LPAREN> <_>  <Expresion> <_> <_RPAREN> <_><_LBRACE> <_nl> <Sentencias> } siNo si ( falso ) { imprimir("Adios"); } siNo { imprimir("Que haces?"); }
+::= <_nl> <_PR_SI>  <_> <_LPAREN> <_>  <Expresion> <_> <_RPAREN> <_><_LBRACE> <_nl> <Sentencia> } siNo si ( falso ) { imprimir("Adios"); } siNo { imprimir("Que haces?"); }
+::= <_nl> <_PR_SI>  <_> <_LPAREN> <_>  <Expresion> <_> <_RPAREN> <_><_LBRACE> <_nl> <LlamadaImprimir> } siNo si ( falso ) { imprimir("Adios"); } siNo { imprimir("Que haces?"); }
+::= <_nl> <_PR_SI>  <_> <_LPAREN> <_>  <Expresion> <_> <_RPAREN> <_><_LBRACE> <_nl> <_PR_IMPRIMIR> <_> <_LPAREN> <_> <ListaArgumentosOpcional> <_> <_RPAREN> <_> <_PUNTO_Y_COMA> } siNo si ( falso ) { imprimir("Adios"); } siNo { imprimir("Que 
+haces?"); }
+::= <_nl> <_PR_SI>  <_> <_LPAREN> <_>  <Expresion> <_> <_RPAREN> <_><_LBRACE> <_nl> <_PR_IMPRIMIR> <_> <_LPAREN> <_> <ListaArgumentosOpcional> <_> <_RPAREN>; } siNo si ( falso ) { imprimir("Adios"); } siNo { imprimir("Que haces?"); }
+::= <_nl> <_PR_SI>  <_> <_LPAREN> <_>  <Expresion> <_> <_RPAREN> <_><_LBRACE> <_nl> <_PR_IMPRIMIR> <_> <_LPAREN> <_> <ListaArgumentosOpcional> ); } siNo si ( falso ) { imprimir("Adios"); } siNo { imprimir("Que haces?"); }
+::= <_nl> <_PR_SI>  <_> <_LPAREN> <_>  <Expresion> <_> <_RPAREN> <_><_LBRACE> <_nl> <_PR_IMPRIMIR> <_> <_LPAREN> <_> <ListaArgumentos> ) ; } siNo si ( falso ) { imprimir("Adios"); } siNo { imprimir("Que haces?"); }
+::= <_nl> <_PR_SI>  <_> <_LPAREN> <_>  <Expresion> <_> <_RPAREN> <_><_LBRACE> <_nl> <_PR_IMPRIMIR> <_> <_LPAREN> <_> <Expresion> ) ; } siNo si ( falso ) { imprimir("Adios"); } siNo { imprimir("Que haces?"); }
+::= <_nl> <_PR_SI>  <_> <_LPAREN> <_>  <Expresion> <_> <_RPAREN> <_><_LBRACE> <_nl> <_PR_IMPRIMIR> <_> <_LPAREN> <_> <ExpresionLogicaOr> ) ; } siNo si ( falso ) { imprimir("Adios"); } siNo { imprimir("Que haces?"); }
+::= <_nl> <_PR_SI>  <_> <_LPAREN> <_>  <Expresion> <_> <_RPAREN> <_><_LBRACE> <_nl> <_PR_IMPRIMIR> <_> <_LPAREN> <_> <ExpresionLogicaAnd> ) ; } siNo si ( falso ) { imprimir("Adios"); } siNo { imprimir("Que haces?"); }
+::= <_nl> <_PR_SI>  <_> <_LPAREN> <_>  <Expresion> <_> <_RPAREN> <_><_LBRACE> <_nl> <_PR_IMPRIMIR> <_> <_LPAREN> <_> <ExpresionIgualdad> ) ; } siNo si ( falso ) { imprimir("Adios"); } siNo { imprimir("Que haces?"); }
+::= <_nl> <_PR_SI>  <_> <_LPAREN> <_>  <Expresion> <_> <_RPAREN> <_><_LBRACE> <_nl> <_PR_IMPRIMIR> <_> <_LPAREN> <_> <ExpresionRelacional> ) ; } siNo si ( falso ) { imprimir("Adios"); } siNo { imprimir("Que haces?"); }
+::= <_nl> <_PR_SI>  <_> <_LPAREN> <_>  <Expresion> <_> <_RPAREN> <_><_LBRACE> <_nl> <_PR_IMPRIMIR> <_> <_LPAREN> <_> <ExpresionAditiva> ) ; } siNo si ( falso ) { imprimir("Adios"); } siNo { imprimir("Que haces?"); }
+::= <_nl> <_PR_SI>  <_> <_LPAREN> <_>  <Expresion> <_> <_RPAREN> <_><_LBRACE> <_nl> <_PR_IMPRIMIR> <_> <_LPAREN> <_> <ExpresionMultiplicativa> ) ; } siNo si ( falso ) { imprimir("Adios"); } siNo { imprimir("Que haces?"); }
+::= <_nl> <_PR_SI>  <_> <_LPAREN> <_>  <Expresion> <_> <_RPAREN> <_><_LBRACE> <_nl> <_PR_IMPRIMIR> <_> <_LPAREN> <_> <ExpresionPotencia> ) ; } siNo si ( falso ) { imprimir("Adios"); } siNo { imprimir("Que haces?"); }
+::= <_nl> <_PR_SI>  <_> <_LPAREN> <_>  <Expresion> <_> <_RPAREN> <_><_LBRACE> <_nl> <_PR_IMPRIMIR> <_> <_LPAREN> <_> <ExpresionUnaria> ) ; } siNo si ( falso ) { imprimir("Adios"); } siNo { imprimir("Que haces?"); }
+::= <_nl> <_PR_SI>  <_> <_LPAREN> <_>  <Expresion> <_> <_RPAREN> <_><_LBRACE> <_nl> <_PR_IMPRIMIR> <_> <_LPAREN> <_> <ExpresionPostfija> ) ; } siNo si ( falso ) { imprimir("Adios"); } siNo { imprimir("Que haces?"); }
+::= <_nl> <_PR_SI>  <_> <_LPAREN> <_>  <Expresion> <_> <_RPAREN> <_><_LBRACE> <_nl> <_PR_IMPRIMIR> <_> <_LPAREN> <_> <LiteralPrimario> ) ; } siNo si ( falso ) { imprimir("Adios"); } siNo { imprimir("Que haces?"); }
+::= <_nl> <_PR_SI>  <_> <_LPAREN> <_>  <Expresion> <_> <_RPAREN> <_><_LBRACE> <_nl> <_PR_IMPRIMIR> <_> <_LPAREN> <_> <_texto> ) ; } siNo si ( falso ) { imprimir("Adios"); } siNo { imprimir("Que haces?"); }
+::= <_nl> <_PR_SI>  <_> <_LPAREN> <_>  <Expresion> <_> <_RPAREN> <_><_LBRACE> <_nl> <_PR_IMPRIMIR> <_> <_LPAREN> “Hola” ) ; } siNo si ( falso ) { imprimir("Adios"); } siNo { imprimir("Que haces?"); }
+::= <_nl> <_PR_SI>  <_> <_LPAREN> <_>  <Expresion> <_> <_RPAREN> <_><_LBRACE> <_nl> <_PR_IMPRIMIR> (“Hola” ) ; } siNo si ( falso ) { imprimir("Adios"); } siNo { imprimir("Que haces?"); }
+::= <_nl> <_PR_SI>  <_> <_LPAREN> <_>  <Expresion> <_> <_RPAREN> <_><_LBRACE> imprimir (“Hola” ) ; } siNo si ( falso ) { imprimir("Adios"); } siNo { imprimir("Que haces?"); }
+::= <_nl> <_PR_SI>  <_> <_LPAREN> <_>  <Expresion> <_> <_RPAREN> { imprimir (“Hola” ) ; } siNo si ( falso ) { imprimir("Adios"); } siNo { imprimir("Que haces?"); }
+::= <_nl> <_PR_SI>  <_> <_LPAREN> <_>  <Expresion> ) { imprimir (“Hola” ) ; } siNo si ( falso ) { imprimir("Adios"); } siNo { imprimir("Que haces?"); }
+::= <_nl> <_PR_SI> <_>  <_LPAREN> <_> <ExpresionLogicaOr> ) { imprimir (“Hola” ) ; } siNo si ( falso ) { imprimir(“Adios”); } siNo { imprimir(“Que haces?”); }
+::= <_nl> <_PR_SI> <_>  <_LPAREN> <_> <ExpresionLogicaAnd> ) { imprimir (“Hola” ) ; } siNo si ( falso ) { imprimir(“Adios”); } siNo { imprimir(“Que haces?”); }
+::= <_nl> <_PR_SI> <_>  <_LPAREN> <_> <ExpresionIgualdad> ) { imprimir (“Hola” ) ; } siNo si ( falso ) { imprimir(“Adios”); } siNo { imprimir(“Que haces?”); }
+::= <_nl> <_PR_SI> <_>  <_LPAREN> <_> <ExpresionRelacional> ) { imprimir (“Hola” ) ; } siNo si ( falso ) { imprimir(“Adios”); } siNo { imprimir(“Que haces?”); }
+::= <_nl> <_PR_SI> <_>  <_LPAREN> <_> <ExpresionAditiva> ) { imprimir (“Hola” ) ; } siNo si ( falso ) { imprimir(“Adios”); } siNo { imprimir(“Que haces?”); }
+::= <_nl> <_PR_SI> <_>  <_LPAREN> <_> ExpresionMultiplicativa> ) { imprimir (“Hola” ) ; } siNo si ( falso ) { imprimir(“Adios”); } siNo { imprimir(“Que haces?”); }
+::= <_nl> <_PR_SI> <_>  <_LPAREN> <_> <ExpresionPotencia> ) { imprimir (“Hola” ) ; } siNo si ( falso ) { imprimir(“Adios”); } siNo { imprimir(“Que haces?”); }
+::= <_nl> <_PR_SI> <_> <_LPAREN> <_>  <ExpresionUnaria> ) { imprimir (“Hola” ) ; } siNo si ( falso ) { imprimir(“Adios”); } siNo { imprimir(“Que haces?”); }
+::= <_nl> <_PR_SI> <_>  <_LPAREN> <_> <ExpresionPostfija> ) { imprimir (“Hola” ) ; } siNo si ( falso ) { imprimir(“Adios”); } siNo { imprimir(“Que haces?”); }
+::= <_nl> <_PR_SI> <_>  <_LPAREN> <_> <LiteralPrimario> ) { imprimir (“Hola” ) ; } siNo si ( falso ) { imprimir(“Adios”); } siNo { imprimir(“Que haces?”); }
+::= <_nl> <_PR_SI> <_>  <_LPAREN> <_> <_LIT_VERDADERO> ) { imprimir (“Hola” ) ; } siNo si ( falso ) { imprimir(“Adios”); } siNo { imprimir(“Que haces?”); }
+::= <_nl> <_PR_SI> <_> verdadero ) { imprimir (“Hola” ) ; } siNo si ( falso ) { imprimir(“Adios”); } siNo { imprimir(“Que haces?”); }
+::= <_nl> si ( verdadero ) { imprimir ( "Hola" ) ; } siNo si ( falso ) { imprimir("Adios"); } siNo { imprimir("Que haces?"); }
+::= si ( verdadero ){ { imprimir("Hola"); } siNo si ( falso ) { imprimir("Adios"); } siNo { imprimir("Que haces?"); }
 ```
 
 ## Condicional `si-siNo` `si-siNo` Izquierda
 
 ```go
-
-```
-
-## Gramatica basde: Condicional `mientras`
-
-```go
-
+<Programa>  
+ 
+::= <Sentencias> <_nl>  
+ 
+::= <Sentencia> <_nl> <_nl>  
+ 
+::= <EstructuraControl> <_nl> <_nl>  
+ 
+::= <CondicionalSi> <_nl> <_nl>  
+ 
+::= <_PR_SI> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <BloqueCodigo> <ClausulasSiNoSi>? <ClausulaSiNo>? <_nl> <_nl>  
+ 
+::= si <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <BloqueCodigo> <ClausulasSiNoSi>? <ClausulaSiNo>? <_nl> <_nl>  
+ 
+::= si <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <BloqueCodigo> <ClausulasSiNoSi>? <ClausulaSiNo>? <_nl> <_nl>  
+ 
+::= si ( <_> <Expresion> <_> <_RPAREN> <_> <BloqueCodigo> <ClausulasSiNoSi>? <ClausulaSiNo>? <_nl> <_nl>  
+ 
+::= si ( <Expresion> <_> <_RPAREN> <_> <BloqueCodigo> <ClausulasSiNoSi>? <ClausulaSiNo>? <_nl> <_nl>  
+ 
+::= si ( <ExpresionLogicaOr> <_> <_RPAREN> <_> <BloqueCodigo> <ClausulasSiNoSi>? <ClausulaSiNo>? <_nl> <_nl>  
+ 
+::= si ( <ExpresionLogicaAnd> <_> <_RPAREN> <_> <BloqueCodigo> <ClausulasSiNoSi>? <ClausulaSiNo>? <_nl> <_nl>  
+ 
+::= si ( <ExpresionIgualdad> <_> <_RPAREN> <_> <BloqueCodigo> <ClausulasSiNoSi>? <ClausulaSiNo>? <_nl> <_nl>  
+ 
+::= si ( <ExpresionRelacional> <_> <_RPAREN> <_> <BloqueCodigo> <ClausulasSiNoSi>? <ClausulaSiNo>? <_nl> <_nl>  
+ 
+::= si ( <ExpresionAditiva> <_> <_RPAREN> <_> <BloqueCodigo> <ClausulasSiNoSi>? <ClausulaSiNo>? <_nl> <_nl>  
+ 
+::= si ( <ExpresionMultiplicativa> <_> <_RPAREN> <_> <BloqueCodigo> <ClausulasSiNoSi>? <ClausulaSiNo>? <_nl> <_nl>  
+ 
+::= si ( <ExpresionPotencia> <_> <_RPAREN> <_> <BloqueCodigo> <ClausulasSiNoSi>? <ClausulaSiNo>? <_nl> <_nl>  
+ 
+::= si ( <ExpresionUnaria> <_> <_RPAREN> <_> <BloqueCodigo> <ClausulasSiNoSi>? <ClausulaSiNo>? <_nl> <_nl>  
+ 
+::= si ( <ExpresionPostfija> <_> <_RPAREN> <_> <BloqueCodigo> <ClausulasSiNoSi>? <ClausulaSiNo>? <_nl> <_nl>  
+ 
+::= si ( <LiteralPrimario> <_> <_RPAREN> <_> <BloqueCodigo> <ClausulasSiNoSi>? <ClausulaSiNo>? <_nl> <_nl>  
+ 
+::= si ( <_LIT_VERDADERO> <_> <_RPAREN> <_> <BloqueCodigo> <ClausulasSiNoSi>? <ClausulaSiNo>? <_nl> <_nl>  
+ 
+::= si ( verdadero <_> <_RPAREN> <_> <BloqueCodigo> <ClausulasSiNoSi>? <ClausulaSiNo>? <_nl> <_nl>  
+ 
+::= si ( verdadero ) <_> <BloqueCodigo> <ClausulasSiNoSi>? <ClausulaSiNo>? <_nl> <_nl>  
+ 
+::= si ( verdadero ) <BloqueCodigo> <ClausulasSiNoSi>? <ClausulaSiNo>? <_nl> <_nl>  
+ 
+::= si ( verdadero ) <_LBRACE> <_nl> <Sentencias> <_nl> <_RBRACE> <ClausulasSiNoSi>? <ClausulaSiNo>? <_nl> <_nl>  
+ 
+::= si ( verdadero ) { <_nl> <Sentencias> <_nl> <_RBRACE> <ClausulasSiNoSi>? <ClausulaSiNo>? <_nl> <_nl>  
+ 
+::= si ( verdadero ) { <_nl> <Sentencia> <_nl> <_RBRACE> <ClausulasSiNoSi>? <ClausulaSiNo>? <_nl> <_nl>  
+ 
+::= si ( verdadero ) { <_nl> <LlamadaImprimir> <_nl> <_RBRACE> <ClausulasSiNoSi>? <ClausulaSiNo>? <_nl> <_nl>  
+ 
+::= si ( verdadero ) { <_nl> <_PR_IMPRIMIR> <_> <_LPAREN> <_> <ListaArgumentosOpcional> <_> <_RPAREN> <_> <_PUNTO_Y_COMA> <_nl> <_RBRACE> <ClausulasSiNoSi>? <ClausulaSiNo>? <_nl> <_nl>  
+ 
+::= si ( verdadero ) { <_nl> imprimir <_> <_LPAREN> <_> <ListaArgumentosOpcional> <_> <_RPAREN> <_> <_PUNTO_Y_COMA> <_nl> <_RBRACE> <ClausulasSiNoSi>? <ClausulaSiNo>? <_nl> <_nl>  
+ 
+::= si ( verdadero ) { <_nl> imprimir ( <_> <ListaArgumentosOpcional> <_> <_RPAREN> <_> <_PUNTO_Y_COMA> <_nl> <_RBRACE> <ClausulasSiNoSi>? <ClausulaSiNo>? <_nl> <_nl>  
+ 
+::= si ( verdadero ) { <_nl> imprimir ( <ListaArgumentosOpcional> <_> <_RPAREN> <_> <_PUNTO_Y_COMA> <_nl> <_RBRACE> <ClausulasSiNoSi>? <ClausulaSiNo>? <_nl> <_nl>  
+ 
+::= si ( verdadero ) { <_nl> imprimir ( <ListaArgumentos> <_> <_RPAREN> <_> <_PUNTO_Y_COMA> <_nl> <_RBRACE> <ClausulasSiNoSi>? <ClausulaSiNo>? <_nl> <_nl>  
+ 
+::= si ( verdadero ) { <_nl> imprimir ( <Expresion> <_> <_RPAREN> <_> <_PUNTO_Y_COMA> <_nl> <_RBRACE> <ClausulasSiNoSi>? <ClausulaSiNo>? <_nl> <_nl>  
+ 
+::= si ( verdadero ) { <_nl> imprimir ( <ExpresionLogicaOr> <_> <_RPAREN> <_> <_PUNTO_Y_COMA> <_nl> <_RBRACE> <ClausulasSiNoSi>? <ClausulaSiNo>? <_nl> <_nl>  
+ 
+::= si ( verdadero ) { <_nl> imprimir ( <ExpresionLogicaAnd> <_> <_RPAREN> <_> <_PUNTO_Y_COMA> <_nl> <_RBRACE> <ClausulasSiNoSi>? <ClausulaSiNo>? <_nl> <_nl>  
+ 
+::= si ( verdadero ) { <_nl> imprimir ( <ExpresionIgualdad> <_> <_RPAREN> <_> <_PUNTO_Y_COMA> <_nl> <_RBRACE> <ClausulasSiNoSi>? <ClausulaSiNo>? <_nl> <_nl>  
+ 
+::= si ( verdadero ) { <_nl> imprimir ( <ExpresionRelacional> <_> <_RPAREN> <_> <_PUNTO_Y_COMA> <_nl> <_RBRACE> <ClausulasSiNoSi>? <ClausulaSiNo>? <_nl> <_nl>  
+ 
+::= si ( verdadero ) { <_nl> imprimir ( <ExpresionAditiva> <_> <_RPAREN> <_> <_PUNTO_Y_COMA> <_nl> <_RBRACE> <ClausulasSiNoSi>? <ClausulaSiNo>? <_nl> <_nl>  
+ 
+::= si ( verdadero ) { <_nl> imprimir ( <ExpresionMultiplicativa> <_> <_RPAREN> <_> <_PUNTO_Y_COMA> <_nl> <_RBRACE> <ClausulasSiNoSi>? <ClausulaSiNo>? <_nl> <_nl>  
+ 
+::= si ( verdadero ) { <_nl> imprimir ( <ExpresionPotencia> <_> <_RPAREN> <_> <_PUNTO_Y_COMA> <_nl> <_RBRACE> <ClausulasSiNoSi>? <ClausulaSiNo>? <_nl> <_nl>  
+ 
+::= si ( verdadero ) { <_nl> imprimir ( <ExpresionUnaria> <_> <_RPAREN> <_> <_PUNTO_Y_COMA> <_nl> <_RBRACE> <ClausulasSiNoSi>? <ClausulaSiNo>? <_nl> <_nl>  
+ 
+::= si ( verdadero ) { <_nl> imprimir ( <ExpresionPostfija> <_> <_RPAREN> <_> <_PUNTO_Y_COMA> <_nl> <_RBRACE> <ClausulasSiNoSi>? <ClausulaSiNo>? <_nl> <_nl>  
+ 
+::= si ( verdadero ) { <_nl> imprimir ( <LiteralPrimario> <_> <_RPAREN> <_> <_PUNTO_Y_COMA> <_nl> <_RBRACE> <ClausulasSiNoSi>? <ClausulaSiNo>? <_nl> <_nl>  
+ 
+::= si ( verdadero ) { <_nl> imprimir ( <_texto> <_> <_RPAREN> <_> <_PUNTO_Y_COMA> <_nl> <_RBRACE> <ClausulasSiNoSi>? <ClausulaSiNo>? <_nl> <_nl>  
+ 
+::= si ( verdadero ) { <_nl> imprimir ( "Hola" <_> <_RPAREN> <_> <_PUNTO_Y_COMA> <_nl> <_RBRACE> <ClausulasSiNoSi>? <ClausulaSiNo>? <_nl> <_nl>  
+ 
+::= si ( verdadero ) { <_nl> imprimir ( "Hola" ) <_> <_PUNTO_Y_COMA> <_nl> <_RBRACE> <ClausulasSiNoSi>? <ClausulaSiNo>? <_nl> <_nl>  
+ 
+::= si ( verdadero ) { <_nl> imprimir ( "Hola" ) ; <_nl> <_RBRACE> <ClausulasSiNoSi>? <ClausulaSiNo>? <_nl> <_nl>  
+ 
+::= si ( verdadero ) { <_nl> imprimir ( "Hola" ) ; <_nl> } <ClausulasSiNoSi>? <ClausulaSiNo>? <_nl> <_nl>  
+ 
+::= si ( verdadero ) { imprimir("Hola"); } <ClausulasSiNoSi>? <ClausulaSiNo>? <_nl> <_nl>  
+ 
+::= si ( verdadero ) { imprimir("Hola"); } <ClausulaSiNoSi> <_nl> <_nl>  
+ 
+::= si ( verdadero ) { imprimir("Hola"); } <_PR_SINO> <__> <_PR_SI> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <BloqueCodigo> <ClausulaSiNo>? <_nl> <_nl>  
+ 
+::= si ( verdadero ) { imprimir("Hola"); } siNo <__> <_PR_SI> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <BloqueCodigo> <ClausulaSiNo>? <_nl> <_nl>  
+ 
+::= si ( verdadero ) { imprimir("Hola"); } siNo <_PR_SI> <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <BloqueCodigo> <ClausulaSiNo>? <_nl> <_nl>  
+ 
+::= si ( verdadero ) { imprimir("Hola"); } siNo si <_> <_LPAREN> <_> <Expresion> <_> <_RPAREN> <_> <BloqueCodigo> <ClausulaSiNo>? <_nl> <_nl>  
+ 
+::= si ( verdadero ) { imprimir("Hola"); } siNo si ( <_> <Expresion> <_> <_RPAREN> <_> <BloqueCodigo> <ClausulaSiNo>? <_nl> <_nl>  
+ 
+::= si ( verdadero ) { imprimir("Hola"); } siNo si ( <Expresion> <_> <_RPAREN> <_> <BloqueCodigo> <ClausulaSiNo>? <_nl> <_nl>  
+::= si ( verdadero ) { imprimir("Hola"); } siNo si ( <ExpresionLogicaOr> <_> <_RPAREN> <_> <BloqueCodigo> <ClausulaSiNo>? <_nl> <_nl>  
+::= si ( verdadero ) { imprimir("Hola"); } siNo si ( <ExpresionLogicaAnd> <_> <_RPAREN> <_> <BloqueCodigo> <ClausulaSiNo>? <_nl> <_nl>  
+::= si ( verdadero ) { imprimir("Hola"); } siNo si ( <ExpresionIgualdad> <_> <_RPAREN> <_> <BloqueCodigo> <ClausulaSiNo>? <_nl> <_nl>  
+::= si ( verdadero ) { imprimir("Hola"); } siNo si ( <ExpresionRelacional> <_> <_RPAREN> <_> <BloqueCodigo> <ClausulaSiNo>? <_nl> <_nl>  
+::= si ( verdadero ) { imprimir("Hola"); } siNo si ( <ExpresionAditiva> <_> <_RPAREN> <_> <BloqueCodigo> <ClausulaSiNo>? <_nl> <_nl>  
+::= si ( verdadero ) { imprimir("Hola"); } siNo si ( <ExpresionMultiplicativa> <_> <_RPAREN> <_> <BloqueCodigo> <ClausulaSiNo>? <_nl> <_nl>  
+::= si ( verdadero ) { imprimir("Hola"); } siNo si ( <ExpresionPotencia> <_> <_RPAREN> <_> <BloqueCodigo> <ClausulaSiNo>? <_nl> <_nl>  
+::= si ( verdadero ) { imprimir("Hola"); } siNo si ( <ExpresionUnaria> <_> <_RPAREN> <_> <BloqueCodigo> <ClausulaSiNo>? <_nl> <_nl>  
+::= si ( verdadero ) { imprimir("Hola"); } siNo si ( <ExpresionPostfija> <_> <_RPAREN> <_> <BloqueCodigo> <ClausulaSiNo>? <_nl> <_nl>  
+::= si ( verdadero ) { imprimir("Hola"); } siNo si ( <LiteralPrimario> <_> <_RPAREN> <_> <BloqueCodigo> <ClausulaSiNo>? <_nl> <_nl>  
+::= si ( verdadero ) { imprimir("Hola"); } siNo si ( <_LIT_FALSO> <_> <_RPAREN> <_> <BloqueCodigo> <ClausulaSiNo>? <_nl> <_nl>  
+::= si ( verdadero ) { imprimir("Hola"); } siNo si ( falso <_> <_RPAREN> <_> <BloqueCodigo> <ClausulaSiNo>? <_nl> <_nl>  
+::= si ( verdadero ) { imprimir("Hola"); } siNo si ( falso ) <_> <BloqueCodigo> <ClausulaSiNo>? <_nl> <_nl>  
+::= si ( verdadero ) { imprimir("Hola"); } siNo si ( falso ) <BloqueCodigo> <ClausulaSiNo>? <_nl> <_nl>  
+::= si ( verdadero ) { imprimir("Hola"); } siNo si ( falso ) <_LBRACE> <_nl> <Sentencias> <_nl> <_RBRACE> <ClausulaSiNo>? <_nl> <_nl>  
+::= si ( verdadero ) { imprimir("Hola"); } siNo si ( falso ) { <_nl> <Sentencias> <_nl> <_RBRACE> <ClausulaSiNo>? <_nl> <_nl>  
+::= si ( verdadero ) { imprimir("Hola"); } siNo si ( falso ) { <_nl> <Sentencia> <_nl> <_RBRACE> <ClausulaSiNo>? <_nl> <_nl>  
+::= si ( verdadero ) { imprimir("Hola"); } siNo si ( falso ) { <_nl> <LlamadaImprimir> <_nl> <_RBRACE> <ClausulaSiNo>? <_nl> <_nl>  
+::= si ( verdadero ) { imprimir("Hola"); } siNo si ( falso ) { <_nl> <_PR_IMPRIMIR> <_> <_LPAREN> <_> <ListaArgumentosOpcional> <_> <_RPAREN> <_> <_PUNTO_Y_COMA> <_nl> <_RBRACE> <ClausulaSiNo>? <_nl> <_nl>  
+::= si ( verdadero ) { imprimir("Hola"); } siNo si ( falso ) { <_nl> imprimir <_> <_LPAREN> <_> <ListaArgumentosOpcional> <_> <_RPAREN> <_> <_PUNTO_Y_COMA> <_nl> <_RBRACE> <ClausulaSiNo>? <_nl> <_nl>  
+::= si ( verdadero ) { imprimir("Hola"); } siNo si ( falso ) { <_nl> imprimir ( <_> <ListaArgumentosOpcional> <_> <_RPAREN> <_> <_PUNTO_Y_COMA> <_nl> <_RBRACE> <ClausulaSiNo>? <_nl> <_nl>  
+::= si ( verdadero ) { imprimir("Hola"); } siNo si ( falso ) { <_nl> imprimir ( <ListaArgumentosOpcional> <_> <_RPAREN> <_> <_PUNTO_Y_COMA> <_nl> <_RBRACE> <ClausulaSiNo>? <_nl> <_nl>  
+::= si ( verdadero ) { imprimir("Hola"); } siNo si ( falso ) { <_nl> imprimir ( <ListaArgumentos> <_> <_RPAREN> <_> <_PUNTO_Y_COMA> <_nl> <_RBRACE> <ClausulaSiNo>? <_nl> <_nl>  
+::= si ( verdadero ) { imprimir("Hola"); } siNo si ( falso ) { <_nl> imprimir ( <Expresion> <_> <_RPAREN> <_> <_PUNTO_Y_COMA> <_nl> <_RBRACE> <ClausulaSiNo>? <_nl> <_nl>  
+::= si ( verdadero ) { imprimir("Hola"); } siNo si ( falso ) { <_nl> imprimir ( <ExpresionLogicaOr> <_> <_RPAREN> <_> <_PUNTO_Y_COMA> <_nl> <_RBRACE> <ClausulaSiNo>? <_nl> <_nl>  
+::= si ( verdadero ) { imprimir("Hola"); } siNo si ( falso ) { <_nl> imprimir ( <ExpresionLogicaAnd> <_> <_RPAREN> <_> <_PUNTO_Y_COMA> <_nl> <_RBRACE> <ClausulaSiNo>? <_nl> <_nl>  
+::= si ( verdadero ) { imprimir("Hola"); } siNo si ( falso ) { <_nl> imprimir ( <ExpresionIgualdad> <_> <_RPAREN> <_> <_PUNTO_Y_COMA> <_nl> <_RBRACE> <ClausulaSiNo>? <_nl> <_nl>  
+::= si ( verdadero ) { imprimir("Hola"); } siNo si ( falso ) { <_nl> imprimir ( <ExpresionRelacional> <_> <_RPAREN> <_> <_PUNTO_Y_COMA> <_nl> <_RBRACE> <ClausulaSiNo>? <_nl> <_nl>  
+::= si ( verdadero ) { imprimir("Hola"); } siNo si ( falso ) { <_nl> imprimir ( <ExpresionAditiva> <_> <_RPAREN> <_> <_PUNTO_Y_COMA> <_nl> <_RBRACE> <ClausulaSiNo>? <_nl> <_nl>  
+::= si ( verdadero ) { imprimir("Hola"); } siNo si ( falso ) { <_nl> imprimir ( <ExpresionMultiplicativa> <_> <_RPAREN> <_> <_PUNTO_Y_COMA> <_nl> <_RBRACE> <ClausulaSiNo>? <_nl> <_nl>  
+::= si ( verdadero ) { imprimir("Hola"); } siNo si ( falso ) { <_nl> imprimir ( <ExpresionPotencia> <_> <_RPAREN> <_> <_PUNTO_Y_COMA> <_nl> <_RBRACE> <ClausulaSiNo>? <_nl> <_nl>  
+::= si ( verdadero ) { imprimir("Hola"); } siNo si ( falso ) { <_nl> imprimir ( <ExpresionUnaria> <_> <_RPAREN> <_> <_PUNTO_Y_COMA> <_nl> <_RBRACE> <ClausulaSiNo>? <_nl> <_nl>  
+::= si ( verdadero ) { imprimir("Hola"); } siNo si ( falso ) { <_nl> imprimir ( <ExpresionPostfija> <_> <_RPAREN> <_> <_PUNTO_Y_COMA> <_nl> <_RBRACE> <ClausulaSiNo>? <_nl> <_nl>  
+::= si ( verdadero ) { imprimir("Hola"); } siNo si ( falso ) { <_nl> imprimir ( <LiteralPrimario> <_> <_RPAREN> <_> <_PUNTO_Y_COMA> <_nl> <_RBRACE> <ClausulaSiNo>? <_nl> <_nl>  
+::= si ( verdadero ) { imprimir("Hola"); } siNo si ( falso ) { <_nl> imprimir ( <_texto> <_> <_RPAREN> <_> <_PUNTO_Y_COMA> <_nl> <_RBRACE> <ClausulaSiNo>? <_nl> <_nl>  
+::= si ( verdadero ) { imprimir("Hola"); } siNo si ( falso ) { <_nl> imprimir ( "Adios" <_> <_RPAREN> <_> <_PUNTO_Y_COMA> <_nl> <_RBRACE> <ClausulaSiNo>? <_nl> <_nl>  
+::= si ( verdadero ) { imprimir("Hola"); } siNo si ( falso ) { <_nl> imprimir ( "Adios" ) <_> <_PUNTO_Y_COMA> <_nl> <_RBRACE> <ClausulaSiNo>? <_nl> <_nl>  
+::= si ( verdadero ) { imprimir("Hola"); } siNo si ( falso ) { <_nl> imprimir ( "Adios" ) ; <_nl> <_RBRACE> <ClausulaSiNo>? <_nl> <_nl>  
+::= si ( verdadero ) { imprimir("Hola"); } siNo si ( falso ) { <_nl> imprimir ( "Adios" ) ; <_nl> } <ClausulaSiNo>? <_nl> <_nl>  
+::= si ( verdadero ) { imprimir("Hola"); } siNo si ( falso ) { imprimir("Adios"); } <ClausulaSiNo>? <_nl> <_nl>  
+::= si ( verdadero ) { imprimir("Hola"); } siNo si ( falso ) { imprimir("Adios"); } <_PR_SINO> <__> <BloqueCodigo> <_nl> <_nl>  
+::= si ( verdadero ) { imprimir("Hola"); } siNo si ( falso ) { imprimir("Adios"); } siNo <__> <BloqueCodigo> <_nl> <_nl>  
+::= si ( verdadero ) { imprimir("Hola"); } siNo si ( falso ) { imprimir("Adios"); } siNo <_LBRACE> <_nl> <Sentencias> <_nl> <_RBRACE> <_nl> <_nl>  
+::= si ( verdadero ) { imprimir("Hola"); } siNo si ( falso ) { imprimir("Adios"); } siNo { <_nl> <Sentencias> <_nl> <_RBRACE> <_nl> <_nl>  
+::= si ( verdadero ) { imprimir("Hola"); } siNo si ( falso ) { imprimir("Adios"); } siNo { <_nl> <Sentencia> <_nl> <_RBRACE> <_nl> <_nl>  
+::= si ( verdadero ) { imprimir("Hola"); } siNo si ( falso ) { imprimir("Adios"); } siNo { <_nl> <LlamadaImprimir> <_nl> <_RBRACE> <_nl> <_nl>  
+::= si ( verdadero ) { imprimir("Hola"); } siNo si ( falso ) { imprimir("Adios"); } siNo { <_nl> <_PR_IMPRIMIR> <_> <_LPAREN> <_> <ListaArgumentosOpcional> <_> <_RPAREN> <_> <_PUNTO_Y_COMA> <_nl> <_RBRACE> <_nl> <_nl>  
+::= si ( verdadero ) { imprimir("Hola"); } siNo si ( falso ) { imprimir("Adios"); } siNo { <_nl> imprimir <_> <_LPAREN> <_> <ListaArgumentosOpcional> <_> <_RPAREN> <_> <_PUNTO_Y_COMA> <_nl> <_RBRACE> <_nl> <_nl>  
+::= si ( verdadero ) { imprimir("Hola"); } siNo si ( falso ) { imprimir("Adios"); } siNo { <_nl> imprimir ( <_> <ListaArgumentosOpcional> <_> <_RPAREN> <_> <_PUNTO_Y_COMA> <_nl> <_RBRACE> <_nl> <_nl>  
+::= si ( verdadero ) { imprimir("Hola"); } siNo si ( falso ) { imprimir("Adios"); } siNo { <_nl> imprimir ( <ListaArgumentosOpcional> <_> <_RPAREN> <_> <_PUNTO_Y_COMA> <_nl> <_RBRACE> <_nl> <_nl>  
+::= si ( verdadero ) { imprimir("Hola"); } siNo si ( falso ) { imprimir("Adios"); } siNo { <_nl> imprimir ( <ListaArgumentos> <_> <_RPAREN> <_> <_PUNTO_Y_COMA> <_nl> <_RBRACE> <_nl> <_nl>  
+::= si ( verdadero ) { imprimir("Hola"); } siNo si ( falso ) { imprimir("Adios"); } siNo { <_nl> imprimir ( <Expresion> <_> <_RPAREN> <_> <_PUNTO_Y_COMA> <_nl> <_RBRACE> <_nl> <_nl>  
+::= si ( verdadero ) { imprimir("Hola"); } siNo si ( falso ) { imprimir("Adios"); } siNo { <_nl> imprimir ( <ExpresionLogicaOr> <_> <_RPAREN> <_> <_PUNTO_Y_COMA> <_nl> <_RBRACE> <_nl> <_nl>  
+::= si ( verdadero ) { imprimir("Hola"); } siNo si ( falso ) { imprimir("Adios"); } siNo { <_nl> imprimir ( <ExpresionLogicaAnd> <_> <_RPAREN> <_> <_PUNTO_Y_COMA> <_nl> <_RBRACE> <_nl> <_nl>  
+::= si ( verdadero ) { imprimir("Hola"); } siNo si ( falso ) { imprimir("Adios"); } siNo { <_nl> imprimir ( <ExpresionIgualdad> <_> <_RPAREN> <_> <_PUNTO_Y_COMA> <_nl> <_RBRACE> <_nl> <_nl>  
+::= si ( verdadero ) { imprimir("Hola"); } siNo si ( falso ) { imprimir("Adios"); } siNo { <_nl> imprimir ( <ExpresionRelacional> <_> <_RPAREN> <_> <_PUNTO_Y_COMA> <_nl> <_RBRACE> <_nl> <_nl>  
+::= si ( verdadero ) { imprimir("Hola"); } siNo si ( falso ) { imprimir("Adios"); } siNo { <_nl> imprimir ( <ExpresionAditiva> <_> <_RPAREN> <_> <_PUNTO_Y_COMA> <_nl> <_RBRACE> <_nl> <_nl>  
+::= si ( verdadero ) { imprimir("Hola"); } siNo si ( falso ) { imprimir("Adios"); } siNo { <_nl> imprimir ( <ExpresionMultiplicativa> <_> <_RPAREN> <_> <_PUNTO_Y_COMA> <_nl> <_RBRACE> <_nl> <_nl>  
+::= si ( verdadero ) { imprimir("Hola"); } siNo si ( falso ) { imprimir("Adios"); } siNo { <_nl> imprimir ( <ExpresionPotencia> <_> <_RPAREN> <_> <_PUNTO_Y_COMA> <_nl> <_RBRACE> <_nl> <_nl>  
+::= si ( verdadero ) { imprimir("Hola"); } siNo si ( falso ) { imprimir("Adios"); } siNo { <_nl> imprimir ( <ExpresionUnaria> <_> <_RPAREN> <_> <_PUNTO_Y_COMA> <_nl> <_RBRACE> <_nl> <_nl>  
+::= si ( verdadero ) { imprimir("Hola"); } siNo si ( falso ) { imprimir("Adios"); } siNo { <_nl> imprimir ( <ExpresionPostfija> <_> <_RPAREN> <_> <_PUNTO_Y_COMA> <_nl> <_RBRACE> <_nl> <_nl>  
+::= si ( verdadero ) { imprimir("Hola"); } siNo si ( falso ) { imprimir("Adios"); } siNo { <_nl> imprimir ( <LiteralPrimario> <_> <_RPAREN> <_> <_PUNTO_Y_COMA> <_nl> <_RBRACE> <_nl> <_nl>  
+::= si ( verdadero ) { imprimir("Hola"); } siNo si ( falso ) { imprimir("Adios"); } siNo { <_nl> imprimir ( <_texto> <_> <_RPAREN> <_> <_PUNTO_Y_COMA> <_nl> <_RBRACE> <_nl> <_nl>  
+::= si ( verdadero ) { imprimir("Hola"); } siNo si ( falso ) { imprimir("Adios"); } siNo { <_nl> imprimir ( "Que haces?" <_> <_RPAREN> <_> <_PUNTO_Y_COMA> <_nl> <_RBRACE> <_nl> <_nl>  
+::= si ( verdadero ) { imprimir("Hola"); } siNo si ( falso ) { imprimir("Adios"); } siNo { <_nl> imprimir ( "Que haces?" ) <_> <_PUNTO_Y_COMA> <_nl> <_RBRACE> <_nl> <_nl>  
+::= si ( verdadero ) { imprimir("Hola"); } siNo si ( falso ) { imprimir("Adios"); } siNo { <_nl> imprimir ( "Que haces?" ) ; <_nl> <_RBRACE> <_nl> <_nl>  
+::= si ( verdadero ) { imprimir("Hola"); } siNo si ( falso ) { imprimir("Adios"); } siNo { <_nl> imprimir ( "Que haces?" ) ; } <_nl> <nl> 
+::= si ( verdadero ) { imprimir("Hola"); } siNo si ( falso ) { imprimir("Adios"); } siNo { imprimir("Que haces?"); } <_nl>
+::= si ( verdadero ) { imprimir("Hola"); } siNo si ( falso ) { imprimir("Adios"); } siNo { imprimir("Que haces?"); } 
 ```
 
 ## Condicional `mientras`Derecha
@@ -617,21 +916,342 @@ mientras ($i <= 5) {
 
 ```
 
-## Gramatica basde: Condicional `para`
-
-```go
-
-```
-
 ## Condicional `para`Derecha
 
+```ts
+para ($i: numero = 0; $i < 10; $i = $i + 1) {
+    imprimir($i);
+}
+```
+
 ```go
+<Programa>
+::= <_nl> <Sentencias <_nl>
+::= <_nl> <Sentencias
+::= <_nl> <Sentencia <_nl>
+ 
+::= <_nl> <Sentencia> 
+ 
+::= <_nl> <EstructuraControl>
+ 
+::= <_nl> <BuclePara>
+ 
+::= <_nl> <_PR_PARA> <_> <_LPAREN> <_> <DeclaracionVariable> <_PUNTO_Y_COMA> <_> <Expresion> <_PUNTO_Y_COMA> <_> <Asignacion> <_> <_RPAREN> <_> <BloqueCodigo
+ 
+::= <_nl> <_PR_PARA> <_> <_LPAREN> <_> <DeclaracionVariable> <_PUNTO_Y_COMA> <_> <Expresion> <_PUNTO_Y_COMA> <_> <Asignacion> <_> <_RPAREN> <_> <BloqueCodigo
+ 
+::= <_nl> <_PR_PARA> <_> <_LPAREN> <_> <DeclaracionVariable> <_PUNTO_Y_COMA> <_> <Expresion> <_PUNTO_Y_COMA> <_> <Asignacion> <_> <_RPAREN> <_> <_LBRACE <Sentencias <_RBRACE
+ 
+::= <_nl> <_PR_PARA> <_> <_LPAREN> <_> <DeclaracionVariable> <_PUNTO_Y_COMA> <_> <Expresion> <_PUNTO_Y_COMA> <_> <Asignacion> <_> <_RPAREN> <_> <_LBRACE <Sentencias> }
+ 
+::= <_nl> <_PR_PARA> <_> <_LPAREN> <_> <DeclaracionVariable> <_PUNTO_Y_COMA> <_> <Expresion> <_PUNTO_Y_COMA> <_> <Asignacion> <_> <_RPAREN> <_> <_LBRACE <Sentencia>}<_nl>
+ 
+::= <_nl> <_PR_PARA> <_> <_LPAREN> <_> <DeclaracionVariable> <_PUNTO_Y_COMA> <_> <Expresion> <_PUNTO_Y_COMA> <_> <Asignacion> <_> <_RPAREN> <_> <_LBRACE <LlamadaImprimir ; }
+ 
+::= <_nl> <_PR_PARA> <_> <_LPAREN> <_> <DeclaracionVariable> <_PUNTO_Y_COMA> <_> <Expresion> <_PUNTO_Y_COMA> <_> <Asignacion> <_> <_RPAREN> <_> <_LBRACE <_PR_IMPRIMIR> <_> <_LPAREN> <_> <ListaArgumentosOpcional> <_> <_RPAREN> 
+<_> <_PUNTO_Y_COMA ; }
+ 
+::= <_nl> <_PR_PARA> <_> <_LPAREN> <_> <DeclaracionVariable> <_PUNTO_Y_COMA> <_> <Expresion> <_PUNTO_Y_COMA> <_> <Asignacion> <_> <_RPAREN> <_> <_LBRACE <_PR_IMPRIMIR> <_> <_LPAREN> <_> <ListaArgumentosOpcional> <_> <_RPAREN> 
+<_> ; }
+ 
+::= <_nl> <_PR_PARA> <_> <_LPAREN> <_> <DeclaracionVariable> <_PUNTO_Y_COMA> <_> <Expresion> <_PUNTO_Y_COMA> <_> <Asignacion> <_> <_RPAREN> <_> <_LBRACE <_PR_IMPRIMIR> <_> <_LPAREN> <_> <ListaArgumentosOpcional> <_> ) <_> ; <_nl> } 
+<_nl>
+ 
+::= <_nl> <_PR_PARA> <_> <_LPAREN> <_> <DeclaracionVariable> <_PUNTO_Y_COMA> <_> <Expresion> <_PUNTO_Y_COMA> <_> <Asignacion> <_> <_RPAREN> <_> <_LBRACE <_PR_IMPRIMIR> <_> <_LPAREN> <_> <ListaArgumentos> <_> ) <_> ; }
+ 
+::= <_nl> <_PR_PARA> <_> <_LPAREN> <_> <DeclaracionVariable> <_PUNTO_Y_COMA> <_> <Expresion> <_PUNTO_Y_COMA> <_> <Asignacion> <_> <_RPAREN> <_> <_LBRACE <_PR_IMPRIMIR> <_> <_LPAREN> <_> <Expresion> <_> ) <_> ; }
+ 
+::= <_nl> <_PR_PARA> <_> <_LPAREN> <_> <DeclaracionVariable> <_PUNTO_Y_COMA> <_> <Expresion> <_PUNTO_Y_COMA> <_> <Asignacion> <_> <_RPAREN> <_> <_LBRACE <_PR_IMPRIMIR> <_> <_LPAREN> <_> <ExpresionLogicaOr> <_> ) <_> ; }
+ 
+::= <_nl> <_PR_PARA> <_> <_LPAREN> <_> <DeclaracionVariable> <_PUNTO_Y_COMA> <_> <Expresion> <_PUNTO_Y_COMA> <_> <Asignacion> <_> <_RPAREN> <_> <_LBRACE <_PR_IMPRIMIR> <_> <_LPAREN> <_> <ExpresionLogicaAnd> <_> ) <_> ; }
+ 
+::= <_nl> <_PR_PARA> <_> <_LPAREN> <_> <DeclaracionVariable> <_PUNTO_Y_COMA> <_> <Expresion> <_PUNTO_Y_COMA> <_> <Asignacion> <_> <_RPAREN> <_> <_LBRACE <_PR_IMPRIMIR> <_> <_LPAREN> <_> <ExpresionIgualdad> <_> ) <_> ; }
+ 
+::= <_nl> <_PR_PARA> <_> <_LPAREN> <_> <DeclaracionVariable> <_PUNTO_Y_COMA> <_> <Expresion> <_PUNTO_Y_COMA> <_> <Asignacion> <_> <_RPAREN> <_> <_LBRACE <_PR_IMPRIMIR> <_> <_LPAREN> <_> <ExpresionRelacional> <_> ) <_> ; }
+ 
+::= <_nl> <_PR_PARA> <_> <_LPAREN> <_> <DeclaracionVariable> <_PUNTO_Y_COMA> <_> <Expresion> <_PUNTO_Y_COMA> <_> <Asignacion> <_> <_RPAREN> <_> <_LBRACE <_PR_IMPRIMIR> <_> <_LPAREN> <_> <ExpresionAditiva> <_> ) <_> ; }
+ 
+::= <_nl> <_PR_PARA> <_> <_LPAREN> <_> <DeclaracionVariable> <_PUNTO_Y_COMA> <_> <Expresion> <_PUNTO_Y_COMA> <_> <Asignacion> <_> <_RPAREN> <_> <_LBRACE <_PR_IMPRIMIR> <_> <_LPAREN> <_> <ExpresionMultiplicativa> <_> ) <_> ; <_nl> } 
+<_nl>
+ 
+::= <_nl> <_PR_PARA> <_> <_LPAREN> <_> <DeclaracionVariable> <_PUNTO_Y_COMA> <_> <Expresion> <_PUNTO_Y_COMA> <_> <Asignacion> <_> <_RPAREN> <_> <_LBRACE <_PR_IMPRIMIR> <_> <_LPAREN> <_> <ExpresionPotencia> <_> ) <_> ; }
+ 
+::= <_nl> <_PR_PARA> <_> <_LPAREN> <_> <DeclaracionVariable> <_PUNTO_Y_COMA> <_> <Expresion> <_PUNTO_Y_COMA> <_> <Asignacion> <_> <_RPAREN> <_> <_LBRACE <_PR_IMPRIMIR> <_> <_LPAREN> <_> <ExpresionUnaria> <_> ) <_> ; }
+ 
+::= <_nl> <_PR_PARA> <_> <_LPAREN> <_> <DeclaracionVariable> <_PUNTO_Y_COMA> <_> <Expresion> <_PUNTO_Y_COMA> <_> <Asignacion> <_> <_RPAREN> <_> <_LBRACE <_PR_IMPRIMIR> <_> <_LPAREN> <_> <ExpresionPostfija> <_> ) <_> ; }
+ 
+::= <_nl> <_PR_PARA> <_> <_LPAREN> <_> <DeclaracionVariable> <_PUNTO_Y_COMA> <_> <Expresion> <_PUNTO_Y_COMA> <_> <Asignacion> <_> <_RPAREN> <_> <_LBRACE <_PR_IMPRIMIR> <_> <_LPAREN> <_> <Variable> <_> ) <_> ; }
+ 
+::= <_nl> <_PR_PARA> <_> <_LPAREN> <_> <DeclaracionVariable> <_PUNTO_Y_COMA> <_> <Expresion> <_PUNTO_Y_COMA> <_> <Asignacion> <_> <_RPAREN> <_> <_LBRACE <_PR_IMPRIMIR> <_> <_LPAREN> <_> <_IDENTIFICADOR> <_> ) <_> ; }
+ 
+::= <_nl> <_PR_PARA> <_> <_LPAREN> <_> <DeclaracionVariable> <_PUNTO_Y_COMA> <_> <Expresion> <_PUNTO_Y_COMA> <_> <Asignacion> <_> <_RPAREN> <_> <_LBRACE <_PR_IMPRIMIR> <_> <_LPAREN> <_> $i <_> ) <_> ; }
+ 
+::= <_nl> <_PR_PARA> <_> <_LPAREN> <_> <DeclaracionVariable> <_PUNTO_Y_COMA> <_> <Expresion> <_PUNTO_Y_COMA> <_> <Asignacion> <_> <_RPAREN> <_> <_LBRACE <_PR_IMPRIMIR> <_> <_LPAREN> <_> $i ) <_> ; }
+ 
+::= <_nl> <_PR_PARA> <_> <_LPAREN> <_> <DeclaracionVariable> <_PUNTO_Y_COMA> <_> <Expresion> <_PUNTO_Y_COMA> <_> <Asignacion> <_> <_RPAREN> <_> <_LBRACE <_PR_IMPRIMIR> <_> <_LPAREN> <_> $i ) ; }
+ 
+::= <_nl> <_PR_PARA> <_> <_LPAREN> <_> <DeclaracionVariable> <_PUNTO_Y_COMA> <_> <Expresion> <_PUNTO_Y_COMA> <_> <Asignacion> <_> <_RPAREN> <_> <_LBRACE imprimir <_> ( <_> $i ) ; }
+ 
+::= <_nl> <_PR_PARA> <_> <_LPAREN> <_> <DeclaracionVariable> <_PUNTO_Y_COMA> <_> <Expresion> <_PUNTO_Y_COMA> <_> <Asignacion> <_> <_RPAREN> <_> <_LBRACE imprimir(" <_> $i ") ; }
+ 
+::= <_nl> <_PR_PARA> <_> <_LPAREN> <_> <DeclaracionVariable> <_PUNTO_Y_COMA> <_> <Expresion> <_PUNTO_Y_COMA> <_> <Asignacion> <_> <_RPAREN> <_> <_LBRACE imprimir($i) ; }
+ 
+::= <_nl> <_PR_PARA> <_> <_LPAREN> <_> <DeclaracionVariable> <_PUNTO_Y_COMA> <_> <Expresion> <_PUNTO_Y_COMA> <_> <Asignacion> <_> <_RPAREN> <_> { <_nl> imprimir($i); }
+ 
+::= <_nl> <_PR_PARA> <_> <_LPAREN> <_> <DeclaracionVariable> <_PUNTO_Y_COMA> <_> <Expresion> <_PUNTO_Y_COMA> <_> <_IDENTIFICADOR> <_> <_ASIGNACION> <_> <Expresion> <_> <_RPAREN> <_> { <_nl> imprimir($i); ; }
+ 
+::= <_nl> <_PR_PARA> <_> <_LPAREN> <_> <DeclaracionVariable> <_PUNTO_Y_COMA> <_> <Expresion> <_PUNTO_Y_COMA> <_> <_IDENTIFICADOR> <_> <_ASIGNACION> <_> <Expresion> ) <_> { <_nl> imprimir($i); }
+ 
+::= <_nl> <_PR_PARA> <_> <_LPAREN> <_> <DeclaracionVariable> <_PUNTO_Y_COMA> <_> <Expresion> <_PUNTO_Y_COMA> <_> <_IDENTIFICADOR> <_> = <_> <Expresion> ) <_> { <_nl> imprimir($i);}
+ 
+::= <_nl> <_PR_PARA> <_> <_LPAREN> <_> <DeclaracionVariable> <_PUNTO_Y_COMA> <_> <Expresion> <_PUNTO_Y_COMA> <_> <_IDENTIFICADOR> = <_> <Expresion> ) <_> { <_nl> imprimir($i); }
+ 
+::= <_nl> <_PR_PARA> <_> <_LPAREN> <_> <DeclaracionVariable> <_PUNTO_Y_COMA> <_> <Expresion> <_PUNTO_Y_COMA> <_> $i = <_> <Expresion> ) <_> { <_nl> imprimir($i); }
+ 
+::= <_nl> <_PR_PARA> <_> <_LPAREN> <_> <DeclaracionVariable> <_PUNTO_Y_COMA> <_> <Expresion> <_PUNTO_Y_COMA> <_> $i = <Expresion> ) <_> { <_nl> imprimir($i); }
+ 
+::= <_nl> <_PR_PARA> <_> <_LPAREN> <_> <DeclaracionVariable> <_PUNTO_Y_COMA> <_> <Expresion> <_PUNTO_Y_COMA> <_> $i = <ExpresionLogicaOr> ) <_> { <_nl> imprimir($i); }
+ 
+::= <_nl> <_PR_PARA> <_> <_LPAREN> <_> <DeclaracionVariable> <_PUNTO_Y_COMA> <_> <Expresion> <_PUNTO_Y_COMA> <_> $i = <ExpresionLogicaAnd> ) <_> { <_nl> imprimir($i); }
+ 
+::= <_nl> <_PR_PARA> <_> <_LPAREN> <_> <DeclaracionVariable> <_PUNTO_Y_COMA> <_> <Expresion> <_PUNTO_Y_COMA> <_> $i = <ExpresionIgualdad> ) <_> { <_nl> imprimir($i); }
+ 
+::= <_nl> <_PR_PARA> <_> <_LPAREN> <_> <DeclaracionVariable> <_PUNTO_Y_COMA> <_> <Expresion> <_PUNTO_Y_COMA> <_> $i = <ExpresionRelacional> ) <_> { <_nl> imprimir($i); }
+ 
+::= <_nl> <_PR_PARA> <_> <_LPAREN> <_> <DeclaracionVariable> <_PUNTO_Y_COMA> <_> <Expresion> <_PUNTO_Y_COMA> <_> $i = <ExpresionAditiva> ) <_> { <_nl> imprimir($i); }
+ 
+::= <_nl> <_PR_PARA> <_> <_LPAREN> <_> <DeclaracionVariable> <_PUNTO_Y_COMA> <_> <Expresion> <_PUNTO_Y_COMA> <_> $i = <ExpresionMultiplicativa> <_SUMA> <ExpresionMultiplicativa> ) <_> { <_nl> imprimir($i); }
+ 
+::= <_nl> <_PR_PARA> <_> <_LPAREN> <_> <DeclaracionVariable> <_PUNTO_Y_COMA> <_> <Expresion> <_PUNTO_Y_COMA> <_> $i = <ExpresionMultiplicativa> <_SUMA> <_ENTERO> ) <_> { <_nl> imprimir($i); }
+ 
+::= <_nl> <_PR_PARA> <_> <_LPAREN> <_> <DeclaracionVariable> <_PUNTO_Y_COMA> <_> <Expresion> <_PUNTO_Y_COMA> <_> $i = <ExpresionMultiplicativa> <_SUMA> 1 ) <_> { <_nl> imprimir($i); }
+ 
+::= <_nl> <_PR_PARA> <_> <_LPAREN> <_> <DeclaracionVariable> <_PUNTO_Y_COMA> <_> <Expresion> <_PUNTO_Y_COMA> <_> $i = <ExpresionMultiplicativa> + 1 ) <_> { <_nl> imprimir($i); }
+ 
+::= <_nl> <_PR_PARA> <_> <_LPAREN> <_> <DeclaracionVariable> <_PUNTO_Y_COMA> <_> <Expresion> <_PUNTO_Y_COMA> <_> $i = <ExpresionPotencia> + 1 ) <_> { <_nl> imprimir($i); }
+ 
+::= <_nl> <_PR_PARA> <_> <_LPAREN> <_> <DeclaracionVariable> <_PUNTO_Y_COMA> <_> <Expresion> <_PUNTO_Y_COMA> <_> $i = <ExpresionUnaria> + 1 ) <_> { <_nl> imprimir($i); }
+ 
+::= <_nl> <_PR_PARA> <_> <_LPAREN> <_> <DeclaracionVariable> <_PUNTO_Y_COMA> <_> <Expresion> <_PUNTO_Y_COMA> <_> $i = <ExpresionPostfija> + 1 ) <_> { <_nl> imprimir($i); }
+ 
+::= <_nl> <_PR_PARA> <_> <_LPAREN> <_> <DeclaracionVariable> <_PUNTO_Y_COMA> <_> <Expresion> <_PUNTO_Y_COMA> <_> $i = <Variable> + 1 ) <_> { <_nl> imprimir($i); }
+ 
+::= <_nl> <_PR_PARA> <_> <_LPAREN> <_> <DeclaracionVariable> <_PUNTO_Y_COMA> <_> <Expresion> <_PUNTO_Y_COMA> <_> $i = <_IDENTIFICADOR> + 1 ) <_> { <_nl> imprimir($i); }
+ 
+::= <_nl> <_PR_PARA> <_> <_LPAREN> <_> <DeclaracionVariable> <_PUNTO_Y_COMA> <_> <Expresion> <_PUNTO_Y_COMA> <_> $i = $i + 1 ) <_> { <_nl> imprimir($i); }
+ 
+::= <_nl> <_PR_PARA> <_> <_LPAREN> <_> <DeclaracionVariable> <_PUNTO_Y_COMA> <_> <Expresion> <_PUNTO_Y_COMA> <_> $i = $i + 1 ) { <_nl> imprimir($i); }
+ 
+::= <_nl> <_PR_PARA> <_> <_LPAREN> <_> <DeclaracionVariable> <_PUNTO_Y_COMA> <_> <Expresion> <_REL_MENOR_QUE> <ExpresionAditiva> <_PUNTO_Y_COMA> <_> $i = $i + 1 ) { imprimir($i); }
+ 
+::= <_nl> <_PR_PARA> <_> <_LPAREN> <_> <DeclaracionVariable> <_PUNTO_Y_COMA> <_> <Expresion> <_REL_MENOR_QUE> <_ENTERO> <_PUNTO_Y_COMA> <_> $i = $i + 1 ) { imprimir($i); }
+ 
+::= <_nl> <_PR_PARA> <_> <_LPAREN> <_> <DeclaracionVariable> <_PUNTO_Y_COMA> <_> <Expresion> <_REL_MENOR_QUE> 10 <_PUNTO_Y_COMA> <_> $i = $i + 1 ) { imprimir($i); }
+ 
+::= <_nl> <_PR_PARA> <_> <_LPAREN> <_> <DeclaracionVariable> <_PUNTO_Y_COMA> <_> <Expresion> < 10 <_PUNTO_Y_COMA> <_> $i = $i + 1 ) { imprimir($i); }
+ 
+::= <_nl> <_PR_PARA> <_> <_LPAREN> <_> <DeclaracionVariable> <_PUNTO_Y_COMA> <_> <ExpresionLogicaOr> < 10 <_PUNTO_Y_COMA> <_> $i = $i + 1 ) { imprimir($i); }
+ 
+::= <_nl> <_PR_PARA> <_> <_LPAREN> <_> <DeclaracionVariable> <_PUNTO_Y_COMA> <_> <ExpresionLogicaAnd> < 10 <_PUNTO_Y_COMA> <_> $i = $i + 1 ) { imprimir($i); }
+ 
+::= <_nl> <_PR_PARA> <_> <_LPAREN> <_> <DeclaracionVariable> <_PUNTO_Y_COMA> <_> <ExpresionIgualdad> < 10 <_PUNTO_Y_COMA> <_> $i = $i + 1 ) { imprimir($i); }
+ 
+::= <_nl> <_PR_PARA> <_> <_LPAREN> <_> <DeclaracionVariable> <_PUNTO_Y_COMA> <_> <ExpresionRelacional> < 10 <_PUNTO_Y_COMA> <_> $i = $i + 1 ) { imprimir($i); }
+ 
+::= <_nl> <_PR_PARA> <_> <_LPAREN> <_> <DeclaracionVariable> <_PUNTO_Y_COMA> <_> <ExpresionAditiva> < 10 <_PUNTO_Y_COMA> <_> $i = $i + 1 ) { imprimir($i); }
+ 
+::= <_nl> <_PR_PARA> <_> <_LPAREN> <_> <DeclaracionVariable> <_PUNTO_Y_COMA> <_> <ExpresionMultiplicativa> < 10 <_PUNTO_Y_COMA> <_> $i = $i + 1 ) { imprimir($i); }
+ 
+::= <_nl> <_PR_PARA> <_> <_LPAREN> <_> <DeclaracionVariable> <_PUNTO_Y_COMA> <_> <ExpresionPotencia> < 10 <_PUNTO_Y_COMA> <_> $i = $i + 1 ) { imprimir($i); }
+ 
+::= <_nl> <_PR_PARA> <_> <_LPAREN> <_> <DeclaracionVariable> <_PUNTO_Y_COMA> <_> <ExpresionUnaria> < 10 <_PUNTO_Y_COMA> <_> $i = $i + 1 ) { imprimir($i); }
+ 
+::= <_nl> <_PR_PARA> <_> <_LPAREN> <_> <DeclaracionVariable> <_PUNTO_Y_COMA> <_> <ExpresionPostfija> < 10 <_PUNTO_Y_COMA> <_> $i = $i + 1 ) { imprimir($i); }
+ 
+::= <_nl> <_PR_PARA> <_> <_LPAREN> <_> <DeclaracionVariable> <_PUNTO_Y_COMA> <_> <Variable> < 10 <_PUNTO_Y_COMA> <_> $i = $i + 1 ) { imprimir($i); }
+ 
+::= <_nl> <_PR_PARA> <_> <_LPAREN> <_> <DeclaracionVariable> <_PUNTO_Y_COMA> <_> <_IDENTIFICADOR> < 10 <_PUNTO_Y_COMA> <_> $i = $i + 1 ) { imprimir($i); }
+ 
+::= <_nl> <_PR_PARA> <_> <_LPAREN> <_> <DeclaracionVariable> <_PUNTO_Y_COMA> <_> $i < 10 <_PUNTO_Y_COMA> <_> $i = $i + 1 ) { imprimir($i); }
+ 
+::= <_nl> <_PR_PARA> <_> <_LPAREN> <_> <DeclaracionVariable> <_PUNTO_Y_COMA> $i < 10 <_PUNTO_Y_COMA> <_> $i = $i + 1 ) { imprimir($i); }
+ 
+::= <_nl> <_PR_PARA> <_> <_LPAREN> <_> <DeclaracionVariable> ; $i < 10 <_PUNTO_Y_COMA> <_> $i = $i + 1 ) { imprimir($i); }
+ 
+::= <_nl> <_PR_PARA> <_> <_LPAREN> <_> <DeclaracionVariable> ; $i < 10 ; <_> $i = $i + 1 ) { imprimir($i); }
+ 
+::= <_nl> <_PR_PARA> <_> <_LPAREN> <_> <_IDENTIFICADOR> <_> <_DOS_PUNTOS> <_> <TipoDato> <_> <_ASIGNACION> <_> <Expresion> <_PUNTO_Y_COMA> $i < 10 ; <_> $i = $i + 1 ) { imprimir($i); }
+ 
+::= <_nl> <_PR_PARA> <_> <_LPAREN> <_> <_IDENTIFICADOR> <_> <_DOS_PUNTOS> <_> <TipoDato> <_> <_ASIGNACION> <_> <Expresion> ; $i < 10 ; <_> $i = $i + 1 ) { imprimir($i); }
+ 
+::= <_nl> <_PR_PARA> <_> <_LPAREN> <_> <_IDENTIFICADOR> <_> <_DOS_PUNTOS> <_> <TipoDato> <_> = <_> <Expresion> ; $i < 10 ; <_> $i = $i + 1 ) { imprimir($i); }
+ 
+::= <_nl> <_PR_PARA> <_> <_LPAREN> <_> <_IDENTIFICADOR> <_> <_DOS_PUNTOS> <_> <TipoDato> = <_> <Expresion> ; $i < 10 ; <_> $i = $i + 1 ) { imprimir($i); }
+ 
+::= <_nl> <_PR_PARA> <_> <_LPAREN> <_> <_IDENTIFICADOR> <_> <_DOS_PUNTOS> <_> <TipoDato> = <Expresion> ; $i < 10 ; <_> $i = $i + 1 ) { imprimir($i); }
+ 
+::= <_nl> <_PR_PARA> <_> <_LPAREN> <_> <_IDENTIFICADOR> <_> <_DOS_PUNTOS> <_> <TipoDato> = <ExpresionLogicaOr> ; $i < 10 ; <_> $i = $i + 1 ) { imprimir($i); }
+ 
+::= <_nl> <_PR_PARA> <_> <_LPAREN> <_> <_IDENTIFICADOR> <_> <_DOS_PUNTOS> <_> <TipoDato> = <ExpresionLogicaAnd> ; $i < 10 ; <_> $i = $i + 1 ) { imprimir($i); }
+ 
+::= <_nl> <_PR_PARA> <_> <_LPAREN> <_> <_IDENTIFICADOR> <_> <_DOS_PUNTOS> <_> <TipoDato> = <ExpresionIgualdad> ; $i < 10 ; <_> $i = $i + 1 ) { imprimir($i); }
+ 
+::= <_nl> <_PR_PARA> <_> <_LPAREN> <_> <_IDENTIFICADOR> <_> <_DOS_PUNTOS> <_> <TipoDato> = <ExpresionRelacional> ; $i < 10 ; <_> $i = $i + 1 ) { imprimir($i); }
+ 
+::= <_nl> <_PR_PARA> <_> <_LPAREN> <_> <_IDENTIFICADOR> <_> <_DOS_PUNTOS> <_> <TipoDato> = <ExpresionAditiva> ; $i < 10 ; <_> $i = $i + 1 ) { imprimir($i); }
+ 
+::= <_nl> <_PR_PARA> <_> <_LPAREN> <_> <_IDENTIFICADOR> <_> <_DOS_PUNTOS> <_> <TipoDato> = <ExpresionMultiplicativa> ; $i < 10 ; <_> $i = $i + 1 ) { imprimir($i); }
+ 
+::= <_nl> <_PR_PARA> <_> <_LPAREN> <_> <_IDENTIFICADOR> <_> <_DOS_PUNTOS> <_> <TipoDato> = <ExpresionPotencia> ; $i < 10 ; <_> $i = $i + 1 ) { imprimir($i); }
+ 
+::= <_nl> <_PR_PARA> <_> <_LPAREN> <_> <_IDENTIFICADOR> <_> <_DOS_PUNTOS> <_> <TipoDato> = <ExpresionUnaria> ; $i < 10 ; <_> $i = $i + 1 ) { imprimir($i); }
+ 
+::= <_nl> <_PR_PARA> <_> <_LPAREN> <_> <_IDENTIFICADOR> <_> <_DOS_PUNTOS> <_> <TipoDato> = <ExpresionPostfija> ; $i < 10 ; <_> $i = $i + 1 ) { imprimir($i); }
+ 
+::= <_nl> <_PR_PARA> <_> <_LPAREN> <_> <_IDENTIFICADOR> <_> <_DOS_PUNTOS> <_> <TipoDato> = <LiteralPrimario> ; $i < 10 ; <_> $i = $i + 1 ) { imprimir($i); }
+ 
+::= <_nl> <_PR_PARA> <_> <_LPAREN> <_> <_IDENTIFICADOR> <_> <_DOS_PUNTOS> <_> <TipoDato> = <_ENTERO> ; $i < 10 ; <_> $i = $i + 1 ) { imprimir($i); }
+ 
+::= <_nl> <_PR_PARA> <_> <_LPAREN> <_> <_IDENTIFICADOR> <_> <_DOS_PUNTOS> <_> <TipoDato> = 0 ; $i < 10 ; <_> $i = $i + 1 ) { imprimir($i); }
+ 
+::= <_nl> <_PR_PARA> <_> <_LPAREN> <_> <_IDENTIFICADOR> <_> <_DOS_PUNTOS> <_> <_PR_NUMERO> = 0 ; $i < 10 ; <_> $i = $i + 1 ) { imprimir($i); }
+ 
+::= <_nl> <_PR_PARA> <_> <_LPAREN> <_> <_IDENTIFICADOR> <_> <_DOS_PUNTOS> numero = 0 ; $i < 10 ; <_> $i = $i + 1 ) { imprimir($i); }
+ 
+::= <_nl> <_PR_PARA> <_> <_LPAREN> <_> <_IDENTIFICADOR> <_> : numero = 0 ; $i < 10 ; <_> $i = $i + 1 ) { imprimir($i); }
+ 
+::= <_nl> <_PR_PARA> <_> <_LPAREN> <_> $i <_> : numero = 0 ; $i < 10 ; <_> $i = $i + 1 ) { imprimir($i); }
+ 
+::= <_nl> <_PR_PARA> <_> ( <_> $i : numero = 0 ; $i < 10 ; <_> $i = $i + 1 ) { imprimir($i); }
+ 
+::= <_nl> <_PR_PARA> ( <_> $i : numero = 0 ; $i < 10 ; <_> $i = $i + 1 ) { imprimir($i); }
+ 
+::= <_nl> para <_> ( <_> $i : numero = 0 ; $i < 10 ; <_> $i = $i + 1 ) { imprimir($i); }
+ 
+::= <_nl> para ( <_> $i : numero = 0 ; $i < 10 ; <_> $i = $i + 1 ) { imprimir($i); }
+ 
+::= para ($i: numero = 0; $i < 10; $i = $i + 1) { imprimir($i); }
 
 ```
 
 ## Condicional `para` Izquierda
 
 ```go
+<Programa>
+::= <_nl> <Sentencias> <_nl>
+::= <Sentencias> <_nl>
+::= <EstructuraControl> <_nl>
+::= <BuclePara>
+::= <_PR_PARA> <_> <_LPAREN> <_> <InicializadorPara>? <_> <_PUNTO_Y_COMA> <_> <CondicionPara>? <_> <_PUNTO_Y_COMA> <_> <IncrementoPara>? <_> <_RPAREN> <_> <BloqueCodigo>
+::= para ( <DeclaracionVariableSinPuntoComa> <_> <_PUNTO_Y_COMA> <_> <CondicionPara>? <_> <_PUNTO_Y_COMA> <_> <IncrementoPara>? <_> <_RPAREN> <_> <BloqueCodigo>
+::= para ( <_IDENTIFICADOR_VAR> <_> <_DOS_PUNTOS> <_> <Tipo> <_> <_OP_ASIGNACION> <_> <Expresion> <_> <_PUNTO_Y_COMA> <_> <CondicionPara>? <_> <_PUNTO_Y_COMA> <_> <IncrementoPara>? <_> <_RPAREN> <_> <BloqueCodigo>
+::= para ( $i  <_DOS_PUNTOS> <_> <Tipo> <_> <_OP_ASIGNACION> <_> <Expresion> <_> <_PUNTO_Y_COMA> <_> <CondicionPara>? <_> <_PUNTO_Y_COMA> <_> <IncrementoPara>? <_> <_RPAREN> <_> <BloqueCodigo>
+::= para ( $i:  <Tipo> <_> <_OP_ASIGNACION> <_> <Expresion> <_> <_PUNTO_Y_COMA> <_> <CondicionPara>? <_> <_PUNTO_Y_COMA> <_> <IncrementoPara>? <_> <_RPAREN> <_> <BloqueCodigo>
+::= para ( $i:  <TipoBase> <_> <_OP_ASIGNACION> <_> <Expresion> <_> <_PUNTO_Y_COMA> <_> <CondicionPara>? <_> <_PUNTO_Y_COMA> <_> <IncrementoPara>? <_> <_RPAREN> <_> <BloqueCodigo>
+::= para ( $i:  <_TIPO_NUMERO> <_> <_OP_ASIGNACION> <_> <Expresion> <_> <_PUNTO_Y_COMA> <_> <CondicionPara>? <_> <_PUNTO_Y_COMA> <_> <IncrementoPara>? <_> <_RPAREN> <_> <BloqueCodigo>
+::= para ( $i:  numero  <_OP_ASIGNACION> <_> <Expresion> <_> <_PUNTO_Y_COMA> <_> <CondicionPara>? <_> <_PUNTO_Y_COMA> <_> <IncrementoPara>? <_> <_RPAREN> <_> <BloqueCodigo>
+::= para ( $i:  numero  =  <Expresion> <_> <_PUNTO_Y_COMA> <_> <CondicionPara>? <_> <_PUNTO_Y_COMA> <_> <IncrementoPara>? <_> <_RPAREN> <_> <BloqueCodigo>
+::= para ( $i:  numero  =  <ExpresionLogicaOr> <_> <_PUNTO_Y_COMA> <_> <CondicionPara>? <_> <_PUNTO_Y_COMA> <_> <IncrementoPara>? <_> <_RPAREN> <_> <BloqueCodigo>
+::= para ( $i:  numero  =  <ExpresionLogicaAnd> <_> <_PUNTO_Y_COMA> <_> <CondicionPara>? <_> <_PUNTO_Y_COMA> <_> <IncrementoPara>? <_> <_RPAREN> <_> <BloqueCodigo>
+::= para ( $i:  numero  =  <ExpresionIgualdad> <_> <_PUNTO_Y_COMA> <_> <CondicionPara>? <_> <_PUNTO_Y_COMA> <_> <IncrementoPara>? <_> <_RPAREN> <_> <BloqueCodigo>
+::= para ( $i:  numero  =  <ExpresionRelacional> <_> <_PUNTO_Y_COMA> <_> <CondicionPara>? <_> <_PUNTO_Y_COMA> <_> <IncrementoPara>? <_> <_RPAREN> <_> <BloqueCodigo>
+::= para ( $i:  numero  =  <ExpresionAditiva> <_> <_PUNTO_Y_COMA> <_> <CondicionPara>? <_> <_PUNTO_Y_COMA> <_> <IncrementoPara>? <_> <_RPAREN> <_> <BloqueCodigo>
+::= para ( $i:  numero  =  <ExpresionMultiplicativa> <_> <_PUNTO_Y_COMA> <_> <CondicionPara>? <_> <_PUNTO_Y_COMA> <_> <IncrementoPara>? <_> <_RPAREN> <_> <BloqueCodigo>
+::= para ( $i:  numero  =  <ExpresionPotencia> <_> <_PUNTO_Y_COMA> <_> <CondicionPara>? <_> <_PUNTO_Y_COMA> <_> <IncrementoPara>? <_> <_RPAREN> <_> <BloqueCodigo>
+::= para ( $i:  numero  =  <ExpresionUnaria> <_> <_PUNTO_Y_COMA> <_> <CondicionPara>? <_> <_PUNTO_Y_COMA> <_> <IncrementoPara>? <_> <_RPAREN> <_> <BloqueCodigo>
+::= para ( $i:  numero  =  <ExpresionPostfija> <_> <_PUNTO_Y_COMA> <_> <CondicionPara>? <_> <_PUNTO_Y_COMA> <_> <IncrementoPara>? <_> <_RPAREN> <_> <BloqueCodigo>
+::= para ( $i:  numero  =  <LiteralPrimario> <_> <_PUNTO_Y_COMA> <_> <CondicionPara>? <_> <_PUNTO_Y_COMA> <_> <IncrementoPara>? <_> <_RPAREN> <_> <BloqueCodigo>
+::= para ( $i:  numero  =  <_numero> <_> <_PUNTO_Y_COMA> <_> <CondicionPara>? <_> <_PUNTO_Y_COMA> <_> <IncrementoPara>? <_> <_RPAREN> <_> <BloqueCodigo>
+= para ( $i : numero = 0 <_PUNTO_Y_COMA> <_> <CondicionPara> <_> <_PUNTO_Y_COMA> <_> <IncrementoPara> <_> <_RPAREN> <_> <BloqueCodigo> <_nl>
+::= para ( $i:  numero  =  0;  <CondicionPara>? <_> <_PUNTO_Y_COMA> <_> <IncrementoPara>? <_> <_RPAREN> <_> <BloqueCodigo>
+::= para ( $i:  numero  =  0;  <Expresion> <_> <_PUNTO_Y_COMA> <_> <IncrementoPara>? <_> <_RPAREN> <_> <BloqueCodigo>
+::= para ( $i:  numero  =  0;  <ExpresionLogicaOr> <_> <_PUNTO_Y_COMA> <_> <IncrementoPara>? <_> <_RPAREN> <_> <BloqueCodigo>
+::= para ( $i:  numero  =  0;  <ExpresionLogicaAnd> <_> <_PUNTO_Y_COMA> <_> <IncrementoPara>? <_> <_RPAREN> <_> <BloqueCodigo>
+::= para ( $i:  numero  =  0;  <ExpresionIgualdad> <_> <_PUNTO_Y_COMA> <_> <IncrementoPara>? <_> <_RPAREN> <_> <BloqueCodigo>
+::= para ( $i:  numero  =  0;  <ExpresionRelacional> <_> <_PUNTO_Y_COMA> <_> <IncrementoPara>? <_> <_RPAREN> <_> <BloqueCodigo>
+::= para ( $i:  numero  =  0;  <ExpresionRelacional> <_> <_PUNTO_Y_COMA> <_> <IncrementoPara>? <_> <_RPAREN> <_> <BloqueCodigo>
+
+::= para ( $i:  numero  =  0;  <ExpresionRelacional> <_> <_OP_LT> <_> <ExpresionAditiva> <_> <_PUNTO_Y_COMA> <_> <IncrementoPara>? <_> <_RPAREN> <_> <BloqueCodigo>
+::= para ( $i:  numero  =  0;  <ExpresionAditiva> <_> <_OP_LT> <_> <ExpresionAditiva>  <_> <_PUNTO_Y_COMA> <_> <IncrementoPara>? <_> <_RPAREN> <_> <BloqueCodigo>
+::= para ( $i:  numero  =  0;  <ExpresionMultiplicativa> <_> <_OP_LT> <_> <ExpresionAditiva> <_> <_PUNTO_Y_COMA> <_> <IncrementoPara>? <_> <_RPAREN> <_> <BloqueCodigo>
+::= para ( $i:  numero  =  0;  <ExpresionPotencia> <_> <_OP_LT> <_> <ExpresionAditiva>  <_> <_PUNTO_Y_COMA> <_> <IncrementoPara>? <_> <_RPAREN> <_> <BloqueCodigo>
+::= para ( $i:  numero  =  0;  <ExpresionUnaria> <_> <_OP_LT> <_> <ExpresionAditiva> <_> <_PUNTO_Y_COMA> <_> <IncrementoPara>? <_> <_RPAREN> <_> <BloqueCodigo>
+::= para ( $i:  numero  =  0;  <ExpresionPostfija> <_> <_OP_LT> <_> <ExpresionAditiva> <_> <_PUNTO_Y_COMA> <_> <IncrementoPara>? <_> <_RPAREN> <_> <BloqueCodigo>
+::= para ( $i:  numero  =  0;  <LiteralPrimario> <_> <_OP_LT> <_> <ExpresionAditiva> <_> <_PUNTO_Y_COMA> <_> <IncrementoPara>? <_> <_RPAREN> <_> <BloqueCodigo>
+::= para ( $i:  numero  =  0;  <_IDENTIFICADOR_VAR> <_> <_OP_LT> <_> <ExpresionAditiva>  <_> <_PUNTO_Y_COMA> <_> <IncrementoPara>? <_> <_RPAREN> <_> <BloqueCodigo>
+::= para ( $i:  numero  =  0;  $i  <_> <_OP_LT> <_> <ExpresionAditiva>  <_> <_PUNTO_Y_COMA> <_>  <IncrementoPara>? <_> <_RPAREN> <_> <BloqueCodigo>
+::= para ( $i:  numero  =  0;  $i: <_OP_LT> <_> <ExpresionAditiva> <_PUNTO_Y_COMA> <_>   <IncrementoPara>? <_> <_RPAREN> <_> <BloqueCodigo>
+::= para ( $i:  numero  =  0;  $i: < <ExpresionAditiva>  <_> <_PUNTO_Y_COMA> <_>  <IncrementoPara>? <_> <_RPAREN> <_> <BloqueCodigo>
+::= para ( $i:  numero  =  0;  $i: < <ExpresionMultiplicatica>  <_> <_PUNTO_Y_COMA> <_>  <IncrementoPara>?  <_> <_RPAREN> <_> <BloqueCodigo>
+::= para ( $i:  numero  =  0;  $i: < <ExpresionPotencia>   <_> <_PUNTO_Y_COMA> <_>  <IncrementoPara>? <_> <_RPAREN> <_> <BloqueCodigo>
+::= para ( $i:  numero  =  0;  $i: < <ExpresionUnaria>  <_> <_PUNTO_Y_COMA> <_>  <IncrementoPara>? <_> <_RPAREN> <_> <BloqueCodigo>
+::= para ( $i:  numero  =  0;  $i: < <ExpresionFija>  <_> <_PUNTO_Y_COMA> <_>  <IncrementoPara>? <_> <_RPAREN> <_> <BloqueCodigo>
+::= para ( $i:  numero  =  0;  $i: < <LiteralPrimario> >  <_> <_PUNTO_Y_COMA> <_>  <IncrementoPara>? <_> <_RPAREN> <_> <BloqueCodigo>
+::= para ( $i:  numero  =  0;  $i: < <_numero> >  <_> <_PUNTO_Y_COMA> <_>  <IncrementoPara>? <_> <_RPAREN> <_> <BloqueCodigo>
+::= para ( $i:  numero  =  0;  $i: < 10  <_PUNTO_Y_COMA> <_>  <IncrementoPara>? <_> <_RPAREN> <_> <BloqueCodigo>
+::= para ( $i : numero = 0 ; $i < 10 ; <IncrementoPara>  <_> <_RPAREN> <_>  <BloqueCodigo> <_nl>
+::= para ( $i : numero = 0 ; $i < 10 ; <Expresion>  <_> <_RPAREN> <_>  <BloqueCodigo> <_nl>
+::= para ( $i : numero = 0 ; $i < 10 ; <ExpresionLogicaOr>  <_> <_RPAREN> <_>  <BloqueCodigo> <_nl>
+::= para ( $i : numero = 0 ; $i < 10 ; <ExpresionLogicaAnd>  <_> <_RPAREN> <_>  <BloqueCodigo> <_nl>
+::= para ( $i : numero = 0 ; $i < 10 ; <ExpresionIgualdad>  <_> <_RPAREN> <_>  <BloqueCodigo> <_nl>
+::= para ( $i : numero = 0 ; $i < 10 ; <ExpresionReacional>  <_> <_RPAREN> <_>  <BloqueCodigo> <_nl>
+::= para ( $i : numero = 0 ; $i < 10 ; <ExpresionAditiva>  <_> <_RPAREN> <_>  <BloqueCodigo> <_nl>
+::= para ( $i : numero = 0 ; $i < 10 ; <ExpresionAditiva> <_> <_OP_SUMA> <_> <ExpresionMultiplicativa>  <_> <_RPAREN> <_>  <BloqueCodigo> <_nl>
+::= para ( $i : numero = 0 ; $i < 10 ; <ExpresionPotencia> <_> <_OP_SUMA> <_> <ExpresionMultiplicativa>  <_> <_RPAREN> <_>  <BloqueCodigo> <_nl>
+::= para ( $i : numero = 0 ; $i < 10 ; <ExpresionUnaria> <_> <_OP_SUMA> <_> <ExpresionMultiplicativa> <_> <_RPAREN> <_>  <BloqueCodigo> <_nl>
+::= para ( $i : numero = 0 ; $i < 10 ; <ExpresionPostfija> <_> <_OP_SUMA> <_> <ExpresionMultiplicativa> <_> <_RPAREN> <_>  <BloqueCodigo> <_nl>
+::= para ( $i : numero = 0 ; $i < 10 ; <LitealPrimario>  <_<_> <_OP_SUMA> <_> <ExpresionMultiplicativa>> <_RPAREN> <_>  <BloqueCodigo> <_nl>
+::= para ( $i : numero = 0 ; $i < 10 ; <_numero> <_> <_OP_SUMA> <_> <ExpresionMultiplicativa> <_> <_RPAREN> <_>  <BloqueCodigo> <_nl>
+::= para ( $i : numero = 0 ; $i < 10 ; <_IDENTIFICADOR_VAR> <_> <_OP_SUMA> <_> <ExpresionMultiplicativa> <_> <_RPAREN> <_>  <BloqueCodigo> <_nl>
+::= para ( $i : numero = 0 ; $i < 10 ; $i  <_> <_OP_SUMA> <_> <ExpresionMultiplicativa> <_> <_RPAREN> <_>  <BloqueCodigo> <_nl>
+::= para ( $i : numero = 0 ; $i < 10 ; $i + <_> <ExpresionMultiplicativa> <_>  <BloqueCodigo> <_nl>
+::= para ( $i : numero = 0 ; $i < 10 ; $i + <ExpresionMultiplicativa> <_> <_RPAREN> <_>  <BloqueCodigo> <_nl>
+::= para ( $i : numero = 0 ; $i < 10 ; $i + <ExpresionPotencia> <_> <_RPAREN> <_>  <BloqueCodigo> <_nl>
+::= para ( $i : numero = 0 ; $i < 10 ; $i + <ExpresionUnaria> <_> <_RPAREN> <_>  <BloqueCodigo> <_nl>
+::= para ( $i : numero = 0 ; $i < 10 ; $i + <ExpresionPostfija> <_> <_RPAREN> <_>  <BloqueCodigo> <_nl>
+::= para ( $i : numero = 0 ; $i < 10 ; $i + <LiteralPrimario> <_> <_RPAREN> <_>  <BloqueCodigo> <_nl>
+::= para ( $i : numero = 0 ; $i < 10 ; $i + <_numero> <_> <_RPAREN> <_>  <BloqueCodigo> <_nl>
+::= para ( $i : numero = 0 ; $i < 10 ; $i + 1 <_> <_RPAREN> <_>  <BloqueCodigo> <_nl>
+::= para ( $i : numero = 0 ; $i < 10 ; $i + 1 ) <BloqueCodigo> <_nl>
+::= para ( $i : numero = 0 ; $i < 10 ; $i + 1 ) <_LBRACE> <_nl> <Sentencias> <_nl> <_RBRACE> <_nl>
+::= para ( $i : numero = 0 ; $i < 10 ; $i + 1 ) { <Sentencias> <_nl> <_RBRACE> <_nl>
+::= para ( $i : numero = 0 ; $i < 10 ; $i + 1 ) { <LlamadaImprimir> <_nl> <_RBRACE> <_nl>
+::= para ( $i : numero = 0 ; $i < 10 ; $i + 1 ) { <_PR_IMPRIMIR> <_> <_LPAREN> <_> <ListaArgumentosOpcional> <_> <_RPAREN> <_> <_PUNTO_Y_COMA>
+ <_nl> <_RBRACE> <_nl>
+::= para ( $i : numero = 0 ; $i < 10 ; $i + 1 ) { imprimir <_> <_LPAREN> <_> <ListaArgumentosOpcional> <_> <_RPAREN> <_> <_PUNTO_Y_COMA>
+ <_nl> <_RBRACE> <_nl>
+::= para ( $i : numero = 0 ; $i < 10 ; $i + 1 ) { imprimir( <ListaArgumentosOpcional> <_> <_RPAREN> <_> <_PUNTO_Y_COMA>
+ <_nl> <_RBRACE> <_nl>
+::= para ( $i : numero = 0 ; $i < 10 ; $i + 1 ) { imprimir( <ListaArgumentos> <_> <_RPAREN> <_> <_PUNTO_Y_COMA>
+ <_nl> <_RBRACE> <_nl>
+::= para ( $i : numero = 0 ; $i < 10 ; $i + 1 ) { imprimir( <Expresion> <_> <_RPAREN> <_> <_PUNTO_Y_COMA>
+ <_nl> <_RBRACE> <_nl>
+::= para ( $i : numero = 0 ; $i < 10 ; $i + 1 ) { imprimir( <ExpresionOr> <_> <_RPAREN> <_> <_PUNTO_Y_COMA>
+ <_nl> <_RBRACE> <_nl>
+::= para ( $i : numero = 0 ; $i < 10 ; $i + 1 ) { imprimir( <ExpresionAnd> <_> <_RPAREN> <_> <_PUNTO_Y_COMA>
+ <_nl> <_RBRACE> <_nl>
+::= para ( $i : numero = 0 ; $i < 10 ; $i + 1 ) { imprimir( <ExpresionIgualdad> <_> <_RPAREN> <_> <_PUNTO_Y_COMA>
+ <_nl> <_RBRACE> <_nl>
+::= para ( $i : numero = 0 ; $i < 10 ; $i + 1 ) { imprimir( <ExpresionRelacional> <_> <_RPAREN> <_> <_PUNTO_Y_COMA>
+ <_nl> <_RBRACE> <_nl>
+::= para ( $i : numero = 0 ; $i < 10 ; $i + 1 ) { imprimir( <ExpresionAditiva> <_> <_RPAREN> <_> <_PUNTO_Y_COMA>
+ <_nl> <_RBRACE> <_nl>
+::= para ( $i : numero = 0 ; $i < 10 ; $i + 1 ) { imprimir( <ExpresionMultiplicativa> <_> <_RPAREN> <_> <_PUNTO_Y_COMA>
+ <_nl> <_RBRACE> <_nl>
+::= para ( $i : numero = 0 ; $i < 10 ; $i + 1 ) { imprimir( <ExpresionPotencia> <_> <_RPAREN> <_> <_PUNTO_Y_COMA>
+ <_nl> <_RBRACE> <_nl>
+::= para ( $i : numero = 0 ; $i < 10 ; $i + 1 ) { imprimir( <ExpresionUnaria> <_> <_RPAREN> <_> <_PUNTO_Y_COMA>
+ <_nl> <_RBRACE> <_nl>
+::= para ( $i : numero = 0 ; $i < 10 ; $i + 1 ) { imprimir( <ExpresionPOstfija> <_> <_RPAREN> <_> <_PUNTO_Y_COMA>
+ <_nl> <_RBRACE> <_nl>
+::= para ( $i : numero = 0 ; $i < 10 ; $i + 1 ) { imprimir( <LiteralPrimario> <_> <_RPAREN> <_> <_PUNTO_Y_COMA>
+ <_nl> <_RBRACE> <_nl>
+::= para ( $i : numero = 0 ; $i < 10 ; $i + 1 ) { imprimir( <_IDENTIFICADOR_VAR><_> <_RPAREN> <_> <_PUNTO_Y_COMA>
+ <_nl> <_RBRACE> <_nl>
+::= para ( $i : numero = 0 ; $i < 10 ; $i + 1 ) { imprimir($i) <_> <_PUNTO_Y_COMA> <_nl> <_RBRACE> <_nl>
+::= para ( $i : numero = 0 ; $i < 10 ; $i + 1 ) { imprimir($i); <_nl> <_RBRACE> <_nl>
+::= para ( $i : numero = 0 ; $i < 10 ; $i + 1 ) { imprimir($i); } <_nl>
+::= para ( $i : numero = 0 ; $i < 10 ; $i + 1 ) { imprimir($i); } 
 
 ```
 
