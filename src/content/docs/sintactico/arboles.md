@@ -134,9 +134,7 @@ Los árboles de derivación son una forma visual de entender la estructura sint�
 
 ## Condicional `si-siNo` `si-siNo`
 
-## Condicional `mientras`
-
-## Condicional `para`
+![Arreglo booleano](/AstroLibresScript/img/arboles/Arbol_siNo.jpeg)
 
 ## Condicional `segun`
 

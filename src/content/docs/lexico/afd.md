@@ -8,16 +8,6 @@ sidebar:
 
 ![Reasignacion variable 1](/AstroLibresScript/img/afd/AFD_DvariableN.jpeg)
 
-## Declaración de variable (texto)
-
-## Declaración de variable (booleano)
-
-## Declaración de constante (numero)
-
-## Declaración de constante (texto)
-
-## Declaración de constante (booleano)
-
 ## Reasignación de variable
 
 ![Reasignacion variable 1](/AstroLibresScript/img/afd/AFD_Rvariable.jpeg)
@@ -36,12 +26,6 @@ sidebar:
 ## Condicional `si`
 
 ![Reasignacion variable 1](/AstroLibresScript/img/afd/AFD_Si.jpeg)
-
-## Condicional `si-siNo` `si-siNo`
-
-## Condicional `mientras`
-
-## Condicional `para`
 
 ## Condicional `segun`
 
