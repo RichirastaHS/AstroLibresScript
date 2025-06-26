@@ -18,13 +18,9 @@ sidebar:
 
 ## Declaración de constante (booleano)
 
-## Reasignación de variable (numero)
+## Reasignación de variable
 
 ![Reasignacion variable 1](/AstroLibresScript/img/afd/AFD_Rvariable.jpeg)
-
-## Reasignación de variable (texto)
-
-## Reasignación de variable (booleano)
 
 ## Arreglo de datos
 

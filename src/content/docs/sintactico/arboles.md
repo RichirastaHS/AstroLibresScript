@@ -7,7 +7,7 @@ Un árbol de derivación (o árbol sintáctico) es una representación gráfica 
 
 Los árboles de derivación son una forma visual de entender la estructura sintáctica de un programa y cómo el analizador sintáctico lo ha interpretado.
 
-## Declaración de variable 
+## Declaración de variable
 
 ![LiveServer](/AstroLibresScript/img/arboles/Arbol_Declaracion.png)
 
@@ -23,7 +23,7 @@ Los árboles de derivación son una forma visual de entender la estructura sint�
 
 ![LiveServer](/AstroLibresScript/img/arboles/arboldcn.png)
 
-## Reasignación de variable (numero)
+## Reasignación de variable
 
 ```go
                                  <Programa>
@@ -65,10 +65,6 @@ Los árboles de derivación son una forma visual de entender la estructura sint�
                                                       123
 
 ```
-
-## Reasignación de variable (texto)
-
-## Reasignación de variable (booleano)
 
 ## Arreglo de datos (numero)
 
