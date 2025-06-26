@@ -15,7 +15,7 @@ Los árboles de derivación son una forma visual de entender la estructura sint�
 
 ## Declaración de constante (numero)
 
-![LiveServer](/AstroLibresScript/img/arboles/arboldcn.png)
+![LiveServer](/AstroLibresScript/img/arboles/arboldcb.png)
 
 ## Declaración de constante (texto)
 
@@ -23,7 +23,7 @@ Los árboles de derivación son una forma visual de entender la estructura sint�
 
 ## Declaración de constante (booleano)
 
-![LiveServer](/AstroLibresScript/img/arboles/arboldcb.png)
+![LiveServer](/AstroLibresScript/img/arboles/arboldcn.png)
 
 ## Reasignación de variable (numero)
 
@@ -72,9 +72,21 @@ Los árboles de derivación son una forma visual de entender la estructura sint�
 
 ## Reasignación de variable (booleano)
 
-## Arreglo de datos
+## Arreglo de datos (numero)
+
+![Arreglo booleano](/AstroLibresScript/img/arboles/Arbol_Arreglo_numero.png)
+
+## Arreglo de datos (texto)
+
+![Arreglo booleano](/AstroLibresScript/img/arboles/Arbol_Arreglo_numero.png)
+
+## Arreglo de datos (booleano)
+
+![Arreglo booleano](/AstroLibresScript/img/arboles/Arbol_Arreglo_numero.png)
 
 ## Concatenación
+
+![Arreglo booleano](/AstroLibresScript/img/arboles/Arbol_Concatenacion.png)
 
 ## Condicional `si`
 
@@ -134,7 +146,9 @@ Los árboles de derivación son una forma visual de entender la estructura sint�
 
 ## Condicional `segun`
 
-## Funcion
+## `funcion`
+
+![Arreglo booleano](/AstroLibresScript/img/arboles/Arbol_Funciones.png)
 
 ## Operacion aritmetica compleja
 

@@ -363,34 +363,89 @@ Derivacion por la izquierda
 
 ```
 
-## Arreglo de datos Derecha
+## Arreglo de datos (numero) Derecha
 
 ```go
+$matriz: numero[][] = [[1, 2], [3, 4]];
+
+<Programa>
+→ _nl <Sentencias> _nl
+→ _nl <Sentencia> _nl _nl
+→ _nl <DeclaracionVariable> _nl _nl
+→ _nl <_IDENTIFICADOR_VAR> _ <_DOS_PUNTOS> _ <Tipo> _ <_OP_ASIGNACION> _ <Expresion> _ <_PUNTO_Y_COMA> _nl _nl
+→ _nl $matriz _ <_DOS_PUNTOS> _ <Tipo> _ <_OP_ASIGNACION> _ <Expresion> _ ; _nl _nl
+→ _nl $matriz _ : _ <Tipo> _ = _ <Expresion> _ ; _nl _nl
+→ _nl $matriz _ : _ numero <_LBRACKET> _ <_RBRACKET> <_LBRACKET> _ <_RBRACKET> _ = _ <Expresion> _ ; _nl _nl
+→ _nl $matriz _ : _ numero [ ] [ ] _ = _ <Expresion> _ ; _nl _nl
+→ _nl $matriz _ : _ numero [ ] [ ] _ = _ <CreacionArreglo> _ ; _nl _nl
+→ _nl $matriz _ : _ numero [ ] [ ] _ = _ [ <ListaArgumentos> ] _ ; _nl _nl
+→ _nl $matriz _ : _ numero [ ] [ ] _ = _ [ <Expresion> , <Expresion> ] _ ; _nl _nl
+→ _nl $matriz _ : _ numero [ ] [ ] _ = _ [ [ <ListaArgumentos> ] , [ <ListaArgumentos> ] ] _ ; _nl _nl
+→ _nl $matriz _ : _ numero [ ] [ ] _ = _ [ [ 1 , 2 ] , [ 3 , 4 ] ] _ ; _nl _nl
 
 ```
 
-## Arreglo de  Izquierda
+## Arreglo de datos (numero) Izquierda
 
 ```go
+$matriz: numero[][] = [[1, 2], [3, 4]];
 
-```
-
-## Gramatica basde: Concatenación
-
-```go
-
+<Programa>
+→ _nl <Sentencias> _nl
+→ _nl <Sentencia> _nl _nl
+→ _nl <DeclaracionVariable> _nl _nl
+→ _nl <_IDENTIFICADOR_VAR> _ <_DOS_PUNTOS> _ <Tipo> _ <_OP_ASIGNACION> _ <Expresion> _ <_PUNTO_Y_COMA> _nl _nl
+→ _nl <_IDENTIFICADOR_VAR> _ <_DOS_PUNTOS> _ <Tipo> _ <_OP_ASIGNACION> _ <CreacionArreglo> _ ; _nl _nl
+→ _nl <_IDENTIFICADOR_VAR> _ <_DOS_PUNTOS> _ <TipoBase> <_LBRACKET> <_RBRACKET> <_LBRACKET> <_RBRACKET> _ = _ [ <ListaArgumentos> ] _ ; _nl _nl
+→ _nl $matriz _ : _ numero [ ] [ ] _ = _ [ <Expresion> , <Expresion> ] _ ; _nl _nl
+→ _nl $matriz _ : _ numero [ ] [ ] _ = _ [ <CreacionArreglo> , <CreacionArreglo> ] _ ; _nl _nl
+→ _nl $matriz _ : _ numero [ ] [ ] _ = _ [ [ <ListaArgumentos> ] , [ <ListaArgumentos> ] ] _ ; _nl _nl
+→ _nl $matriz _ : _ numero [ ] [ ] _ = _ [ [ <Expresion> , <Expresion> ] , [ <Expresion> , <Expresion> ] ] _ ; _nl _nl
+→ _nl $matriz _ : _ numero [ ] [ ] _ = _ [ [ 1 , 2 ] , [ 3 , 4 ] ] _ ; _nl _nl
 ```
 
 ## Concatenación Derecha
 
 ```go
+$saludo: texto = "Hola" + " " + "Mundo";
 
+<DeclaracionVariable>
+→ <_IDENTIFICADOR_VAR> <_> <_DOS_PUNTOS> <_> <Tipo> <_> <_OP_ASIGNACION> <_> <Expresion> <_> <_PUNTO_Y_COMA>
+→ "$saludo" <_> ":" <_> <Tipo> <_> "=" <_> <Expresion> <_> ";"
+→ "$saludo" " " ":" " " <Tipo> " " "=" " " <Expresion> " " ";"
+→ "$saludo" " " ":" " " <TipoBase> " " "=" " " <Expresion> " " ";"
+→ "$saludo" " " ":" " " "texto" " " "=" " " <ExpresionLogicaOr> " " ";"
+→ "$saludo" " " ":" " " "texto" " " "=" " " <ExpresionLogicaAnd> " " ";"
+→ "$saludo" " " ":" " " "texto" " " "=" " " <ExpresionIgualdad> " " ";"
+→ "$saludo" " " ":" " " "texto" " " "=" " " <ExpresionRelacional> " " ";"
+→ "$saludo" " " ":" " " "texto" " " "=" " " <ExpresionAditiva> " " ";"
+→ "$saludo" " " ":" " " "texto" " " "=" " " <ExpresionAditiva> "+" " " <ExpresionMultiplicativa> " " ";"
+→ "$saludo" " " ":" " " "texto" " " "=" " " <ExpresionAditiva> "+" " " <ExpresionPostfija> " " ";"
+→ "$saludo" " " ":" " " "texto" " " "=" " " <ExpresionAditiva> "+" " " "\"Mundo\"" " " ";"
+→ "$saludo" " " ":" " " "texto" " " "=" " " <ExpresionAditiva> "+" " " "\" \"" "+" " " "\"Mundo\"" " " ";"
+→ "$saludo" " " ":" " " "texto" " " "=" " " "\"Hola\"" "+" " " "\" \"" "+" " " "\"Mundo\"" " " ";"
 ```
 
 ## Concatenación Izquierda
 
 ```go
-
+<DeclaracionVariable>
+→ <_IDENTIFICADOR_VAR> <_> <_DOS_PUNTOS> <_> <Tipo> <_> <_OP_ASIGNACION> <_> <Expresion> <_> <_PUNTO_Y_COMA>
+→ "$saludo" <_> ":" <_> <Tipo> <_> "=" <_> <Expresion> <_> ";"
+→ "$saludo" " " ":" " " <TipoBase> <_> "=" " " <Expresion> " " ";"
+→ "$saludo" " " ":" " " "texto" " " "=" " " <ExpresionLogicaOr> " " ";"
+→ "$saludo" " " ":" " " "texto" " " "=" " " <ExpresionLogicaAnd> " " ";"
+→ "$saludo" " " ":" " " "texto" " " "=" " " <ExpresionIgualdad> " " ";"
+→ "$saludo" " " ":" " " "texto" " " "=" " " <ExpresionRelacional> " " ";"
+→ "$saludo" " " ":" " " "texto" " " "=" " " <ExpresionAditiva> " " ";"
+→ "$saludo" " " ":" " " "texto" " " "=" " " <ExpresionAditiva> "+" <_> <ExpresionMultiplicativa> " " ";"
+→ "$saludo" " " ":" " " "texto" " " "=" " " <ExpresionAditiva> "+" " " <ExpresionMultiplicativa> " " ";"
+→ "$saludo" " " ":" " " "texto" " " "=" " " <ExpresionMultiplicativa> "+" " " <ExpresionMultiplicativa> " " ";"
+→ "$saludo" " " ":" " " "texto" " " "=" " " <ExpresionPostfija> "+" " " <ExpresionMultiplicativa> " " ";"
+→ "$saludo" " " ":" " " "texto" " " "=" " " "\"Hola\"" "+" " " <ExpresionMultiplicativa> " " ";"
+→ "$saludo" " " ":" " " "texto" " " "=" " " "\"Hola\"" "+" " " <ExpresionAditiva> " " ";"
+→ "$saludo" " " ":" " " "texto" " " "=" " " "\"Hola\"" "+" " " <ExpresionAditiva> "+" <_> <ExpresionMultiplicativa> " " ";"
+→ "$saludo" " " ":" " " "texto" " " "=" " " "\"Hola\"" "+" " " "\" \"" "+" " " "\"Mundo\"" " " ";"
 ```
 
 ## Gramatica base: Condicional `si`
@@ -516,16 +571,48 @@ Derivacion por la izquierda
 
 ```
 
-## Funcion Derecha
+## `funcion` Derecha
 
 ```go
+funcion esMayor($num1: numero, $num2: numero): booleano {
+    devolver $num1 > $num2;
+}
 
+<Programa>
+→ _nl <Sentencias> _nl
+→ _nl <Sentencia> _nl _nl
+→ _nl <DeclaracionFuncion> _nl _nl
+→ _nl <_PR_FUNCION> __ <_IDENTIFICADOR_GRAL> _ <_LPAREN> _ <ListaParametrosOpcional> _ <_RPAREN> _ <_DOS_PUNTOS> _ <Tipo> _ <BloqueCodigo> _nl _nl
+→ _nl funcion __ esMayor _ ( _ <ListaParametros> _ ) _ : _ booleano _ <BloqueCodigo> _nl _nl
+→ _nl funcion __ esMayor _ ( _ <Parametro> _ , _ <Parametro> _ ) _ : _ booleano _ <BloqueCodigo> _nl _nl
+→ _nl funcion __ esMayor _ ( _ $num1 : numero , $num2 : numero ) _ : _ booleano _ <BloqueCodigo> _nl _nl
+→ _nl funcion __ esMayor _ ( _ $num1 : numero , $num2 : numero ) _ : _ booleano _ { _nl <Sentencias> _nl } _nl _nl
+→ _nl funcion __ esMayor _ ( _ $num1 : numero , $num2 : numero ) _ : _ booleano _ { _nl <Sentencia> _nl _nl } _nl _nl
+→ _nl funcion __ esMayor _ ( _ $num1 : numero , $num2 : numero ) _ : _ booleano _ { _nl <SentenciaDevolver> _nl _nl } _nl _nl
+→ _nl funcion __ esMayor _ ( _ $num1 : numero , $num2 : numero ) _ : _ booleano _ { _nl devolver __ <Expresion> _ <_PUNTO_Y_COMA> _nl _nl } _nl _nl
+→ _nl funcion __ esMayor _ ( _ $num1 : numero , $num2 : numero ) _ : _ booleano _ { _nl devolver __ <ExpresionRelacional> _ ; _nl _nl } _nl _nl
+→ _nl funcion __ esMayor _ ( _ $num1 : numero , $num2 : numero ) _ : _ booleano _ { _nl devolver __ $num1 > $num2 ; _nl _nl } _nl _nl
 ```
 
-## Funcion Izquierda
+## `funcion` Izquierda
 
 ```go
 
+<Programa>
+→ _nl <Sentencias> _nl
+→ _nl <Sentencia> _nl _nl
+→ _nl <DeclaracionFuncion> _nl _nl
+→ _nl <_PR_FUNCION> __ <_IDENTIFICADOR_GRAL> _ <_LPAREN> _ <ListaParametrosOpcional> _ <_RPAREN> _ <_DOS_PUNTOS> _ <Tipo> _ <BloqueCodigo> _nl _nl
+→ _nl funcion __ esMayor _ ( _ <ListaParametros> _ ) _ : _ booleano _ <BloqueCodigo> _nl _nl
+→ _nl funcion __ esMayor _ ( _ <Parametro> _ , _ <Parametro> _ ) _ : _ booleano _ <BloqueCodigo> _nl _nl
+→ _nl funcion __ esMayor _ ( _ $num1 _ : _ numero , _ $num2 _ : _ numero ) _ : _ booleano _ <BloqueCodigo> _nl _nl
+→ _nl funcion __ esMayor _ ( _ $num1 : numero , $num2 : numero ) _ : _ booleano _ <_LBRACE> _nl <Sentencias> _nl <_RBRACE> _nl _nl
+→ _nl funcion __ esMayor _ ( _ $num1 : numero , $num2 : numero ) _ : _ booleano _ { _nl <Sentencia> _nl _nl } _nl _nl
+→ _nl funcion __ esMayor _ ( _ $num1 : numero , $num2 : numero ) _ : _ booleano _ { _nl <SentenciaDevolver> _nl _nl } _nl _nl
+→ _nl funcion __ esMayor _ ( _ $num1 : numero , $num2 : numero ) _ : _ booleano _ { _nl devolver __ <Expresion> _ <_PUNTO_Y_COMA> _nl _nl } _nl _nl
+→ _nl funcion __ esMayor _ ( _ $num1 : numero , $num2 : numero ) _ : _ booleano _ { _nl devolver __ <ExpresionRelacional> _ ; _nl _nl } _nl _nl
+→ _nl funcion __ esMayor _ ( _ $num1 : numero , $num2 : numero ) _ : _ booleano _ { _nl devolver __ <ExpresionRelacional> _OP_GT <ExpresionAditiva> _ ; _nl _nl } _nl _nl
+→ _nl funcion __ esMayor _ ( _ $num1 : numero , $num2 : numero ) _ : _ booleano _ { _nl devolver __ $num1 > $num2 ; _nl _nl } _nl _nl
 ```
 
 ## Gramatica basde: Operacion aritmetica
