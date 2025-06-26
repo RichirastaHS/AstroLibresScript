@@ -3,6 +3,7 @@ title: Derivaciones
 sidebar:
   order: 3
 ---
+
 Una derivación es una secuencia de aplicaciones de reglas de producción de la gramática, comenzando desde el símbolo inicial, que lleva a una cadena de símbolos terminales (o una forma sentencial). El analizador sintáctico realiza implícitamente estas derivaciones para verificar la corrección de la entrada.
 
 Existen dos tipos principales de derivaciones, que se refieren al orden en que se expanden los no terminales:
@@ -10,74 +11,567 @@ Existen dos tipos principales de derivaciones, que se refieren al orden en que s
 * **Derivación más a la izquierda:** En cada paso, se reemplaza el no terminal más a la izquierda de la forma sentencial actual.
 * **Derivación más a la derecha:** En cada paso, se reemplaza el no terminal más a la derecha de la forma sentencial actual.
 
-Para los ejemplos, utilizaremos un fragmento de tu gramática. Consideremos la sentencia de LibreScript:
-`$a: numero = 10;`
-
-Los tokens de esta sentencia, después del análisis léxico (simplificados para la derivación), son:
-`<_IDENTIFICADOR_VAR> <_DOS_PUNTOS> <_TIPO_NUMERO> <_OP_ASIGNACION> <_numero> <_PUNTO_Y_COMA>`
-
-### Ejemplo de Derivación Más a la Izquierda
-
-Partiendo del símbolo inicial simplificado para una sentencia: `<Sentencia>`.
-
-Gramática relevante para este ejemplo:
-
-```go
-<Programa> ::= <_nl> <Sentencias> <_nl>
-<Sentencias> ::= <Sentencia> <_nl> | <Sentencias> <Sentencia> <_nl> | ε
-<Sentencia> ::= <DeclaracionVariable>
-<DeclaracionVariable> ::= <_IDENTIFICADOR_VAR> <_> <_DOS_PUNTOS> <_> <Tipo> <_> <_OP_ASIGNACION> <_> <Expresion> <_> <_PUNTO_Y_COMA>
-<Tipo> ::= <TipoBase>
-<TipoBase> ::= <_TIPO_NUMERO>
-<Expresion> ::= <ExpresionLogicaOr>
-<ExpresionLogicaOr> ::= <ExpresionLogicaAnd>
-<ExpresionLogicaAnd> ::= <ExpresionIgualdad>
-<ExpresionIgualdad> ::= <ExpresionRelacional>
-<ExpresionRelacional> ::= <ExpresionAditiva>
-<ExpresionAditiva> ::= <ExpresionMultiplicativa>
-<ExpresionMultiplicativa> ::= <ExpresionPotencia>
-<ExpresionPotencia> ::= <ExpresionUnaria>
-<ExpresionUnaria> ::= <ExpresionPostfija>
-<ExpresionPostfija> ::= <LiteralPrimario>
-<LiteralPrimario> ::= <_numero>
-<_> ::= <_ws>* (* espacio opcional *)
-<_nl> ::= (<_ws> | <_nl> | <_comentario_linea> | <_comentario_bloque>)* (* salto de línea/espacio significativo *)
-```
-
-Derivación:
+## Declaración de variable (numero) Derecha
 
 ```go
 <Programa>
-_nl <Sentencias> _nl (aplicando Programa ::= _nl Sentencias _nl)
-_nl <Sentencia> _nl _nl (aplicando Sentencias ::= Sentencia _nl) - asumiendo solo una sentencia para simplificar
-_nl <DeclaracionVariable> _nl _nl (aplicando Sentencia ::= DeclaracionVariable)
-_nl <_IDENTIFICADOR_VAR> _ <_DOS_PUNTOS> _ <Tipo> _ <_OP_ASIGNACION> _ <Expresion> _ <_PUNTO_Y_COMA> _nl _nl (aplicando DeclaracionVariable)
-_nl <_IDENTIFICADOR_VAR> _ <_DOS_PUNTOS> _ <TipoBase> _ <_OP_ASIGNACION> _ <Expresion> _ <_PUNTO_Y_COMA> _nl _nl (aplicando Tipo ::= TipoBase)
-_nl <_IDENTIFICADOR_VAR> _ <_DOS_PUNTOS> _ <_TIPO_NUMERO> _ <_OP_ASIGNACION> _ <Expresion> _ <_PUNTO_Y_COMA> _nl _nl (aplicando TipoBase ::= _TIPO_NUMERO)
-_nl <_IDENTIFICADOR_VAR> _ <_DOS_PUNTOS> _ <_TIPO_NUMERO> _ <_OP_ASIGNACION> _ <ExpresionLogicaOr> _ <_PUNTO_Y_COMA> _nl _nl (aplicando Expresion ::= ExpresionLogicaOr)
-... (continúa expandiendo ExpresionLogicaOr a ExpresionLogicaAnd, etc., hasta LiteralPrimario)
-... _ <_numero> _ <_PUNTO_Y_COMA> _nl _nl (llegando al token numérico)
-... (reemplazando _ y _nl con sus lexemas de espacio/salto de línea)
+=> <_nl> <Sentencias> <_nl>
+=> <_nl> <Sentencia> <_nl>
+=> <_nl> <DeclaracionVariable> <_nl>
+=> <_nl> <_IDENTIFICADOR_VAR> <_> <_DOS_PUNTOS> <_> <Tipo> <_> <_OP_ASIGNACION> <_> <Expresion> <_> <_PUNTO_Y_COMA> <_nl>
+=> <_nl> $edad <_> <_DOS_PUNTOS> <_> <Tipo> <_> <_OP_ASIGNACION> <_> <Expresion> <_> <_PUNTO_Y_COMA> <_nl>
+=> <_nl> $edad : <_> <Tipo> <_> = <_> <Expresion> <_> <_PUNTO_Y_COMA> <_nl>
+=> <_nl> $edad : <_> <TipoBase> <_> = <_> <Expresion> <_> <_PUNTO_Y_COMA> <_nl>
+=> <_nl> $edad : <_> numero <_> = <_> <Expresion> <_> <_PUNTO_Y_COMA> <_nl>
+=> <_nl> $edad : numero <_> = <_> <Expresion> <_> <_PUNTO_Y_COMA> <_nl>
+=> <_nl> $edad : numero = <_> <ExpresionLogicaOr> <_> <_PUNTO_Y_COMA> <_nl>
+=> <_nl> $edad : numero = <_> <ExpresionLogicaAnd> <_> <_PUNTO_Y_COMA> <_nl>
+=> <_nl> $edad : numero = <_> <ExpresionIgualdad> <_> <_PUNTO_Y_COMA> <_nl>
+=> <_nl> $edad : numero = <_> <ExpresionRelacional> <_> <_PUNTO_Y_COMA> <_nl>
+=> <_nl> $edad : numero = <_> <ExpresionAditiva> <_> <_PUNTO_Y_COMA> <_nl>
+=> <_nl> $edad : numero = <_> <ExpresionMultiplicativa> <_> <_PUNTO_Y_COMA> <_nl>
+=> <_nl> $edad : numero = <_> <ExpresionPotencia> <_> <_PUNTO_Y_COMA> <_nl>
+=> <_nl> $edad : numero = <_> <ExpresionUnaria> <_> <_PUNTO_Y_COMA> <_nl>
+=> <_nl> $edad : numero = <_> <ExpresionPostfija> <_> <_PUNTO_Y_COMA> <_nl>
+=> <_nl> $edad : numero = <_> <LiteralPrimario> <_> <_PUNTO_Y_COMA> <_nl>
+=> <_nl> $edad : numero = <_> <_numero> <_> <_PUNTO_Y_COMA> <_nl>
+=> <_nl> $edad : numero = <_> 25 <_> ; <_nl>
+=> $edad : numero = 25 ;
+
 ```
 
-### Ejemplo de Derivación Más a la Derecha
+## Declaración de variable (numero) Izquierda
 
 ```go
-Partiendo del símbolo inicial: <Programa>
-
-Derivación:
-
 <Programa>
-_nl <Sentencias> _nl
-_nl <Sentencias> <Sentencia> _nl _nl (aplicando Sentencias ::= Sentencias Sentencia _nl - expandiendo el _nl más a la derecha de la primera sentencia antes de la segunda)
-_nl <Sentencias> <Sentencia> _ws* _nl (expandiendo el _nl más a la derecha)
-_nl <Sentencias> <Sentencia> _ws* \n (ejemplificando el lexema de _nl)
-_nl <Sentencias> <DeclaracionVariable> _ws* \n (aplicando Sentencia ::= DeclaracionVariable)
-_nl <Sentencias> <_IDENTIFICADOR_VAR> _ <_DOS_PUNTOS> _ <Tipo> _ <_OP_ASIGNACION> _ <Expresion> _ <_PUNTO_Y_COMA> _ws* \n
-_nl <Sentencias> <_IDENTIFICADOR_VAR> _ <_DOS_PUNTOS> _ <Tipo> _ <_OP_ASIGNACION> _ <ExpresionLogicaOr> _ <_PUNTO_Y_COMA> _ws* \n (expande Expresion que es el no terminal más a la derecha en la producción de DeclaracionVariable)
-... (continúa expandiendo ExpresionLogicaOr a ExpresionLogicaAnd, etc., hasta LiteralPrimario)
-_nl <Sentencias> <_IDENTIFICADOR_VAR> _ <_DOS_PUNTOS> _ <Tipo> _ <_OP_ASIGNACION> _ <_numero> _ <_PUNTO_Y_COMA> _ws* \n (llega al lexema 10)
-_nl <Sentencias> <_IDENTIFICADOR_VAR> _ <_DOS_PUNTOS> _ <TipoBase> _ <_OP_ASIGNACION> _ <_numero> _ <_PUNTO_Y_COMA> _ws* \n (expande Tipo que es el siguiente no terminal más a la derecha)
-_nl <Sentencias> <_IDENTIFICADOR_VAR> _ <_DOS_PUNTOS> _ <_TIPO_NUMERO> _ <_OP_ASIGNACION> _ <_numero> _ <_PUNTO_Y_COMA> _ws* \n (llega al lexema numero)
-... (y así sucesivamente hasta que solo quedan terminales y los espacios/saltos de línea se resuelven a sus lexemas).
+=> <_nl> <Sentencias> <_nl>
+=> <_nl> <Sentencia> <_nl>
+=> <_nl> <DeclaracionVariable> <_nl>
+=> <_nl> <_IDENTIFICADOR_VAR> <_> <_DOS_PUNTOS> <_> <Tipo> <_> <_OP_ASIGNACION> <_> <Expresion> <_> <_PUNTO_Y_COMA> <_nl>
+=> $edad <_> <_DOS_PUNTOS> <_> <Tipo> <_> <_OP_ASIGNACION> <_> <Expresion> <_> <_PUNTO_Y_COMA>
+=> $edad : <_> <Tipo> <_> = <_> <Expresion> <_> <_PUNTO_Y_COMA>
+=> $edad : <_> <TipoBase> <_> = <_> <Expresion> <_> <_PUNTO_Y_COMA>
+=> $edad : <_> numero <_> = <_> <Expresion> <_> <_PUNTO_Y_COMA>
+=> $edad : numero = <_> <ExpresionLogicaOr> <_> <_PUNTO_Y_COMA>
+=> $edad : numero = <_> <ExpresionLogicaAnd> <_> <_PUNTO_Y_COMA>
+=> $edad : numero = <_> <ExpresionIgualdad> <_> <_PUNTO_Y_COMA>
+=> $edad : numero = <_> <ExpresionRelacional> <_> <_PUNTO_Y_COMA>
+=> $edad : numero = <_> <ExpresionAditiva> <_> <_PUNTO_Y_COMA>
+=> $edad : numero = <_> <ExpresionMultiplicativa> <_> <_PUNTO_Y_COMA>
+=> $edad : numero = <_> <ExpresionPotencia> <_> <_PUNTO_Y_COMA>
+=> $edad : numero = <_> <ExpresionUnaria> <_> <_PUNTO_Y_COMA>
+=> $edad : numero = <_> <ExpresionPostfija> <_> <_PUNTO_Y_COMA>
+=> $edad : numero = <_> <LiteralPrimario> <_> <_PUNTO_Y_COMA>
+=> $edad : numero = <_> <_numero> <_> <_PUNTO_Y_COMA>
+=> $edad : numero = <_> 25 <_> <_PUNTO_Y_COMA>
+=> $edad : numero = 25 <_> ;
+=> $edad : numero = 25 ;
+```
+
+## Declaración de variable (texto)Derecha
+
+```go
+<Programa>
+=> <_nl> <Sentencias> <_nl>
+=> <_nl> <Sentencia> <_nl>
+=> <_nl> <DeclaracionVariable> <_nl>
+=> <_nl> <_IDENTIFICADOR_VAR> <_> <_DOS_PUNTOS> <_> <Tipo> <_> <_OP_ASIGNACION> <_> <Expresion> <_> <_PUNTO_Y_COMA> <_nl>
+=> <_nl> $saludo <_> <_DOS_PUNTOS> <_> <Tipo> <_> <_OP_ASIGNACION> <_> <Expresion> <_> <_PUNTO_Y_COMA> <_nl>
+=> <_nl> $saludo : <_> <Tipo> <_> <_OP_ASIGNACION> <_> <Expresion> <_> <_PUNTO_Y_COMA> <_nl>
+=> <_nl> $saludo : <_> <TipoBase> <_> <_OP_ASIGNACION> <_> <Expresion> <_> <_PUNTO_Y_COMA> <_nl>
+=> <_nl> $saludo : <_> texto <_> <_OP_ASIGNACION> <_> <Expresion> <_> <_PUNTO_Y_COMA> <_nl>
+=> <_nl> $saludo : texto <_> = <_> <Expresion> <_> <_PUNTO_Y_COMA> <_nl>
+=> <_nl> $saludo : texto = <_> <ExpresionLogicaOr> <_> <_PUNTO_Y_COMA> <_nl>
+=> <_nl> $saludo : texto = <_> <ExpresionLogicaAnd> <_> <_PUNTO_Y_COMA> <_nl>
+=> <_nl> $saludo : texto = <_> <ExpresionIgualdad> <_> <_PUNTO_Y_COMA> <_nl>
+=> <_nl> $saludo : texto = <_> <ExpresionRelacional> <_> <_PUNTO_Y_COMA> <_nl>
+=> <_nl> $saludo : texto = <_> <ExpresionAditiva> <_> <_PUNTO_Y_COMA> <_nl>
+=> <_nl> $saludo : texto = <_> <ExpresionMultiplicativa> <_> <_PUNTO_Y_COMA> <_nl>
+=> <_nl> $saludo : texto = <_> <ExpresionPotencia> <_> <_PUNTO_Y_COMA> <_nl>
+=> <_nl> $saludo : texto = <_> <ExpresionUnaria> <_> <_PUNTO_Y_COMA> <_nl>
+=> <_nl> $saludo : texto = <_> <ExpresionPostfija> <_> <_PUNTO_Y_COMA> <_nl>
+=> <_nl> $saludo : texto = <_> <LiteralPrimario> <_> <_PUNTO_Y_COMA> <_nl>
+=> <_nl> $saludo : texto = <_> <_texto> <_> <_PUNTO_Y_COMA> <_nl>
+=> <_nl> $saludo : texto = <_> "Hola mundo" <_> ; <_nl>
+=> $saludo : texto = "Hola mundo" ;
+
+```
+
+## Declaración de variable (texto) Izquierda
+
+```go
+<Programa> 
+=> <_nl> <Sentencias> <_nl> 
+=> <_nl> <Sentencia> <_nl> 
+=> <_nl> <DeclaracionVariable> <_nl> 
+=> <_nl> <_IDENTIFICADOR_VAR> <_> <_DOS_PUNTOS> <_> <Tipo> <_> <_OP_ASIGNACION> <_> <Expresion> <_> <_PUNTO_Y_COMA> <_nl>
+=> $saludo <_> <_DOS_PUNTOS> <_> <Tipo> <_> <_OP_ASIGNACION> <_> <Expresion> <_> <_PUNTO_Y_COMA> 
+=> $saludo : <_> <Tipo> <_> = <_> <Expresion> <_> <_PUNTO_Y_COMA> 
+=> $saludo : <_> <TipoBase> <_> = <_> <Expresion> <_> <_PUNTO_Y_COMA> 
+=> $saludo : <_> <_TIPO_TEXTO> <_> = <_> <Expresion> <_> <_PUNTO_Y_COMA> 
+=> $saludo : texto <_> = <_> <Expresion> <_> <_PUNTO_Y_COMA> 
+=> $saludo : texto = <_> <ExpresionLogicaOr> <_> <_PUNTO_Y_COMA> 
+=> $saludo : texto = <_> <ExpresionLogicaAnd> <_> <_PUNTO_Y_COMA> 
+=> $saludo : texto = <_> <ExpresionIgualdad> <_> <_PUNTO_Y_COMA> 
+=> $saludo : texto = <_> <ExpresionRelacional> <_> <_PUNTO_Y_COMA> 
+=> $saludo : texto = <_> <ExpresionAditiva> <_> <_PUNTO_Y_COMA> 
+=> $saludo : texto = <_> <ExpresionMultiplicativa> <_> <_PUNTO_Y_COMA> 
+=> $saludo : texto = <_> <ExpresionPotencia> <_> <_PUNTO_Y_COMA> 
+=> $saludo : texto = <_> <ExpresionUnaria> <_> <_PUNTO_Y_COMA> 
+=> $saludo : texto = <_> <ExpresionPostfija> <_> <_PUNTO_Y_COMA> 
+=> $saludo : texto = <_> <LiteralPrimario> <_> <_PUNTO_Y_COMA> 
+=> $saludo : texto = <_> <_texto> <_> <_PUNTO_Y_COMA> 
+=> $saludo : texto = <_> "Hola mundo" <_> <_PUNTO_Y_COMA> 
+=> $saludo : texto = "Hola mundo" <_> ; 
+=> $saludo : texto = "Hola mundo" ;
+```
+
+## Declaración de variable (booleano)Derecha
+
+```go
+<Programa>
+=> <_nl> <Sentencias> <_nl>
+=> <_nl> <Sentencia> <_nl>
+=> <_nl> <DeclaracionVariable> <_nl>
+=> <_nl> <_IDENTIFICADOR_VAR> <_> <_DOS_PUNTOS> <_> <Tipo> <_> <_OP_ASIGNACION> <_> <Expresion> <_> <_PUNTO_Y_COMA> <_nl>
+=> <_nl> $activo <_> <_DOS_PUNTOS> <_> <Tipo> <_> <_OP_ASIGNACION> <_> <Expresion> <_> <_PUNTO_Y_COMA> <_nl>
+=> <_nl> $activo : <_> <Tipo> <_> <_OP_ASIGNACION> <_> <Expresion> <_> <_PUNTO_Y_COMA> <_nl>
+=> <_nl> $activo : <_> <TipoBase> <_> <_OP_ASIGNACION> <_> <Expresion> <_> <_PUNTO_Y_COMA> <_nl>
+=> <_nl> $activo : <_> booleano <_> <_OP_ASIGNACION> <_> <Expresion> <_> <_PUNTO_Y_COMA> <_nl>
+=> <_nl> $activo : booleano <_> = <_> <Expresion> <_> <_PUNTO_Y_COMA> <_nl>
+=> <_nl> $activo : booleano = <_> <ExpresionLogicaOr> <_> <_PUNTO_Y_COMA> <_nl>
+=> <_nl> $activo : booleano = <_> <ExpresionLogicaAnd> <_> <_PUNTO_Y_COMA> <_nl>
+=> <_nl> $activo : booleano = <_> <ExpresionIgualdad> <_> <_PUNTO_Y_COMA> <_nl>
+=> <_nl> $activo : booleano = <_> <ExpresionRelacional> <_> <_PUNTO_Y_COMA> <_nl>
+=> <_nl> $activo : booleano = <_> <ExpresionAditiva> <_> <_PUNTO_Y_COMA> <_nl>
+=> <_nl> $activo : booleano = <_> <ExpresionMultiplicativa> <_> <_PUNTO_Y_COMA> <_nl>
+=> <_nl> $activo : booleano = <_> <ExpresionPotencia> <_> <_PUNTO_Y_COMA> <_nl>
+=> <_nl> $activo : booleano = <_> <ExpresionUnaria> <_> <_PUNTO_Y_COMA> <_nl>
+=> <_nl> $activo : booleano = <_> <ExpresionPostfija> <_> <_PUNTO_Y_COMA> <_nl>
+=> <_nl> $activo : booleano = <_> <LiteralPrimario> <_> <_PUNTO_Y_COMA> <_nl>
+=> <_nl> $activo : booleano = <_> <_LIT_VERDADERO> <_> <_PUNTO_Y_COMA> <_nl>
+=> <_nl> $activo : booleano = <_> verdadero <_> ; <_nl>
+=> $activo : booleano = verdadero ;
+```
+
+## Declaración de variable (booleano) Izquierda
+
+```go
+<Programa>
+=> <_nl> <Sentencias> <_nl>
+=> <_nl> <Sentencia> <_nl>
+=> <_nl> <DeclaracionVariable> <_nl>
+=> <_nl> <_IDENTIFICADOR_VAR> <_> <_DOS_PUNTOS> <_> <Tipo> <_> <_OP_ASIGNACION> <_> <Expresion> <_> <_PUNTO_Y_COMA> <_nl>
+=> $activo <_> <_DOS_PUNTOS> <_> <Tipo> <_> <_OP_ASIGNACION> <_> <Expresion> <_> <_PUNTO_Y_COMA>
+=> $activo : <_> <Tipo> <_> = <_> <Expresion> <_> <_PUNTO_Y_COMA>
+=> $activo : <_> <TipoBase> <_> = <_> <Expresion> <_> <_PUNTO_Y_COMA>
+=> $activo : <_> booleano <_> = <_> <Expresion> <_> <_PUNTO_Y_COMA>
+=> $activo : booleano = <_> <ExpresionLogicaOr> <_> <_PUNTO_Y_COMA>
+=> $activo : booleano = <_> <ExpresionLogicaAnd> <_> <_PUNTO_Y_COMA>
+=> $activo : booleano = <_> <ExpresionIgualdad> <_> <_PUNTO_Y_COMA>
+=> $activo : booleano = <_> <ExpresionRelacional> <_> <_PUNTO_Y_COMA>
+=> $activo : booleano = <_> <ExpresionAditiva> <_> <_PUNTO_Y_COMA>
+=> $activo : booleano = <_> <ExpresionMultiplicativa> <_> <_PUNTO_Y_COMA>
+=> $activo : booleano = <_> <ExpresionPotencia> <_> <_PUNTO_Y_COMA>
+=> $activo : booleano = <_> <ExpresionUnaria> <_> <_PUNTO_Y_COMA>
+=> $activo : booleano = <_> <ExpresionPostfija> <_> <_PUNTO_Y_COMA>
+=> $activo : booleano = <_> <LiteralPrimario> <_> <_PUNTO_Y_COMA>
+=> $activo : booleano = <_> <_LIT_VERDADERO> <_> <_PUNTO_Y_COMA>
+=> $activo : booleano = <_> verdadero <_> <_PUNTO_Y_COMA>
+=> $activo : booleano = verdadero <_> ;
+=> $activo : booleano = verdadero ;
+```
+
+## Gramatica base: Declaración de constante (numero)
+
+```go
+
+```
+
+## Declaración de constante (numero) Derecha
+
+```go
+<Programa>
+⇒ <_nl> <Sentencias> <_nl>
+⇒ <_nl> <Sentencia> <_nl>
+⇒ <_nl> <DeclaracionConstante> <_nl>
+⇒ <_nl> <_IDENTIFICADOR_CONST> <_> <_DOS_PUNTOS> <_> <Tipo> <_> <_OP_ASIGNACION> <_> <Expresion> <_> <_PUNTO_Y_COMA> <_nl>
+⇒ <_nl> <_IDENTIFICADOR_CONST> <_> <_DOS_PUNTOS> <_> <Tipo> <_> <_OP_ASIGNACION> <_> <Expresion> <_> ;<_nl>
+⇒ <_nl> <_IDENTIFICADOR_CONST> <_> <_DOS_PUNTOS> <_> <Tipo> <_> <_OP_ASIGNACION> <_> <ExpresionLogicaOr><_> ;<_nl>
+⇒ <_nl> <_IDENTIFICADOR_CONST> <_> <_DOS_PUNTOS> <_> <Tipo> <_> <_OP_ASIGNACION> <_> <ExpresionLogicaAnd><_> ;<_nl>
+⇒ <_nl> <_IDENTIFICADOR_CONST> <_> <_DOS_PUNTOS> <_> <Tipo> <_> <_OP_ASIGNACION> <_> <ExpresionIgualdad><_> ;<_nl>
+⇒ <_nl> <_IDENTIFICADOR_CONST> <_> <_DOS_PUNTOS> <_> <Tipo> <_> <_OP_ASIGNACION> <_> <ExpresionRelacional><_> ;<_nl>
+⇒ <_nl> <_IDENTIFICADOR_CONST> <_> <_DOS_PUNTOS> <_> <Tipo> <_> <_OP_ASIGNACION> <_> <ExpresionAditiva><_> ;<_nl>
+⇒ <_nl> <_IDENTIFICADOR_CONST> <_> <_DOS_PUNTOS> <_> <Tipo> <_> <_OP_ASIGNACION> <_> <ExpresionMultiplicativa><_> ;<_nl>
+⇒ <_nl> <_IDENTIFICADOR_CONST> <_> <_DOS_PUNTOS> <_> <Tipo> <_> <_OP_ASIGNACION> <_> <ExpresionPotencia><_> ;<_nl>
+⇒ <_nl> <_IDENTIFICADOR_CONST> <_> <_DOS_PUNTOS> <_> <Tipo> <_> <_OP_ASIGNACION> <_> <ExpresionUnaria><_> ;<_nl>
+⇒ <_nl> <_IDENTIFICADOR_CONST> <_> <_DOS_PUNTOS> <_> <Tipo> <_> <_OP_ASIGNACION> <_> <ExpresionPostfija> <_> ;<_nl>
+⇒ <_nl> <_IDENTIFICADOR_CONST> <_> <_DOS_PUNTOS> <_> <Tipo> <_> <_OP_ASIGNACION> <_> <LiteralPrimario><_> ;<_nl>
+⇒ <_nl> <_IDENTIFICADOR_CONST> <_> <_DOS_PUNTOS> <_> <Tipo> <_> <_OP_ASIGNACION> <_> <_numero><_> ;<_nl>
+⇒ <_nl> <_IDENTIFICADOR_CONST> <_> <_DOS_PUNTOS> <_> <Tipo> <_> <_OP_ASIGNACION> <_> 25 <_> ;<_nl>
+⇒ <_nl> <_IDENTIFICADOR_CONST> <_> <_DOS_PUNTOS> <_> <Tipo> <_> =<_> 25 <_> ;<_nl>
+⇒ <_nl> <_IDENTIFICADOR_CONST> <_> <_DOS_PUNTOS> <_> <TipoBase> <_> =<_> 25<_> ;<_nl>
+⇒ <_nl> <_IDENTIFICADOR_CONST> <_> <_DOS_PUNTOS> <_> <_TIPO_NUMERO> <_> =<_> 25<_> ;<_nl>
+⇒ <_nl> <_IDENTIFICADOR_CONST> <_> <_DOS_PUNTOS> <_> numero <_> =<_> 25<_> ;<_nl>
+⇒ <_nl> <_IDENTIFICADOR_CONST> <_> :<_> numero <_> =<_> 25<_> ;<_nl>
+⇒ <_nl> $$edad <_> :<_> numero <_> =<_> 25<_> ;<_nl>
+=> $$edad : numero =  25; 
+
+```
+
+## Declaración de constante (numero) Izquierda
+
+```go
+<Programa>
+=> <_nl> <Sentencias> <_nl>
+=> <Sentencia> <_nl>
+=> <DeclaracionConstante> <_nl>
+=> <_IDENTIFICADOR_CONST> <_> <_DOS_PUNTOS> <_> <Tipo> <_> <_OP_ASIGNACION> <_> <Expresion> <_> <_PUNTO_Y_COMA> <_nl>
+=> $$edad <_> <_DOS_PUNTOS> <_> <Tipo> <_> <_OP_ASIGNACION> <_> <Expresion> <_> <_PUNTO_Y_COMA> <_nl>
+=> $$edad : <_> <Tipo> <_> = <_> <Expresion> <_> <_> <_PUNTO_Y_COMA> <_nl>
+=> $$edad : <_> <TipoBase> <_> = <_> <Expresion> <_> <_PUNTO_Y_COMA> <_nl>
+=> $$edad : <_> <_TIPO_NUMERO> <_> = <_> <Expresion> <_> <_PUNTO_Y_COMA> <_nl>
+=> $$edad : numero = <_> <Expresion>  <_> <_PUNTO_Y_COMA> <_nl>
+=> $$edad : numero = <_> <ExpresionLogicaOr> <_> <_PUNTO_Y_COMA> <_nl>
+=> $$edad : numero = <_> <ExpresionLogicaAnd> <_> <_PUNTO_Y_COMA> <_nl>
+=> $$edad : numero = <_> <ExpresionIgualdad> <_> <_PUNTO_Y_COMA> <_nl>
+=> $$edad : numero = <_> <ExpresionRelacional> <_> <_PUNTO_Y_COMA> <_nl>
+=> $$edad : numero = <_> <ExpresionAditiva> <_> <_PUNTO_Y_COMA> <_nl>
+=> $$edad : numero = <_> <ExpresionMultiplicativa> <_> <_PUNTO_Y_COMA> <_nl>
+=> $$edad : numero = <_> <ExpresionPotencia> <_> <_PUNTO_Y_COMA> <_nl>
+=> $$edad : numero = <_> <ExpresionUnaria> <_> <_PUNTO_Y_COMA> <_nl>
+
+=> $$edad : numero = <_> <ExpresionPostfija> <_> <_PUNTO_Y_COMA> <_nl>
+=> $$edad : numero = <_> <LiteralPrimario> <_> <_PUNTO_Y_COMA> <_nl>
+=> $$edad : numero = <_> <_numero> <_> <_PUNTO_Y_COMA> <_nl>
+=> $$edad : numero = <_> 25 <_> <_PUNTO_Y_COMA> <_nl>
+=> $$edad : numero = <_> 25 <_> ;<_nl>
+=> $$edad : numero =  25; 
+```
+
+## Declaración de constante (texto)Derecha
+
+```go
+<Programa>  
+⇒ <_nl> <Sentencias> <_nl>⇒ <_nl> <Sentencia> <_nl>⇒ <_nl> <_IDENTIFICADOR_CONST> <_> <_DOS_PUNTOS> <_> <Tipo> <_> <_OP_ASIGNACION> <_> <Expresion> <_> <_PUNTO_Y_COMA> <_nl>⇒ <_nl> <_IDENTIFICADOR_CONST> <_> <_DOS_PUNTOS> <_> <Tipo> <_> <_OP_ASIGNACION> <_> <Expresion> <_> <_PUNTO_Y_COMA> <_nl>⇒ <_nl> <_IDENTIFICADOR_CONST> <_> <_DOS_PUNTOS> <_> <Tipo> <_> <_OP_ASIGNACION> <_> <Expresion> <_> ; <_nl>⇒ <_nl> <_IDENTIFICADOR_CONST> <_> <_DOS_PUNTOS> <_> <Tipo> <_> <_OP_ASIGNACION> <_> <ExpresionLogicaOr> <_> ; <_nl>⇒ <_nl> <_IDENTIFICADOR_CONST> <_> <_DOS_PUNTOS> <_> <Tipo> <_> <_OP_ASIGNACION> <_> <ExpresionLogicaAnd><_> ; <_nl>⇒ <_nl> <_IDENTIFICADOR_CONST> <_> <_DOS_PUNTOS> <_> <Tipo> <_> <_OP_ASIGNACION> <_> <ExpresionIgualdad><_> ; <_nl>⇒ <_nl> <_IDENTIFICADOR_CONST> <_> <_DOS_PUNTOS> <_> <Tipo> <_> <_OP_ASIGNACION> <_> <ExpresionRelacional><_> ; <_nl>⇒ <_nl> <_IDENTIFICADOR_CONST> <_> <_DOS_PUNTOS> <_> <Tipo> <_> <_OP_ASIGNACION> <_> <ExpresionAditiva><_> ; <_nl>⇒ <_nl> <_IDENTIFICADOR_CONST> <_> <_DOS_PUNTOS> <_> <Tipo> <_> <_OP_ASIGNACION> <_> <ExpresionMultiplicativa><_> ; <_nl>⇒ <_nl> <_IDENTIFICADOR_CONST> <_> <_DOS_PUNTOS> <_> <Tipo> <_> <_OP_ASIGNACION> <_> <ExpresionPotencia><_> ; <_nl>⇒ <_nl> <_IDENTIFICADOR_CONST> <_> <_DOS_PUNTOS> <_> <Tipo> <_> <_OP_ASIGNACION> <_> <ExpresionUnaria><_> ; <_nl>⇒ <_nl> <_IDENTIFICADOR_CONST> <_> <_DOS_PUNTOS> <_> <Tipo> <_> <_OP_ASIGNACION> <_> <ExpresionPostfija><_> ; <_nl>⇒ <_nl> <_IDENTIFICADOR_CONST> <_> <_DOS_PUNTOS> <_> <Tipo> <_> <_OP_ASIGNACION> <_> <LiteralPrimario><_> ; <_nl>⇒ <_nl> <_IDENTIFICADOR_CONST> <_> <_DOS_PUNTOS> <_> <Tipo> <_> <_OP_ASIGNACION> <_> <_texto><_> ; <_nl>⇒ <_nl> <_IDENTIFICADOR_CONST> <_> <_DOS_PUNTOS> <_> <Tipo> <_> <_OP_ASIGNACION> <_> "Hola mundo" <_> ; <_nl>⇒ <_nl> <_IDENTIFICADOR_CONST><_> <_DOS_PUNTOS> <_> <Tipo> <_> =<_> "Hola mundo" <_> ; <_nl>⇒ <_nl> <_IDENTIFICADOR_CONST>: <_> <Tipo> <_> =<_> "Hola mundo" <_> ; <_nl>⇒ <_nl> <_IDENTIFICADOR_CONST>: <_> <TipoBase> <_> =<_> "Hola mundo" <_> ; <_nl>⇒ <_nl> <_IDENTIFICADOR_CONST>: <_> <TipoTexto> <_> =<_> "Hola mundo" <_> ; <_nl>⇒ <_nl> <_IDENTIFICADOR_CONST>: <_> Texto<_> =<_> "Hola mundo" <_> ; <_nl>⇒ <_nl><_IDENTIFICADOR_CONST>: texto <_> = <_> "Hola mundo" <_> ; <_nl>⇒ <_nl> $$saludo : texto <_> = <_> "Hola mundo" <_> ; <_nl>⇒ $$saludo : texto = "Hola mundo" ;
+```
+
+## Declaración de constante (texto) Izquierda
+
+```go
+$$saludo: texto = "Hola mundo";
+
+Derivacion por la izquierda
+<Programa> => <_nl> <Sentencias> <_nl>=> <Sentencia> <_nl>=> <DeclaracionConstante><_nl> => <_IDENTIFICADOR_CONST> <_> <_DOS_PUNTOS> <_> <Tipo> <_> <_OP_ASIGNACION> <_> <Expresion> <_> <_PUNTO_Y_COMA> =>  $$saludo <_> <_DOS_PUNTOS> <_> <Tipo> <_> <_OP_ASIGNACION> <_> <Expresion> <_> <_PUNTO_Y_COMA>=> $$saludo : <_> <Tipo> <_> = <_> <Expresion> <_><_PUNTO_Y_COMA>>=> $$saludo : <_> <TipoBase> <_> = <_> <Expresion> <_><_PUNTO_Y_COMA>=> $$saludo : <_> <TipoTexto> <_> = <_> <Expresion> <_><_PUNTO_Y_COMA>  $$saludo : texto <_> = <_> <Expresion> <_><_PUNTO_Y_COMA>=> $$saludo : texto = <_> <ExpresionLogicaOr> <_> <_PUNTO_Y_COMA>=>$$saludo : texto = <_>  <ExpresionLogicaAnd> <_> <_PUNTO_Y_COMA> =>$$saludo : texto = <_> <ExpresionIgualdad> <_> <_PUNTO_Y_COMA>=>$$saludo : texto = <_> <ExpresionRelacional> <_> <_PUNTO_Y_COMA>=>$$saludo : texto = <_> <ExpresionAditiva> <_> <_PUNTO_Y_COMA>=>$$saludo : texto = <_> <ExpresionMultiplicativa> <_> <_PUNTO_Y_COMA>=>$$saludo : texto = <_> <ExpresionPotencia> <_> <_PUNTO_Y_COMA>=>$$saludo : texto = <_> <ExpresionUnaria> <_> <_PUNTO_Y_COMA>=>$$saludo : texto = <_> <ExpresionPostfija> <_> <_PUNTO_Y_COMA>=>$$saludo : texto = <_> <LiteralPrimario> <_> <_PUNTO_Y_COMA>=>$$saludo : texto = <_> <_texto> <_> <_PUNTO_Y_COMA>=>$$saludo : texto = <_> "Hola mundo" <_> <_PUNTO_Y_COMA>=>$$saludo : texto = "Hola mundo" <_> ; =>  
+```
+
+## Gramatica basde: Declaración de constante (booleano)
+
+```go
+
+```
+
+## Declaración de constante (booleano)Derecha
+
+```go
+<Programa>
+=> <_nl> <Sentencias> <_nl>
+=> <_nl> <Sentencia> <_nl>
+=> <_nl> <DeclaracionConstante> <_nl>
+=> <_nl> <_IDENTIFICADOR_CONST> <_> <_DOS_PUNTOS> <_> <Tipo> <_> <_OP_ASIGNACION> <_> <Expresion> <_> <_PUNTO_Y_COMA> <_nl>
+=> <_nl> <_IDENTIFICADOR_CONST> <_> <_DOS_PUNTOS> <_> <Tipo> <_> <_OP_ASIGNACION> <_> <Expresion> <_> ; <_nl>
+=> <_nl> <_IDENTIFICADOR_CONST> <_> <_DOS_PUNTOS> <_> <Tipo> <_> <_OP_ASIGNACION>  <_> <ExpresionLogicaOr> <_> ; <_nl>
+=> <_nl> <_IDENTIFICADOR_CONST> <_> <_DOS_PUNTOS> <_> <Tipo> <_><_OP_ASIGNACION>  <_> <ExpresionLogicaAnd> <_> ; <_nl>
+=> <_nl> <_IDENTIFICADOR_CONST> <_> <_DOS_PUNTOS> <_> <Tipo>  <_> <_OP_ASIGNACION>  <_> <ExpresionIgualdad> <_> ; <_nl>
+=> <_nl> <_IDENTIFICADOR_CONST> <_> <_DOS_PUNTOS> <_> <Tipo>  <_> <_OP_ASIGNACION>  <_> <ExpresionRelacional> <_> ; <_nl>
+=> <_nl> <_IDENTIFICADOR_CONST> <_> <_DOS_PUNTOS> <_> <Tipo> <_> <_OP_ASIGNACION> <_> <ExpresionAditiva> <_> ; <_nl>
+=> <_nl> <_IDENTIFICADOR_CONST> <_> <_DOS_PUNTOS> <_> <Tipo> <_> <_OP_ASIGNACION>  <_> <ExpresionMultiplicativa> <_> ; <_nl>
+=> <_nl> <_IDENTIFICADOR_CONST> <_> <_DOS_PUNTOS> <_> <Tipo> <_> <_OP_ASIGNACION>  <_> <ExpresionPotencia> <_> ; <_nl>
+=> <_nl> <_IDENTIFICADOR_CONST> <_> <_DOS_PUNTOS> <_> <Tipo>  <_> <_OP_ASIGNACION>  <_> <ExpresionUnaria> <_> ; <_nl>
+=> <_nl> <_IDENTIFICADOR_CONST> <_> <_DOS_PUNTOS> <_> <Tipo>  <_> <_OP_ASIGNACION>  <_> <ExpresionPostfija> <_> ; <_nl>
+=> <_nl> <_IDENTIFICADOR_CONST> <_> <_DOS_PUNTOS> <_> <Tipo>  <_> <_OP_ASIGNACION>  <_> <LiteralPrimario> <_> ; <_nl>
+=> <_nl> <_IDENTIFICADOR_CONST> <_> <_DOS_PUNTOS> <_> <Tipo>  <_> <_OP_ASIGNACION>  <_> <_booleano> <_> ; <_nl>
+=> <_nl> <_IDENTIFICADOR_CONST> <_> <_DOS_PUNTOS> <_><Tipo> <_> <_OP_ASIGNACION>  <_> verdadero <_> ; <_nl>
+=> <_nl> <_IDENTIFICADOR_CONST> <_> <_DOS_PUNTOS> <_> <Tipo> <_> = <_> verdadero <_> ; <_nl>
+=> <_nl> <_IDENTIFICADOR_CONST> <_> <_DOS_PUNTOS> <_> <TipoBase> <_> = <_> verdadero<_> ; <_nl>
+=> <_nl> <_IDENTIFICADOR_CONST> <_> <_DOS_PUNTOS> <_> <_TIPO_BOOLEANO><_> = <_> verdadero<_> ; <_nl>=> <_nl> <_IDENTIFICADOR_CONST> <_> <_DOS_PUNTOS> <_> booleano<_> = <_> verdadero<_> ; <_nl>>=> <_nl> <_IDENTIFICADOR_CONST> <_> : <_> booleano<_> = <_> verdadero<_> ; <_nl>>=> <_nl> $$activo<_> <_DOS_PUNTOS> <_> booleano<_> = <_> verdadero<_> ; <_nl>=> <_nl> $$activo : booleano = verdadero ; <_nl>=>  $$activo : booleano = verdadero ; 
+```
+
+## Declaración de constante (booleano) Izquierda
+
+```go
+<Programa>  => <_nl> <Sentencias> <_nl> =>  <Sentencias> =>  <Sentencia> <_nl> => <DeclaracionConstante> <_nl> => <_IDENTIFICADOR_CONST> <_> <_DOS_PUNTOS> <_> <Tipo> <_> <_OP_ASIGNACION> <_> <Expresion> <_> <_PUNTO_Y_COMA> <_nl> =>  $$activo <_> <_DOS_PUNTOS> <_> <Tipo> <_> <_OP_ASIGNACION> <_> <Expresion> <_> <_PUNTO_Y_COMA> <_nl> =>  $$activo : <_> <Tipo> <_> = <_> <Expresion> <_><_PUNTO_Y_COMA> <_nl>=>  $$activo : <_> <TipoBase> <_> = <_> <Expresion> <_><_PUNTO_Y_COMA> <_nl>=>  $$activo : <_> <_TIPO_BOOLEANO><_> = <_> <Expresion> <_><_PUNTO_Y_COMA> <_nl>  => $$activo : booleano <_> = <_> <Expresion> <_><_PUNTO_Y_COMA>  <_nl> => $$activo : booleano <_> = <_> <ExpresionLogicaOr><_><_PUNTO_Y_COMA>  <_nl>=> $$activo : booleano <_> = <_> <Expresion> <_><_PUNTO_Y_COMA>  <_nl> => $$activo : booleano <_> = <_> <ExpresionLogicaAnd><_><_PUNTO_Y_COMA>  <_nl> => $$activo : booleano <_> = <_> <<ExpresionIgualdad><_><_PUNTO_Y_COMA>  <_nl> => $$activo : booleano <_> = <_> <ExpresionRelacional> <_><_PUNTO_Y_COMA>  <_nl> => $$activo : booleano <_> = <_> <ExpresionAditiva><_><_PUNTO_Y_COMA>  <_nl> => $$activo : booleano <_> = <_> <ExpresionMultiplicativa><_><_PUNTO_Y_COMA>  <_nl>=> $$activo : booleano <_> = <_> <ExpresionPotencia><_><_PUNTO_Y_COMA>  <_nl>=> $$activo : booleano <_> = <_> <ExpresionUnaria><_><_PUNTO_Y_COMA>  <_nl>=> $$activo : booleano <_> = <_> <ExpresionPostfija><_><_PUNTO_Y_COMA>  <_nl>=> $$activo : booleano <_> = <_> <LiteralPrimario><_><_PUNTO_Y_COMA>  <_nl>=> $$activo : booleano <_> = <_> <_booleano><_><_PUNTO_Y_COMA>  <_nl>=> $$activo : booleano <_> = <_> <verdadero><_><_PUNTO_Y_COMA>  <_nl> => $$activo : booleano <_> = <_> <verdadero><_>;<_nl>=> $$activo: booleano = verdadero;
+```
+
+## Gramatica bas: Reasignación de variable
+
+```go
+
+```
+
+## Reasignación de variable (numero)Derecha
+
+```go
+
+```
+
+## Reasignación de variable (numero) Izquierda
+
+```go
+
+```
+
+## Gramatica basde: Reasignación de variable (texto)
+
+```go
+
+```
+
+## Reasignación de variable (texto)Derecha
+
+```go
+
+```
+
+## Reasignación de variable (texto) Izquierda
+
+```go
+
+```
+
+## Gramatica basde: Reasignación de variable (booleano)
+
+```go
+
+```
+
+## Reasignación de variable (booleano)Derecha
+
+```go
+
+```
+
+## Reasignación de variable (booleano) Izquierda
+
+```go
+
+```
+
+## Gramatica basde: Arreglo de datos
+
+```go
+
+```
+
+## Arreglo de datos Derecha
+
+```go
+
+```
+
+## Arreglo de  Izquierda
+
+```go
+
+```
+
+## Gramatica basde: Concatenación
+
+```go
+
+```
+
+## Concatenación Derecha
+
+```go
+
+```
+
+## Concatenación Izquierda
+
+```go
+
+```
+
+## Gramatica base: Condicional `si`
+
+```go
+<Programa>        ::= <Sentencia>*
+<Sentencia>       ::= <CondicionalSi> | <DeclaracionVariable> | <Expresion>
+<CondicionalSi>   ::= "si" "(" <Expresion> ")" "{" <Sentencia>* "}"
+<DeclaracionVariable> ::= "$" <IDENTIFICADOR> ":" <Tipo> "=" <Expresion> ";"
+<Expresion>       ::= <ExpresionLogica>
+<ExpresionLogica> ::= <ExpresionRelacional> (<OperadorLogico> <ExpresionRelacional>)*
+<ExpresionRelacional> ::= <ExpresionAditiva> (<OperadorRelacional> <ExpresionAditiva>)*
+<ExpresionAditiva> ::= <ExpresionMultiplicativa> (<OperadorAditivo> <ExpresionMultiplicativa>)*
+<ExpresionMultiplicativa> ::= <ExpresionUnaria> (<OperadorMultiplicativo> <ExpresionUnaria>)*
+<ExpresionUnaria> ::= <OperadorUnario>? <ExpresionPrimaria>
+<ExpresionPrimaria> ::= <Literal> | <Variable> | "(" <Expresion> ")"
+<Literal>         ::= <numero> | <texto> | <booleano>
+<Variable>        ::= "$" <IDENTIFICADOR>
+```
+
+## Condicional `si`Derecha
+
+```go
+<Programa>
+→ <Sentencia>*
+→ <Sentencia>* <CondicionalSi>
+→ <Sentencia>* "si" "(" <Expresion> ")" "{" <Sentencia>* "}"
+→ <Sentencia>* "si" "(" <ExpresionLogica> ")" "{" <Sentencia>* "}"
+→ <Sentencia>* "si" "(" <ExpresionRelacional> (<OperadorLogico> <ExpresionRelacional>)* ")" "{" <Sentencia>* "}"
+→ <Sentencia>* "si" "(" <ExpresionAditiva> (<OperadorRelacional> <ExpresionAditiva>)* (<OperadorLogico> <ExpresionRelacional>)* ")" "{" <Sentencia>* "}"
+→ ... (se expande hasta terminales)
+
+```
+
+## Condicional `si` Izquierda
+
+```go
+<Programa>
+→ <Sentencia>*
+→ <CondicionalSi> <Sentencia>*
+→ "si" "(" <Expresion> ")" "{" <Sentencia>* "}" <Sentencia>*
+→ "si" "(" <ExpresionLogica> ")" "{" <Sentencia>* "}" <Sentencia>*
+→ "si" "(" <ExpresionRelacional> (<OperadorLogico> <ExpresionRelacional>)* ")" "{" <Sentencia>* "}" <Sentencia>*
+→ "si" "(" <ExpresionAditiva> (<OperadorRelacional> <ExpresionAditiva>)* (<OperadorLogico> <ExpresionRelacional>)* ")" "{" <Sentencia>* "}" <Sentencia>*
+
+```
+
+## Gramatica basde: Condicional `si-siNo` `si-siNo`
+
+```go
+
+```
+
+## Condicional `si-siNo` `si-siNo`Derecha
+
+```go
+
+```
+
+## Condicional `si-siNo` `si-siNo` Izquierda
+
+```go
+
+```
+
+## Gramatica basde: Condicional `mientras`
+
+```go
+
+```
+
+## Condicional `mientras`Derecha
+
+```go
+
+```
+
+## Condicional `mientras` Izquierda
+
+```go
+
+```
+
+## Gramatica basde: Condicional `para`
+
+```go
+
+```
+
+## Condicional `para`Derecha
+
+```go
+
+```
+
+## Condicional `para` Izquierda
+
+```go
+
+```
+
+## Gramatica basde: Condicional `segun`
+
+```go
+
+```
+
+## Condicional `segun`Derecha
+
+```go
+
+```
+
+## Condicional `segun` Izquierda
+
+```go
+
+```
+
+## Gramatica basde: Funcion
+
+```go
+
+```
+
+## Funcion Derecha
+
+```go
+
+```
+
+## Funcion Izquierda
+
+```go
+
+```
+
+## Gramatica basde: Operacion aritmetica
+
+```go
+<Expresion> ::= <ExpresionAsignacion>
+<ExpresionAsignacion> ::= <Variable> <OP_ASIGNACION> <ExpresionAsignacion> | <ExpresionLogicaOR>
+<ExpresionLogicaOR> ::= <ExpresionLogicaAND> (<OP_OR> <ExpresionLogicaAND>)*
+<ExpresionLogicaAND> ::= <ExpresionIgualdad> (<OP_AND> <ExpresionIgualdad>)*
+<ExpresionIgualdad> ::= <ExpresionRelacional> ((<OP_EQ> | <OP_NEQ>) <ExpresionRelacional>)*
+<ExpresionRelacional> ::= <ExpresionAditiva> ((<OP_MAYOR_QUE> | <OP_MENOR_QUE> | <OP_GTE> | <OP_LTE>) <ExpresionAditiva>)*
+<ExpresionAditiva> ::= <ExpresionMultiplicativa> ((<OP_SUMA> | <OP_RESTA>) <ExpresionMultiplicativa>)*
+<ExpresionMultiplicativa> ::= <ExpresionPotencia> ((<OP_MULT> | <OP_DIV> | <OP_MOD>) <ExpresionPotencia>)*
+<ExpresionPotencia> ::= <ExpresionUnaria> (<OP_POTENCIA> <ExpresionUnaria>)*
+<ExpresionUnaria> ::= (<OP_NEGACION> | <OP_UNARIO_MENOS>)* <ExpresionPrimaria>
+
+```
+
+## Operacion aritmetica compleja Derecha
+
+```go
+<Expresion>
+→ <ExpresionAsignacion>
+→ <Variable> <OP_ASIGNACION> <ExpresionAsignacion>
+→ <Variable> <OP_ASIGNACION> <ExpresionLogicaOR>
+→ <Variable> <OP_ASIGNACION> <ExpresionLogicaAND> (<OP_OR> <ExpresionLogicaAND>)*
+→ ...
+→ <Variable> <OP_ASIGNACION> <ExpresionPrimaria> (<OP_OR> <ExpresionPrimaria>)*
+→ <Variable> <OP_ASIGNACION> <Variable> (<OP_OR> <Variable>)*
+
+```
+
+## Operacion aritmetica compleja Izquierda
+
+```go
+<Expresion>
+→ <ExpresionAsignacion>
+→ <ExpresionLogicaOR>
+→ <ExpresionLogicaAND>
+→ <ExpresionIgualdad>
+→ <ExpresionRelacional>
+→ <ExpresionAditiva>
+→ <ExpresionMultiplicativa>
+→ <ExpresionPotencia>
+→ <ExpresionUnaria>
+→ <ExpresionPrimaria>
+→ <Variable> | <Literal> | "(" <Expresion> ")"
+
 ```

@@ -22,7 +22,7 @@ La gramática de LibreScript se presenta a continuación utilizando una notació
 
 ### Gramática de LibreScript (EBNF)
 
-```ebnf
+```go
 <Programa> ::= <_nl> <Sentencias> <_nl>
 
 <Sentencias> ::= <Sentencia> <_nl>
@@ -234,3 +234,4 @@ La gramática de LibreScript se presenta a continuación utilizando una notació
 <__> ::= <_ws>+
 <_> ::= <_ws>*
 <_nl> ::= (<_ws> | <_nl> | <_comentario_linea> | <_comentario_bloque>)*
+```

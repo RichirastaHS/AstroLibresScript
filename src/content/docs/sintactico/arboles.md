@@ -7,91 +7,153 @@ Un árbol de derivación (o árbol sintáctico) es una representación gráfica 
 
 Los árboles de derivación son una forma visual de entender la estructura sintáctica de un programa y cómo el analizador sintáctico lo ha interpretado.
 
-**Ejemplo de Árbol de Derivación**
-Consideremos la misma sentencia de LibreScript:
-`$a: numero = 10;`
+## Declaración de variable (numero)
 
-```bash
-     <Programa>
-          |
-        <_nl>
-          |
-      <Sentencias>
-          |
-      <Sentencia> ----- <_nl>
-          |
-   <DeclaracionVariable> --- <_PUNTO_Y_COMA>
-          |
-  <_IDENTIFICADOR_VAR> -- <_> -- <_DOS_PUNTOS> -- <_> -- <Tipo> -- <_> -- <_OP_ASIGNACION> -- <_> -- <Expresion> -- <_>
-        |                                                 |                                                  |
-      "$a"                                           <TipoBase>                                          <ExpresionLogicaOr>
-                                                        |                                                       |
-                                                  <_TIPO_NUMERO>                                        <ExpresionLogicaAnd>
-                                                        |                                                       |
-                                                      "numero"                                          <ExpresionIgualdad>
-                                                                                                                |
-                                                                                                          <ExpresionRelacional>
-                                                                                                                |
-                                                                                                          <ExpresionAditiva>
-                                                                                                                |
-                                                                                                        <ExpresionMultiplicativa>
-                                                                                                                |
-                                                                                                         <ExpresionPotencia>
-                                                                                                                |
-                                                                                                          <ExpresionUnaria>
-                                                                                                                |
-                                                                                                         <ExpresionPostfija>
-                                                                                                                |
-                                                                                                          <LiteralPrimario>
-                                                                                                                |
-                                                                                                              <_numero>
-                                                                                                                |
-                                                                                                               "10"
+## Declaración de variable (texto)
 
-(* Nota: Los nodos `_` representan espacios/saltos de línea opcionales o requeridos. En un AST, estos nodos de espacio suelen ser omitidos para simplificar la estructura. En este diagrama, se incluyen para reflejar la derivación completa según la gramática. *)
+## Declaración de variable (booleano)
+
+## Declaración de constante (numero)
+
+## Declaración de constante (texto)
+
+## Declaración de constante (booleano)
+
+## Reasignación de variable (numero)
+
+```go
+                                 <Programa>
+                                     |
+                ------------------------------------------
+                |                  |                     |
+              <_nl>             <Sentencias>            <_nl>
+                                     |
+                                <Sentencia>
+                                     |
+                                <Asignacion>
+                                     |
+      -------------------------------------------------------------------------
+      |           |           |           |           |          |            |
+ <Designable>    <_>   <_OP_ASIGNACION>  <_>     <Expresion>    <_>   <_PUNTO_Y_COMA>
+      |           |           |           |           |          |            |
+<_IDENTIFICADOR_VAR> ( )       =         ( )    <ExpresionLogicaOr> ( )       ;
+      |                                                |
+  $variable                                   <ExpresionLogicaAnd>
+                                                       |
+                                              <ExpresionIgualdad>
+                                                       |
+                                             <ExpresionRelacional>
+                                                       |
+                                              <ExpresionAditiva>
+                                                       |
+                                           <ExpresionMultiplicativa>
+                                                       |
+                                              <ExpresionPotencia>
+                                                       |
+                                               <ExpresionUnaria>
+                                                       |
+                                              <ExpresionPostfija>e
+                                                       |
+                                               <LiteralPrimario>
+                                                       |
+                                                   <_numero>
+                                                       |
+                                                      123
 
 ```
 
-Otro Ejemplo: Condicional si
-Consideremos un si simple:
-si ($cond: booleano = verdadero) {
-    imprimir("Es verdadero");
-}
+## Reasignación de variable (texto)
 
-```bash
-      <Programa>
-          |
-        <_nl>
-          |
-      <Sentencias>
-          |
-      <Sentencia> ----------- <_nl>
-          |
-   <EstructuraControl>
-          |
-    <CondicionalSi>
-          |
-  <_PR_SI> -- <_> -- <_LPAREN> -- <_> -- <Expresion> -- <_> -- <_RPAREN> -- <_> -- <BloqueCodigo>
-    |                                    |                                         |
-   "si"                           <Asignacion>                                  <_LBRACE> -- <_nl> -- <Sentencias> -- <_nl> -- <_RBRACE>
-                                       |                                                       |
-                            <DeclaracionVariable>                                         <Sentencia> ----- <_nl>
-                                       |                                                       |
-                            "$cond: booleano = verdadero" (simplificado)                <LlamadaImprimir>
-                                                                                                 |
-                                                                               <_PR_IMPRIMIR> -- <_> -- <_LPAREN> -- <_> -- <ListaArgumentosOpcional> -- <_> -- <_RPAREN> -- <_> -- <_PUNTO_Y_COMA>
-                                                                                     |                                     |
-                                                                                   "imprimir"                        <ListaArgumentos>
-                                                                                                                             |
-                                                                                                                          <Expresion>
-                                                                                                                             |
-                                                                                                                      <ExpresionLogicaOr>
-                                                                                                                             |
-                                                                                                                          ...
-                                                                                                                             |
-                                                                                                                       <LiteralPrimario>
-                                                                                                                             |
-                                                                                                                             <_texto>
-                                                                                                                             |
-                                                                                                                      "\"Es verdadero\""
+## Reasignación de variable (booleano)
+
+## Arreglo de datos
+
+## Concatenación
+
+## Condicional `si`
+
+```go
+                                <Programa>
+                                    |
+                               <Sentencias>
+                                    |
+                          ---------------------
+                          |                   |
+                    <CondicionalSi>       <OtrasSentencias>
+                          |
+       ---------------------------------------------------
+       |         |              |              |         |
+      "si"      "("        <Expresión>        ")"       "{"    <Bloque>    "}"
+                                    |
+                     -----------------------------------
+                     |                                 |
+             <ExpresiónLogicaOr>               <OperadorLogico>?
+                     |                                 |
+             <ExpresiónLogicaAnd>                      |
+                     |                                 |
+             <ExpresiónIgualdad>               <ExpresiónRelacional>
+                     |                                 |
+             <ExpresiónRelacional>             ---------------------
+                     |                         |                   |
+             <ExpresiónAditiva>         <ExpresiónAditiva>  <OperadorRelacional>
+                     |
+             <ExpresiónMultiplicativa>
+                     |
+             <ExpresiónPotencia>
+                     |
+             <ExpresiónUnaria>
+                     |
+             <ExpresiónPostfija>
+                     |
+             ---------------------
+             |                   |
+         <Variable>          <Literal>
+             |                   |
+          "$<ID>"       "<numero>|<texto>|<booleano>"
+
+                    <Bloque>
+                        |
+                 <Sentencia>*
+                        |
+                ---------------------
+                |         |         |
+           <Imprimir>  <Asignación>  <CondicionalSi>
+```
+
+## Condicional `si-siNo` `si-siNo`
+
+## Condicional `mientras`
+
+## Condicional `para`
+
+## Condicional `segun`
+
+## Funcion
+
+## Operacion aritmetica compleja
+
+```go
+                                          <Expresion>
+                                                |
+                                         <ExpresionAsignacion>
+                        /                       |                             \
+                 <Variable>               <OP_ASIGNACION>           <ExpresionLogicaOR>
+                                                |
+                                         <ExpresionLogicaAND>
+                                                |
+                                         <ExpresionIgualdad>
+                                                |
+                                        <ExpresionRelacional>
+                                                |
+                                        <ExpresionAditiva>
+                               /                |             \
+                  <ExpresionMultiplicativa>  <OP_SUMA>  <ExpresionMultiplicativa>
+                              |                                      |
+                   <ExpresionPotencia>                     <ExpresionPotencia>
+                              |                                      |
+                   <ExpresionUnaria>                       <ExpresionUnaria>
+                              |                                      |
+                   <ExpresionPrimaria>                     <ExpresionPrimaria>
+                              |                                      |
+                         <Literal>                              <Literal>
 ```
