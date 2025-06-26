@@ -58,3 +58,15 @@ sidebar:
 ![AFD foto](/AstroLibresScript/img/afd/AFD_Segun.png)
 
 ## Operacion aritmetica compleja
+
+Autómatas Individuales por Tipo de Operador
+
+AFD para Potencia (**) (Mayor prioridad)
+
+![AFD foto](/AstroLibresScript/img/afd/AFD_Potencia.png)
+
+AFD para Multiplicación/División/Módulo (*, /, %)
+![AFD foto](/AstroLibresScript/img/afd/AFD_Multiplicacion.png)
+
+AFD para Operadores Lógicos (&&, ||)
+![AFD foto](/AstroLibresScript/img/afd/AFD_Operadores_Logicos.png)

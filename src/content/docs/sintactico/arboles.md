@@ -15,9 +15,15 @@ Los árboles de derivación son una forma visual de entender la estructura sint�
 
 ## Declaración de constante (numero)
 
+![LiveServer](/AstroLibresScript/img/arboles/arboldcn.png)
+
 ## Declaración de constante (texto)
 
+![LiveServer](/AstroLibresScript/img/arboles/arboldct.png)
+
 ## Declaración de constante (booleano)
+
+![LiveServer](/AstroLibresScript/img/arboles/arboldcb.png)
 
 ## Reasignación de variable (numero)
 
